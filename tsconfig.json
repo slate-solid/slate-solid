@@ -13,10 +13,19 @@
     ],
     "noEmit": true,
     "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@slate-solid/*": [
+        "./packages/*/src"
+      ],
+    }
   },
+  "include": [
+    "src"
+  ],
   "references": [
     {
       "path": "./packages/slate-solid"
-    }
+    },
   ]
 }

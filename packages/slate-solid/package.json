@@ -1,5 +1,5 @@
 {
-  "name": "@emeraldwalk/slate-solid",
+  "name": "@slate-solid/slate-solid",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,8 @@
     "@juggle/resize-observer": "^3.4.0",
     "direction": "^2.0.1",
     "lodash": "^4.17.21",
-    "slate": "^0.103.0"
+    "slate": "^0.103.0",
+    "slate-dom": "^0.110.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.7"
