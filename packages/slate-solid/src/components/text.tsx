@@ -8,7 +8,7 @@ import {
   ELEMENT_TO_NODE,
   NODE_TO_ELEMENT,
 } from 'slate-dom'
-import { RenderLeafProps, RenderPlaceholderProps } from './editable'
+import { RenderLeafProps, RenderPlaceholderProps } from './propTypes'
 import Leaf from './leaf'
 import { useRef } from '../hooks/useRef'
 

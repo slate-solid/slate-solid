@@ -1,17 +1,10 @@
-import type { JSX } from 'solid-js/jsx-runtime'
-import {
-  Ancestor,
-  Descendant,
-  Editor,
-  Element,
-  Range,
-  type BaseElement,
-} from 'slate'
-import {
+import type { JSX } from 'solid-js'
+import { Ancestor, Descendant, Editor, Element, Range } from 'slate'
+import type {
   RenderElementProps,
   RenderLeafProps,
   RenderPlaceholderProps,
-} from '../components/editable'
+} from '../components/propTypes'
 
 import ElementComponent from '../components/element'
 import TextComponent from '../components/text'

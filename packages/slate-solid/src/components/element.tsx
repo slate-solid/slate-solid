@@ -23,7 +23,7 @@ import {
   RenderElementProps,
   RenderLeafProps,
   RenderPlaceholderProps,
-} from './editable'
+} from './propTypes'
 
 import Text from './text'
 
@@ -39,6 +39,7 @@ const Element = (props: {
   renderLeaf?: (props: RenderLeafProps) => JSX.Element
   selection: Range | null
 }) => {
+  console.log('[TESTING] Element')
   const {
     decorations,
     element,

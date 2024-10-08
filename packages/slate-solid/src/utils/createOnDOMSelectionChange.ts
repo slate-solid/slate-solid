@@ -36,6 +36,7 @@ export function createOnDOMSelectionChange({
   state,
 }: CreateOnDOMSelectionChangeProps) {
   return throttle(() => {
+    console.log('[TESTING] onDOMSelectionChange')
     const el = DOMEditor.toDOMNode(editor, editor)
     const root = el.getRootNode()
 

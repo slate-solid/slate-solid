@@ -1,4 +1,4 @@
-import { createEditor, Editor } from 'slate'
+import { Editor, type NodeEntry, Range } from 'slate'
 import {
   EDITOR_TO_ELEMENT,
   EDITOR_TO_WINDOW,
@@ -6,24 +6,42 @@ import {
   getDefaultView,
   NODE_TO_ELEMENT,
   type DOMElement,
+  type DOMRange,
 } from 'slate-dom'
 import { createOnDOMSelectionChange } from '../utils/createOnDOMSelectionChange'
-import { createEffect } from 'solid-js'
+import { createEffect, type JSX } from 'solid-js'
 import { useSlate } from '../hooks/use-slate'
 import { useRef } from '../hooks/useRef'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
+import { useChildren } from '../hooks/use-children'
+import type {
+  RenderElementProps,
+  RenderLeafProps,
+  RenderPlaceholderProps,
+} from './propTypes'
+import type { SolidEditor } from '../plugin/solid-editor'
+import { defaultDecorate } from '../utils/defaultDecorate'
 
-const editor = createEditor()
+const Children = (props: Parameters<typeof useChildren>[0]) => (
+  <>{useChildren(props)}</>
+)
 
-export interface EditableProps {
-  class?: string
+export type EditableProps = {
+  decorate?: (entry: NodeEntry) => Range[]
+  onDOMBeforeInput?: (event: InputEvent) => void
+  placeholder?: string
   readOnly?: boolean
-}
+  role?: string
+  style?: JSX.CSSProperties
+  renderElement?: (props: RenderElementProps) => JSX.Element
+  renderLeaf?: (props: RenderLeafProps) => JSX.Element
+  renderPlaceholder?: (props: RenderPlaceholderProps) => JSX.Element
+  scrollSelectionIntoView?: (editor: SolidEditor, domRange: DOMRange) => void
+  // as?: React.ElementType
+  disableDefaultStyles?: boolean
+} & JSX.TextareaHTMLAttributes<HTMLDivElement>
 
-export function Editable({
-  class: className,
-  readOnly = false,
-}: EditableProps) {
+export function Editable(props: EditableProps) {
   const androidInputManagerRef = useRef<
     AndroidInputManager | null | undefined
   >()
@@ -41,7 +59,7 @@ export function Editable({
     editor,
     androidInputManagerRef,
     processing,
-    readOnly,
+    readOnly: props.readOnly ?? false,
     state,
   })
 
@@ -78,11 +96,22 @@ export function Editable({
     }
   }
 
+  const decorations = (props.decorate ?? defaultDecorate)([editor, []])
+
   return (
     <div
       ref={ref.current!}
-      class={className}
+      class={props.class}
       contentEditable
-      onInput={onInput}></div>
+      onInput={onInput}>
+      <Children
+        decorations={decorations}
+        node={editor}
+        renderElement={props.renderElement}
+        renderPlaceholder={() => <div>Default Placeholder</div>}
+        renderLeaf={props.renderLeaf}
+        selection={editor.selection}
+      />
+    </div>
   )
 }
