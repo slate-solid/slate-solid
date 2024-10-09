@@ -14,20 +14,9 @@
     "jsxImportSource": "solid-js",
     "module": "ESNext",
     "moduleResolution": "node",
-    "outDir": "./dist",
+    "outDir": "./lib",
     "rootDir": "./src",
     "strict": true,
     "target": "ESNext",
-    "baseUrl": ".",
-    "paths": {
-      "slate-dom": [
-        "../slate-dom/src"
-      ],
-    }
   },
-  "references": [
-    {
-      "path": "../slate-dom"
-    },
-  ]
 }

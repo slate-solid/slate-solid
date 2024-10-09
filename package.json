@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@slate-solid/slate-solid": "file:./packages/slate-solid",
+    "slate-dom": "file:./packages/slate-dom",
     "slate": "^0.103.0",
     "solid-js": "^1.8.11"
   },

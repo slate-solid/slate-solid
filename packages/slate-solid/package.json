@@ -1,21 +1,23 @@
 {
   "name": "@slate-solid/slate-solid",
+  "description": "",
   "version": "1.0.0",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
     "direction": "^2.0.1",
-    "lodash": "^4.17.21",
-    "slate": "^0.103.0",
-    "slate-dom": "^0.110.1"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.7"
+    "@types/lodash": "^4.17.7",
+    "slate": "^0.103.0",
+    "slate-dom": "file:../slate-dom"
+  },
+  "peerDependencies": {
+    "slate": ">=0.99.0"
   }
 }

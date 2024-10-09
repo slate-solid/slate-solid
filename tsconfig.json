@@ -18,12 +18,18 @@
       "@slate-solid/*": [
         "./packages/*/src"
       ],
+      "slate-dom": [
+        "./packages/slate-dom/src"
+      ],
     }
   },
   "include": [
     "src"
   ],
   "references": [
+    {
+      "path": "./packages/slate-dom"
+    },
     {
       "path": "./packages/slate-solid"
     },

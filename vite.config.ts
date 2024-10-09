@@ -27,6 +27,10 @@ export default defineConfig({
         find: /^@slate-solid\/(.*)/,
         replacement: `${packagesPath}/$1/src`,
       },
+      {
+        find: /^slate-dom$/,
+        replacement: `${packagesPath}/slate-dom/src`,
+      },
     ],
   },
 })
