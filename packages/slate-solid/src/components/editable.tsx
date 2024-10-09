@@ -1,15 +1,17 @@
 import { Editor, type NodeEntry, Range } from 'slate'
 import {
+  CAN_USE_DOM,
   EDITOR_TO_ELEMENT,
   EDITOR_TO_WINDOW,
   ELEMENT_TO_NODE,
   getDefaultView,
+  HAS_BEFORE_INPUT_SUPPORT,
   NODE_TO_ELEMENT,
   type DOMElement,
   type DOMRange,
 } from 'slate-dom'
 import { createOnDOMSelectionChange } from '../utils/createOnDOMSelectionChange'
-import { createEffect, type JSX } from 'solid-js'
+import { createEffect, splitProps, type JSX } from 'solid-js'
 import { useSlate } from '../hooks/use-slate'
 import { useRef } from '../hooks/useRef'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
@@ -42,6 +44,21 @@ export type EditableProps = {
 } & JSX.TextareaHTMLAttributes<HTMLDivElement>
 
 export function Editable(props: EditableProps) {
+  const [namedProps, attributes] = splitProps(props, [
+    'autofocus',
+    'decorate',
+    'onDOMBeforeInput',
+    'placeholder',
+    'readOnly',
+    'renderElement',
+    'renderLeaf',
+    'renderPlaceholder',
+    'scrollSelectionIntoView',
+    'style',
+    'disableDefaultStyles',
+  ])
+
+  console.log('[TESTING] Editable')
   const androidInputManagerRef = useRef<
     AndroidInputManager | null | undefined
   >()
@@ -92,7 +109,16 @@ export function Editable(props: EditableProps) {
       case 'insertText':
         Editor.insertText(editor, 'a')
         // Transforms.splitNodes(editor, { always: true })
-        console.log(editor)
+
+        console.log(
+          '[TESTING] selection',
+          JSON.stringify(editor.selection, undefined, 2),
+        )
+
+        console.log(
+          '[TESTING] insertText',
+          JSON.stringify(editor.children, undefined, 2),
+        )
     }
   }
 
@@ -100,9 +126,15 @@ export function Editable(props: EditableProps) {
 
   return (
     <div
-      ref={ref.current!}
       class={props.class}
-      contentEditable
+      role={props.readOnly ? undefined : 'textbox'}
+      aria-multiline={props.readOnly ? undefined : true}
+      {...attributes}
+      data-slate-editor
+      data-slate-node="value"
+      // explicitly set this
+      contentEditable={!props.readOnly}
+      ref={ref.current!}
       onInput={onInput}>
       <Children
         decorations={decorations}

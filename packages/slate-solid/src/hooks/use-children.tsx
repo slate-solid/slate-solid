@@ -26,6 +26,7 @@ export const useChildren = (props: {
   renderLeaf?: (props: RenderLeafProps) => JSX.Element
   selection: Range | null
 }) => {
+  console.log('[TESTING] useChildren start')
   const {
     decorations,
     node,
@@ -59,6 +60,13 @@ export const useChildren = (props: {
       }
     }
 
+    // In React, these 2 calls happen after building the children array, but in
+    // Solid, the ElementComponent component function gets called before this
+    // hook exits which recursively calls `useChildren`. We need the WeakMaps to
+    // be set first.
+    NODE_TO_INDEX.set(n, i)
+    NODE_TO_PARENT.set(n, node)
+
     if (Element.isElement(n)) {
       children.push(
         <SelectedContext.Provider
@@ -88,11 +96,8 @@ export const useChildren = (props: {
         />,
       )
     }
-
-    NODE_TO_INDEX.set(n, i)
-    NODE_TO_PARENT.set(n, node)
   }
-
+  console.log('[TESTING] useChildren end')
   return children
 }
 

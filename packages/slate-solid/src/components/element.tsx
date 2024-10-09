@@ -26,6 +26,7 @@ import {
 } from './propTypes'
 
 import Text from './text'
+import { Div, Span } from './html'
 
 /**
  * Element.
@@ -39,7 +40,7 @@ const Element = (props: {
   renderLeaf?: (props: RenderLeafProps) => JSX.Element
   selection: Range | null
 }) => {
-  console.log('[TESTING] Element')
+  console.log('[TESTING] Element', props.element)
   const {
     decorations,
     element,
@@ -111,7 +112,7 @@ const Element = (props: {
       attributes.contentEditable = false
     }
 
-    const Tag = isInline ? 'span' : 'div'
+    const Tag = isInline ? Span : Div
     const [[text]] = Node.texts(element)
 
     children = (
@@ -162,7 +163,7 @@ const Element = (props: {
 export const DefaultElement = (props: RenderElementProps) => {
   const { attributes, children, element } = props
   const editor = useSlateStatic()
-  const Tag = editor.isInline(element) ? 'span' : 'div'
+  const Tag = editor.isInline(element) ? Span : Div
   return (
     <Tag {...attributes} style={{ position: 'relative' }}>
       {children}
