@@ -3,7 +3,7 @@
   "description": "",
   "version": "1.0.0",
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/index.js",
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
     "direction": "^1.0.4",
