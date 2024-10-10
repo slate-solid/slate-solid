@@ -11,7 +11,8 @@ import {
   type DOMRange,
 } from 'slate-dom'
 import { createOnDOMSelectionChange } from '../utils/createOnDOMSelectionChange'
-import { createEffect, splitProps, type JSX } from 'solid-js'
+import { createEffect, createSignal, splitProps, type JSX } from 'solid-js'
+import debounce from 'lodash/debounce'
 import { useSlate } from '../hooks/use-slate'
 import { useRef } from '../hooks/useRef'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
@@ -23,6 +24,11 @@ import type {
 } from './propTypes'
 import type { SolidEditor } from '../plugin/solid-editor'
 import { defaultDecorate } from '../utils/defaultDecorate'
+import {
+  createOnDOMBeforeInput,
+  type DeferredOperation,
+} from '../utils/createOnDOMBeforeInput'
+import { useTrackUserInput } from '../hooks/use-track-user-input'
 
 const Children = (props: Parameters<typeof useChildren>[0]) => (
   <>{useChildren(props)}</>
@@ -63,8 +69,12 @@ export function Editable(props: EditableProps) {
     AndroidInputManager | null | undefined
   >()
   const editor = useSlate()
+  // Rerender editor when composition status changed
+  const [isComposing, setIsComposing] = createSignal(false)
   const ref = useRef<HTMLDivElement | null>(null)
+  const deferredOperations = useRef<DeferredOperation[]>([])
   const processing = useRef(false)
+  const { onUserInput, receivedUserInput } = useTrackUserInput()
   const state = {
     isDraggingInternally: false,
     isUpdatingSelection: false,
@@ -78,6 +88,28 @@ export function Editable(props: EditableProps) {
     processing,
     readOnly: props.readOnly ?? false,
     state,
+  })
+
+  const scheduleOnDOMSelectionChange = debounce(onDOMSelectionChange, 0)
+
+  const onBeforeInput = createOnDOMBeforeInput({
+    editor,
+    androidInputManagerRef,
+    deferredOperations,
+    processing,
+    readOnly: props.readOnly ?? false,
+    scheduleOnDOMSelectionChange,
+    onBeforeInput:
+      //TODO: figure out if SolidJS bound functions need to be handled
+      typeof props.onBeforeInput === 'function'
+        ? (props.onBeforeInput as JSX.InputEventHandler<
+            HTMLDivElement,
+            InputEvent
+          >)
+        : undefined,
+    onDOMSelectionChange,
+    onStopComposing: () => setIsComposing(false),
+    onUserInput,
   })
 
   createEffect(() => {
@@ -97,30 +129,30 @@ export function Editable(props: EditableProps) {
     }
   })
 
-  function onInput(
-    event: InputEvent & {
-      currentTarget: HTMLDivElement
-      target: Element
-    },
-  ) {
-    console.log(event)
+  // function onInput(
+  //   event: InputEvent & {
+  //     currentTarget: HTMLDivElement
+  //     target: Element
+  //   },
+  // ) {
+  //   console.log(event)
 
-    switch (event.inputType) {
-      case 'insertText':
-        Editor.insertText(editor, 'a')
-        // Transforms.splitNodes(editor, { always: true })
+  //   switch (event.inputType) {
+  //     case 'insertText':
+  //       Editor.insertText(editor, 'a')
+  //       // Transforms.splitNodes(editor, { always: true })
 
-        console.log(
-          '[TESTING] selection',
-          JSON.stringify(editor.selection, undefined, 2),
-        )
+  //       console.log(
+  //         '[TESTING] selection',
+  //         JSON.stringify(editor.selection, undefined, 2),
+  //       )
 
-        console.log(
-          '[TESTING] insertText',
-          JSON.stringify(editor.children, undefined, 2),
-        )
-    }
-  }
+  //       console.log(
+  //         '[TESTING] insertText',
+  //         JSON.stringify(editor.children, undefined, 2),
+  //       )
+  //   }
+  // }
 
   const decorations = (props.decorate ?? defaultDecorate)([editor, []])
 
@@ -135,7 +167,7 @@ export function Editable(props: EditableProps) {
       // explicitly set this
       contentEditable={!props.readOnly}
       ref={ref.current!}
-      onInput={onInput}>
+      onBeforeInput={onBeforeInput}>
       <Children
         decorations={decorations}
         node={editor}
