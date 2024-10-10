@@ -1,5 +1,5 @@
 import { direction as getDirection } from 'direction'
-import { JSX } from 'solid-js'
+import { JSX, mergeProps } from 'solid-js'
 import {
   Editor,
   Element as SlateElement,
@@ -27,52 +27,49 @@ import {
 
 import Text from './text'
 import { Div, Span } from './html'
+import { DefaultElement } from './defaultElement'
 
-/**
- * Element.
- */
-
-const Element = (props: {
+export interface ElementProps {
   decorations: Range[]
   element: SlateElement
   renderElement?: (props: RenderElementProps) => JSX.Element
   renderPlaceholder: (props: RenderPlaceholderProps) => JSX.Element
   renderLeaf?: (props: RenderLeafProps) => JSX.Element
   selection: Range | null
-}) => {
-  console.log('[TESTING] Element', props.element)
-  const {
-    decorations,
-    element,
-    renderElement = (p: RenderElementProps) => <DefaultElement {...p} />,
-    renderPlaceholder,
-    renderLeaf,
-    selection,
-  } = props
+}
+
+/**
+ * Element.
+ */
+const Element = (origProps: ElementProps) => {
+  const props = mergeProps(
+    { renderElement: (p: RenderElementProps) => <DefaultElement {...p} /> },
+    origProps,
+  )
   const editor = useSlateStatic()
   const readOnly = useReadOnly()
-  const isInline = editor.isInline(element)
-  const key = SolidEditor.findKey(editor, element)
+  const isInline = editor.isInline(props.element)
+  const key = SolidEditor.findKey(editor, props.element)
   const ref = (ref: HTMLElement | null) => {
     // Update element-related weak maps with the DOM element ref.
     const KEY_TO_ELEMENT = EDITOR_TO_KEY_TO_ELEMENT.get(editor)
     if (ref) {
       KEY_TO_ELEMENT?.set(key, ref)
-      NODE_TO_ELEMENT.set(element, ref)
-      ELEMENT_TO_NODE.set(ref, element)
+      NODE_TO_ELEMENT.set(props.element, ref)
+      ELEMENT_TO_NODE.set(ref, props.element)
     } else {
       KEY_TO_ELEMENT?.delete(key)
-      NODE_TO_ELEMENT.delete(element)
+      NODE_TO_ELEMENT.delete(props.element)
     }
   }
 
   let children: JSX.Element = useChildren({
-    decorations,
-    node: element,
-    renderElement,
-    renderPlaceholder,
-    renderLeaf,
-    selection,
+    decorations: props.decorations,
+    node: props.element,
+    renderElement: props.renderElement,
+    renderPlaceholder: props.renderPlaceholder,
+    renderLeaf: props.renderLeaf,
+    selection: props.selection,
   })
 
   // Attributes that the developer must mix into the element in their
@@ -95,8 +92,8 @@ const Element = (props: {
 
   // If it's a block node with inline children, add the proper `dir` attribute
   // for text direction.
-  if (!isInline && Editor.hasInlines(editor, element)) {
-    const text = Node.string(element)
+  if (!isInline && Editor.hasInlines(editor, props.element)) {
+    const text = Node.string(props.element)
     const dir = getDirection(text)
 
     if (dir === 'rtl') {
@@ -105,7 +102,7 @@ const Element = (props: {
   }
 
   // If it's a void node, wrap the children in extra void-specific elements.
-  if (Editor.isVoid(editor, element)) {
+  if (Editor.isVoid(editor, props.element)) {
     attributes['data-slate-void'] = true
 
     if (!readOnly && isInline) {
@@ -113,7 +110,7 @@ const Element = (props: {
     }
 
     const Tag = isInline ? Span : Div
-    const [[text]] = Node.texts(element)
+    const [[text]] = Node.texts(props.element)
 
     children = (
       <Tag
@@ -125,20 +122,20 @@ const Element = (props: {
           position: 'absolute',
         }}>
         <Text
-          renderPlaceholder={renderPlaceholder}
+          renderPlaceholder={props.renderPlaceholder}
           decorations={[]}
           isLast={false}
-          parent={element}
+          parent={props.element}
           text={text}
         />
       </Tag>
     )
 
     NODE_TO_INDEX.set(text, 0)
-    NODE_TO_PARENT.set(text, element)
+    NODE_TO_PARENT.set(text, props.element)
   }
 
-  return renderElement({ attributes, children, element })
+  return props.renderElement({ attributes, children, element: props.element })
 }
 
 // TODO: Figure out if there needs to be something similar in SolidJS
@@ -155,21 +152,6 @@ const Element = (props: {
 //         Range.equals(prev.selection, next.selection)))
 //   )
 // })
-
-/**
- * The default element renderer.
- */
-
-export const DefaultElement = (props: RenderElementProps) => {
-  const { attributes, children, element } = props
-  const editor = useSlateStatic()
-  const Tag = editor.isInline(element) ? Span : Div
-  return (
-    <Tag {...attributes} style={{ position: 'relative' }}>
-      {children}
-    </Tag>
-  )
-}
 
 // export default MemoizedElement
 
