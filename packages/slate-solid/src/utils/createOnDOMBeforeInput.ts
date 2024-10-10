@@ -11,19 +11,12 @@ import type { DebouncedFunc } from 'lodash'
 import { SolidEditor } from '../plugin/solid-editor'
 import type { MutableRefObject } from '../hooks/useRef'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
-
-export type DeferredOperation = () => void
-
-// Extracted from SolidJS `InputEventHandler` type
-type HTMLInputEvent<T = HTMLDivElement> = InputEvent & {
-  currentTarget: T
-  target: globalThis.Element
-}
-
-type HTMLInputEventHandler<T = HTMLDivElement> = JSX.InputEventHandler<
-  T,
-  InputEvent
->
+import type {
+  DeferredOperation,
+  HTMLInputEvent,
+  HTMLInputEventHandler,
+} from './types'
+import { isDOMEventHandled } from './isDOMEventHandled'
 
 export interface CreateOnDOMBeforeInputProps {
   editor: DOMEditor
@@ -342,26 +335,4 @@ export function createOnDOMBeforeInput({
 
     console.log('[TESTING]', editor.children)
   }
-}
-
-/**
- * Check if a DOM event is overrided by a handler.
- */
-export const isDOMEventHandled = (
-  event: HTMLInputEvent,
-  handler?: HTMLInputEventHandler,
-) => {
-  if (!handler) {
-    return false
-  }
-
-  // The custom event handler may return a boolean to specify whether the event
-  // shall be treated as being handled or not.
-  const shouldTreatEventAsHandled = handler(event)
-
-  if (shouldTreatEventAsHandled != null) {
-    return shouldTreatEventAsHandled
-  }
-
-  return event.defaultPrevented
 }
