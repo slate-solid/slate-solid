@@ -1,17 +1,10 @@
-import { direction as getDirection } from 'direction'
 import { JSX, mergeProps } from 'solid-js'
-import {
-  Editor,
-  Element as SlateElement,
-  Node,
-  Range,
-  type BaseEditor,
-} from 'slate'
+import { direction as getDirection } from 'direction'
+import { Editor, Element as SlateElement, Node, Range } from 'slate'
 import { SolidEditor } from '../plugin/solid-editor'
 import { useReadOnly } from '../hooks/use-read-only'
 import { useSlateStatic } from '../hooks/use-slate-static'
 import { useChildren } from '../hooks/use-children'
-import { isElementDecorationsEqual } from 'slate-dom'
 import {
   EDITOR_TO_KEY_TO_ELEMENT,
   ELEMENT_TO_NODE,

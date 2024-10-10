@@ -1,4 +1,4 @@
-import { createEffect, createSignal, JSX } from 'solid-js'
+import { createEffect, createSignal, JSX, mergeProps } from 'solid-js'
 import { Element, Text } from 'slate'
 import { ResizeObserver as ResizeObserverPolyfill } from '@juggle/resize-observer'
 import String from './string'
@@ -7,10 +7,11 @@ import {
   EDITOR_TO_PLACEHOLDER_ELEMENT,
   EDITOR_TO_FORCE_RENDER,
 } from 'slate-dom'
-import { RenderLeafProps, RenderPlaceholderProps } from './editable'
+import { RenderLeafProps, RenderPlaceholderProps } from './propTypes'
 import { useSlateStatic } from '../hooks/use-slate-static'
 import { IS_WEBKIT, IS_ANDROID } from 'slate-dom'
 import { useRef, type MutableRefObject } from '../hooks/useRef'
+import { DefaultLeaf } from './defaultLeaf'
 
 // Delay the placeholder on Android to prevent the keyboard from closing.
 // (https://github.com/ianstormtaylor/slate/pull/5368)
@@ -37,25 +38,23 @@ function clearTimeoutRef(timeoutRef: MutableRefObject<TimerId>) {
   }
 }
 
-/**
- * Individual leaves in a text node with unique formatting.
- */
-const Leaf = (props: {
+export interface LeafProps {
   isLast: boolean
   leaf: Text
   parent: Element
   renderPlaceholder: (props: RenderPlaceholderProps) => JSX.Element
   renderLeaf?: (props: RenderLeafProps) => JSX.Element
   text: Text
-}) => {
-  const {
-    leaf,
-    isLast,
-    text,
-    parent,
-    renderPlaceholder,
-    renderLeaf = (props: RenderLeafProps) => <DefaultLeaf {...props} />,
-  } = props
+}
+
+/**
+ * Individual leaves in a text node with unique formatting.
+ */
+const Leaf = (origProps: LeafProps) => {
+  const props = mergeProps(
+    { renderLeaf: (props: RenderLeafProps) => <DefaultLeaf {...props} /> },
+    origProps,
+  )
 
   const editor = useSlateStatic()
   const placeholderResizeObserver = useRef<ResizeObserver | null>(null)
@@ -71,7 +70,7 @@ const Leaf = (props: {
 
     if (placeholderEl == null) {
       EDITOR_TO_PLACEHOLDER_ELEMENT.delete(editor)
-      leaf.onPlaceholderResize?.(null)
+      props.leaf.onPlaceholderResize?.(null)
     } else {
       EDITOR_TO_PLACEHOLDER_ELEMENT.set(editor, placeholderEl)
 
@@ -79,7 +78,7 @@ const Leaf = (props: {
         // Create a new observer and observe the placeholder element.
         const ResizeObserver = window.ResizeObserver || ResizeObserverPolyfill
         placeholderResizeObserver.current = new ResizeObserver(() => {
-          leaf.onPlaceholderResize?.(placeholderEl)
+          props.leaf.onPlaceholderResize?.(placeholderEl)
         })
       }
       placeholderResizeObserver.current.observe(placeholderEl)
@@ -88,10 +87,15 @@ const Leaf = (props: {
   }
 
   let children = (
-    <String isLast={isLast} leaf={leaf} parent={parent} text={text} />
+    <String
+      isLast={props.isLast}
+      leaf={props.leaf}
+      parent={props.parent}
+      text={props.text}
+    />
   )
 
-  const leafIsPlaceholder = () => Boolean(leaf[PLACEHOLDER_SYMBOL])
+  const leafIsPlaceholder = () => Boolean(props.leaf[PLACEHOLDER_SYMBOL])
   createEffect(() => {
     if (leafIsPlaceholder()) {
       if (!showPlaceholderTimeoutRef.current) {
@@ -110,7 +114,7 @@ const Leaf = (props: {
 
   if (leafIsPlaceholder() && showPlaceholder()) {
     const placeholderProps: RenderPlaceholderProps = {
-      children: leaf.placeholder,
+      children: props.leaf.placeholder,
       attributes: {
         'data-slate-placeholder': true,
         style: {
@@ -133,7 +137,7 @@ const Leaf = (props: {
 
     children = (
       <>
-        {renderPlaceholder(placeholderProps)}
+        {props.renderPlaceholder(placeholderProps)}
         {children}
       </>
     )
@@ -148,7 +152,12 @@ const Leaf = (props: {
     'data-slate-leaf': true,
   }
 
-  return renderLeaf({ attributes, children, leaf, text })
+  return props.renderLeaf({
+    attributes,
+    children,
+    leaf: props.leaf,
+    text: props.text,
+  })
 }
 
 // TODO: Figure out if there is something comparable that needs to be done for SolidJS
@@ -163,11 +172,6 @@ const Leaf = (props: {
 //     next.leaf[PLACEHOLDER_SYMBOL] === prev.leaf[PLACEHOLDER_SYMBOL]
 //   )
 // })
-
-export const DefaultLeaf = (props: RenderLeafProps) => {
-  const { attributes, children } = props
-  return <span {...attributes}>{children}</span>
-}
 
 // export default MemoizedLeaf
 

@@ -5,6 +5,8 @@
  *
  * A workaround is to use wrappers
  * Tag = isInline ? Span : Div
+ *
+ * TODO: Look into <Dynamic/> from `solid-js/web`
  */
 
 import { splitProps, type JSX } from 'solid-js'
