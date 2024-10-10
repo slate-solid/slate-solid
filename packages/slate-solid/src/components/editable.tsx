@@ -11,7 +11,13 @@ import {
   type DOMRange,
 } from 'slate-dom'
 import { createOnDOMSelectionChange } from '../utils/createOnDOMSelectionChange'
-import { createEffect, createSignal, splitProps, type JSX } from 'solid-js'
+import {
+  createEffect,
+  createSignal,
+  mergeProps,
+  splitProps,
+  type JSX,
+} from 'solid-js'
 import debounce from 'lodash/debounce'
 import { useSlate } from '../hooks/use-slate'
 import { useRef } from '../hooks/useRef'
@@ -24,11 +30,9 @@ import type {
 } from './propTypes'
 import type { SolidEditor } from '../plugin/solid-editor'
 import { defaultDecorate } from '../utils/defaultDecorate'
-import {
-  createOnDOMBeforeInput,
-  type DeferredOperation,
-} from '../utils/createOnDOMBeforeInput'
+import { createOnDOMBeforeInput } from '../utils/createOnDOMBeforeInput'
 import { useTrackUserInput } from '../hooks/use-track-user-input'
+import type { DeferredOperation } from '../utils/types'
 
 const Children = (props: Parameters<typeof useChildren>[0]) => (
   <>{useChildren(props)}</>
@@ -49,8 +53,8 @@ export type EditableProps = {
   disableDefaultStyles?: boolean
 } & JSX.TextareaHTMLAttributes<HTMLDivElement>
 
-export function Editable(props: EditableProps) {
-  const [namedProps, attributes] = splitProps(props, [
+export function Editable(origProps: EditableProps) {
+  const [namedProps, attributes] = splitProps(origProps, [
     'autofocus',
     'decorate',
     'onDOMBeforeInput',
@@ -64,7 +68,8 @@ export function Editable(props: EditableProps) {
     'disableDefaultStyles',
   ])
 
-  console.log('[TESTING] Editable')
+  const props = mergeProps({ readOnly: false }, namedProps)
+
   const androidInputManagerRef = useRef<
     AndroidInputManager | null | undefined
   >()
@@ -86,7 +91,7 @@ export function Editable(props: EditableProps) {
     editor,
     androidInputManagerRef,
     processing,
-    readOnly: props.readOnly ?? false,
+    readOnly: props.readOnly,
     state,
   })
 
@@ -97,12 +102,12 @@ export function Editable(props: EditableProps) {
     androidInputManagerRef,
     deferredOperations,
     processing,
-    readOnly: props.readOnly ?? false,
+    readOnly: props.readOnly,
     scheduleOnDOMSelectionChange,
     onBeforeInput:
       //TODO: figure out if SolidJS bound functions need to be handled
-      typeof props.onBeforeInput === 'function'
-        ? (props.onBeforeInput as JSX.InputEventHandler<
+      typeof props.onDOMBeforeInput === 'function'
+        ? (props.onDOMBeforeInput as JSX.InputEventHandler<
             HTMLDivElement,
             InputEvent
           >)
@@ -129,36 +134,10 @@ export function Editable(props: EditableProps) {
     }
   })
 
-  // function onInput(
-  //   event: InputEvent & {
-  //     currentTarget: HTMLDivElement
-  //     target: Element
-  //   },
-  // ) {
-  //   console.log(event)
-
-  //   switch (event.inputType) {
-  //     case 'insertText':
-  //       Editor.insertText(editor, 'a')
-  //       // Transforms.splitNodes(editor, { always: true })
-
-  //       console.log(
-  //         '[TESTING] selection',
-  //         JSON.stringify(editor.selection, undefined, 2),
-  //       )
-
-  //       console.log(
-  //         '[TESTING] insertText',
-  //         JSON.stringify(editor.children, undefined, 2),
-  //       )
-  //   }
-  // }
-
   const decorations = (props.decorate ?? defaultDecorate)([editor, []])
 
   return (
     <div
-      class={props.class}
       role={props.readOnly ? undefined : 'textbox'}
       aria-multiline={props.readOnly ? undefined : true}
       {...attributes}
