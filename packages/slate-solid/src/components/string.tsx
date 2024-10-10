@@ -8,35 +8,35 @@ import { MARK_PLACEHOLDER_SYMBOL } from 'slate-dom'
 import { useRef } from '../hooks/useRef'
 import { createSignal } from 'solid-js'
 
-/**
- * Leaf content strings.
- */
-
-const String = (props: {
+export interface StringProps {
   isLast: boolean
   leaf: Text
   parent: Element
   text: Text
-}) => {
-  const { isLast, leaf, parent, text } = props
+}
+
+/**
+ * Leaf content strings.
+ */
+const String = (props: StringProps) => {
   const editor = useSlateStatic()
-  const path = SolidEditor.findPath(editor, text)
+  const path = SolidEditor.findPath(editor, props.text)
   const parentPath = Path.parent(path)
-  const isMarkPlaceholder = Boolean(leaf[MARK_PLACEHOLDER_SYMBOL])
+  const isMarkPlaceholder = Boolean(props.leaf[MARK_PLACEHOLDER_SYMBOL])
 
   // COMPAT: Render text inside void nodes with a zero-width space.
   // So the node can contain selection but the text is not visible.
-  if (editor.isVoid(parent)) {
-    return <ZeroWidthString length={Node.string(parent).length} />
+  if (editor.isVoid(props.parent)) {
+    return <ZeroWidthString length={Node.string(props.parent).length} />
   }
 
   // COMPAT: If this is the last text node in an empty block, render a zero-
   // width space that will convert into a line break when copying and pasting
   // to support expected plain text.
   if (
-    leaf.text === '' &&
-    parent.children[parent.children.length - 1] === text &&
-    !editor.isInline(parent) &&
+    props.leaf.text === '' &&
+    props.parent.children[props.parent.children.length - 1] === props.text &&
+    !editor.isInline(props.parent) &&
     Editor.string(editor, parentPath) === ''
   ) {
     return <ZeroWidthString isLineBreak isMarkPlaceholder={isMarkPlaceholder} />
@@ -45,17 +45,17 @@ const String = (props: {
   // COMPAT: If the text is empty, it's because it's on the edge of an inline
   // node, so we render a zero-width space so that the selection can be
   // inserted next to it still.
-  if (leaf.text === '') {
+  if (props.leaf.text === '') {
     return <ZeroWidthString isMarkPlaceholder={isMarkPlaceholder} />
   }
 
   // COMPAT: Browsers will collapse trailing new lines at the end of blocks,
   // so we need to add an extra trailing new lines to prevent that.
-  if (isLast && leaf.text.slice(-1) === '\n') {
-    return <TextString isTrailing text={leaf.text} />
+  if (props.isLast && props.leaf.text.slice(-1) === '\n') {
+    return <TextString isTrailing text={props.leaf.text} />
   }
 
-  return <TextString text={leaf.text} />
+  return <TextString text={props.leaf.text} />
 }
 
 /**

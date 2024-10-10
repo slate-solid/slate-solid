@@ -12,24 +12,23 @@ import { RenderLeafProps, RenderPlaceholderProps } from './propTypes'
 import Leaf from './leaf'
 import { useRef } from '../hooks/useRef'
 
-/**
- * Text.
- */
-
-const Text = (props: {
+export interface TextProps {
   decorations: Range[]
   isLast: boolean
   parent: Element
   renderPlaceholder: (props: RenderPlaceholderProps) => JSX.Element
   renderLeaf?: (props: RenderLeafProps) => JSX.Element
   text: SlateText
-}) => {
-  const { decorations, isLast, parent, renderPlaceholder, renderLeaf, text } =
-    props
+}
+
+/**
+ * Text.
+ */
+const Text = (props: TextProps) => {
   const editor = useSlateStatic()
   const ref = useRef<HTMLSpanElement | null>(null)
-  const leaves = SlateText.decorations(text, decorations)
-  const key = SolidEditor.findKey(editor, text)
+  const leaves = SlateText.decorations(props.text, props.decorations)
+  const key = SolidEditor.findKey(editor, props.text)
   const children = []
 
   for (let i = 0; i < leaves.length; i++) {
@@ -37,13 +36,13 @@ const Text = (props: {
 
     children.push(
       <Leaf
-        isLast={isLast && i === leaves.length - 1}
+        isLast={props.isLast && i === leaves.length - 1}
         // key={`${key.id}-${i}`}
-        renderPlaceholder={renderPlaceholder}
+        renderPlaceholder={props.renderPlaceholder}
         leaf={leaf}
-        text={text}
-        parent={parent}
-        renderLeaf={renderLeaf}
+        text={props.text}
+        parent={props.parent}
+        renderLeaf={props.renderLeaf}
       />,
     )
   }
@@ -53,11 +52,11 @@ const Text = (props: {
     const KEY_TO_ELEMENT = EDITOR_TO_KEY_TO_ELEMENT.get(editor)
     if (span) {
       KEY_TO_ELEMENT?.set(key, span)
-      NODE_TO_ELEMENT.set(text, span)
-      ELEMENT_TO_NODE.set(span, text)
+      NODE_TO_ELEMENT.set(props.text, span)
+      ELEMENT_TO_NODE.set(span, props.text)
     } else {
       KEY_TO_ELEMENT?.delete(key)
-      NODE_TO_ELEMENT.delete(text)
+      NODE_TO_ELEMENT.delete(props.text)
       if (ref.current) {
         ELEMENT_TO_NODE.delete(ref.current)
       }
