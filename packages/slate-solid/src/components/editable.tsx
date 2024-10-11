@@ -146,7 +146,28 @@ export function Editable(origProps: EditableProps) {
       // explicitly set this
       contentEditable={!props.readOnly}
       ref={ref.current!}
-      onBeforeInput={onBeforeInput}>
+      onBeforeInput={onBeforeInput}
+      onInput={(_event) => {
+        // TODO: Implement this
+        // if (isEventHandled(event, attributes.onInput)) {
+        //   return
+        // }
+
+        if (androidInputManagerRef.current) {
+          androidInputManagerRef.current.handleInput()
+          return
+        }
+
+        // Flush native operations, as native events will have propogated
+        // and we can correctly compare DOM text values in components
+        // to stop rendering, so that browser functions like autocorrect
+        // and spellcheck work as expected.
+        for (const op of deferredOperations.current) {
+          op()
+        }
+
+        deferredOperations.current = []
+      }}>
       <Children
         decorations={decorations}
         node={editor()}

@@ -67,12 +67,10 @@ export const Slate = (props: {
     useSelectorContext(editor())
 
   const onContextChange = (options?: { operation?: Operation }) => {
-    console.log(
-      '[TESTING] onContextChange',
-      options?.operation,
-      JSON.stringify(editor().selection),
-      JSON.stringify(editor().children),
-    )
+    console.group('onContextChange', options?.operation)
+    console.log('Selection:', JSON.stringify(editor().selection))
+    console.log('Children:', JSON.stringify(editor().children, undefined, 2))
+    console.groupEnd()
 
     if (props.onChange) {
       props.onChange(editor().children)
