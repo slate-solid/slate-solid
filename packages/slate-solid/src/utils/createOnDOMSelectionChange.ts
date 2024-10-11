@@ -107,11 +107,6 @@ export function createOnDOMSelectionChange({
       if (readOnly && (!anchorNodeSelectable || !focusNodeInEditor)) {
         Transforms.deselect(editor)
       }
-
-      console.log(
-        '[TESTING] onDOMSelectionChange',
-        JSON.stringify(editor.selection),
-      )
     }
   }, 100)
 }

@@ -86,9 +86,9 @@ export function Editable(origProps: EditableProps) {
     latestElement: null as DOMElement | null,
     hasMarkPlaceholder: false,
   }
-
+  createEffect(() => console.log('[TESTING] editor:', editor()))
   const onDOMSelectionChange = createOnDOMSelectionChange({
-    editor,
+    editor: editor(),
     androidInputManagerRef,
     processing,
     readOnly: props.readOnly,
@@ -98,7 +98,7 @@ export function Editable(origProps: EditableProps) {
   const scheduleOnDOMSelectionChange = debounce(onDOMSelectionChange, 0)
 
   const onBeforeInput = createOnDOMBeforeInput({
-    editor,
+    editor: editor(),
     androidInputManagerRef,
     deferredOperations,
     processing,
@@ -125,16 +125,16 @@ export function Editable(origProps: EditableProps) {
     // Update element-related weak maps with the DOM element ref.
     let window
     if (ref.current && (window = getDefaultView(ref.current))) {
-      EDITOR_TO_WINDOW.set(editor, window)
-      EDITOR_TO_ELEMENT.set(editor, ref.current)
-      NODE_TO_ELEMENT.set(editor, ref.current)
-      ELEMENT_TO_NODE.set(ref.current, editor)
+      EDITOR_TO_WINDOW.set(editor(), window)
+      EDITOR_TO_ELEMENT.set(editor(), ref.current)
+      NODE_TO_ELEMENT.set(editor(), ref.current)
+      ELEMENT_TO_NODE.set(ref.current, editor())
     } else {
-      NODE_TO_ELEMENT.delete(editor)
+      NODE_TO_ELEMENT.delete(editor())
     }
   })
 
-  const decorations = (props.decorate ?? defaultDecorate)([editor, []])
+  const decorations = (props.decorate ?? defaultDecorate)([editor(), []])
 
   return (
     <div
@@ -149,11 +149,11 @@ export function Editable(origProps: EditableProps) {
       onBeforeInput={onBeforeInput}>
       <Children
         decorations={decorations}
-        node={editor}
+        node={editor()}
         renderElement={props.renderElement}
         renderPlaceholder={() => <div>Default Placeholder</div>}
         renderLeaf={props.renderLeaf}
-        selection={editor.selection}
+        selection={editor().selection}
       />
     </div>
   )

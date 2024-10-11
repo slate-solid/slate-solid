@@ -332,7 +332,5 @@ export function createOnDOMBeforeInput({
         Transforms.select(editor, toRestore)
       }
     }
-
-    console.log('[TESTING]', editor.children)
   }
 }

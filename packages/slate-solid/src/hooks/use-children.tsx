@@ -37,18 +37,18 @@ export const useChildren = (props: {
   } = props
   const decorate = useDecorate()
   const editor = useSlateStatic()
-  const path = SolidEditor.findPath(editor, node)
+  const path = SolidEditor.findPath(editor(), node)
   const children = []
   const isLeafBlock =
     Element.isElement(node) &&
-    !editor.isInline(node) &&
-    Editor.hasInlines(editor, node)
+    !editor().isInline(node) &&
+    Editor.hasInlines(editor(), node)
 
   for (let i = 0; i < node.children.length; i++) {
     const p = path.concat(i)
     const n = node.children[i] as Descendant
-    const key = SolidEditor.findKey(editor, n)
-    const range = Editor.range(editor, p)
+    const key = SolidEditor.findKey(editor(), n)
+    const range = Editor.range(editor(), p)
     const sel = selection && Range.intersection(range, selection)
     const ds = decorate([n, p])
 

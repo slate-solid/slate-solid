@@ -5,6 +5,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
+    "ts:check": "tsc --build --watch tsconfig.json",
     "build": "vite build",
     "serve": "vite preview"
   },

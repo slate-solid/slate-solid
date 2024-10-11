@@ -28,7 +28,7 @@ const Text = (props: TextProps) => {
   const editor = useSlateStatic()
   const ref = useRef<HTMLSpanElement | null>(null)
   const leaves = SlateText.decorations(props.text, props.decorations)
-  const key = SolidEditor.findKey(editor, props.text)
+  const key = SolidEditor.findKey(editor(), props.text)
   const children = []
 
   for (let i = 0; i < leaves.length; i++) {
@@ -49,7 +49,7 @@ const Text = (props: TextProps) => {
 
   // Update element-related weak maps with the DOM element ref.
   const callbackRef = (span: HTMLSpanElement | null) => {
-    const KEY_TO_ELEMENT = EDITOR_TO_KEY_TO_ELEMENT.get(editor)
+    const KEY_TO_ELEMENT = EDITOR_TO_KEY_TO_ELEMENT.get(editor())
     if (span) {
       KEY_TO_ELEMENT?.set(key, span)
       NODE_TO_ELEMENT.set(props.text, span)

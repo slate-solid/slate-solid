@@ -16,7 +16,7 @@ export function useTrackUserInput() {
 
     receivedUserInput.current = true
 
-    const window = SolidEditor.getWindow(editor)
+    const window = SolidEditor.getWindow(editor())
     window.cancelAnimationFrame(animationFrameIdRef.current)
 
     animationFrameIdRef.current = window.requestAnimationFrame(() => {

@@ -20,13 +20,13 @@ export interface StringProps {
  */
 const String = (props: StringProps) => {
   const editor = useSlateStatic()
-  const path = SolidEditor.findPath(editor, props.text)
+  const path = SolidEditor.findPath(editor(), props.text)
   const parentPath = Path.parent(path)
   const isMarkPlaceholder = Boolean(props.leaf[MARK_PLACEHOLDER_SYMBOL])
 
   // COMPAT: Render text inside void nodes with a zero-width space.
   // So the node can contain selection but the text is not visible.
-  if (editor.isVoid(props.parent)) {
+  if (editor().isVoid(props.parent)) {
     return <ZeroWidthString length={Node.string(props.parent).length} />
   }
 
@@ -36,8 +36,8 @@ const String = (props: StringProps) => {
   if (
     props.leaf.text === '' &&
     props.parent.children[props.parent.children.length - 1] === props.text &&
-    !editor.isInline(props.parent) &&
-    Editor.string(editor, parentPath) === ''
+    !editor().isInline(props.parent) &&
+    Editor.string(editor(), parentPath) === ''
   ) {
     return <ZeroWidthString isLineBreak isMarkPlaceholder={isMarkPlaceholder} />
   }

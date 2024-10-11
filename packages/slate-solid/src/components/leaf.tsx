@@ -69,10 +69,10 @@ const Leaf = (origProps: LeafProps) => {
     )
 
     if (placeholderEl == null) {
-      EDITOR_TO_PLACEHOLDER_ELEMENT.delete(editor)
+      EDITOR_TO_PLACEHOLDER_ELEMENT.delete(editor())
       props.leaf.onPlaceholderResize?.(null)
     } else {
-      EDITOR_TO_PLACEHOLDER_ELEMENT.set(editor, placeholderEl)
+      EDITOR_TO_PLACEHOLDER_ELEMENT.set(editor(), placeholderEl)
 
       if (!placeholderResizeObserver.current) {
         // Create a new observer and observe the placeholder element.

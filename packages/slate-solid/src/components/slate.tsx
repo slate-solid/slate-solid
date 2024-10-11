@@ -60,13 +60,20 @@ export const Slate = (props: {
 
   const [context, setContext] = createSignal<SlateContextValue>({
     v: 0,
-    editor: editor(),
+    editor,
   })
 
   const { selectorContext, onChange: handleSelectorChange } =
     useSelectorContext(editor())
 
   const onContextChange = (options?: { operation?: Operation }) => {
+    console.log(
+      '[TESTING] onContextChange',
+      options?.operation,
+      JSON.stringify(editor().selection),
+      JSON.stringify(editor().children),
+    )
+
     if (props.onChange) {
       props.onChange(editor().children)
     }
@@ -81,7 +88,7 @@ export const Slate = (props: {
 
     setContext((prevContext) => ({
       v: prevContext.v + 1,
-      editor: editor(),
+      editor,
     }))
     handleSelectorChange(editor())
   }
@@ -126,9 +133,9 @@ export const Slate = (props: {
 
   return (
     <SlateSelectorContext.Provider value={selectorContext}>
-      <SlateContext.Provider value={context()}>
-        <EditorContext.Provider value={context().editor}>
-          <FocusedContext.Provider value={isFocused()}>
+      <SlateContext.Provider value={context}>
+        <EditorContext.Provider value={editor}>
+          <FocusedContext.Provider value={isFocused}>
             {props.children}
           </FocusedContext.Provider>
         </EditorContext.Provider>

@@ -1,4 +1,4 @@
-import { JSX, mergeProps } from 'solid-js'
+import { createEffect, JSX, mergeProps } from 'solid-js'
 import { direction as getDirection } from 'direction'
 import { Editor, Element as SlateElement, Node, Range } from 'slate'
 import { SolidEditor } from '../plugin/solid-editor'
@@ -41,11 +41,11 @@ const Element = (origProps: ElementProps) => {
   )
   const editor = useSlateStatic()
   const readOnly = useReadOnly()
-  const isInline = editor.isInline(props.element)
-  const key = SolidEditor.findKey(editor, props.element)
+  const isInline = editor().isInline(props.element)
+  const key = SolidEditor.findKey(editor(), props.element)
   const ref = (ref: HTMLElement | null) => {
     // Update element-related weak maps with the DOM element ref.
-    const KEY_TO_ELEMENT = EDITOR_TO_KEY_TO_ELEMENT.get(editor)
+    const KEY_TO_ELEMENT = EDITOR_TO_KEY_TO_ELEMENT.get(editor())
     if (ref) {
       KEY_TO_ELEMENT?.set(key, ref)
       NODE_TO_ELEMENT.set(props.element, ref)
@@ -64,6 +64,8 @@ const Element = (origProps: ElementProps) => {
     renderLeaf: props.renderLeaf,
     selection: props.selection,
   })
+
+  createEffect(() => console.log('[TESTING] element:', props.element))
 
   // Attributes that the developer must mix into the element in their
   // custom node renderer component.
@@ -85,7 +87,7 @@ const Element = (origProps: ElementProps) => {
 
   // If it's a block node with inline children, add the proper `dir` attribute
   // for text direction.
-  if (!isInline && Editor.hasInlines(editor, props.element)) {
+  if (!isInline && Editor.hasInlines(editor(), props.element)) {
     const text = Node.string(props.element)
     const dir = getDirection(text)
 
@@ -95,7 +97,7 @@ const Element = (origProps: ElementProps) => {
   }
 
   // If it's a void node, wrap the children in extra void-specific elements.
-  if (Editor.isVoid(editor, props.element)) {
+  if (Editor.isVoid(editor(), props.element)) {
     attributes['data-slate-void'] = true
 
     if (!readOnly && isInline) {
