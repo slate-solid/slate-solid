@@ -28,7 +28,7 @@ export function Children(props: ChildrenProps) {
   const decorate = useDecorate()
   const editor = useSlateStatic()
   const path = SolidEditor.findPath(editor(), props.node)
-  const children = []
+
   const isLeafBlock =
     Element.isElement(props.node) &&
     !editor().isInline(props.node) &&
