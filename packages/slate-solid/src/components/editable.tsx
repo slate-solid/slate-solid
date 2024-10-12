@@ -70,12 +70,16 @@ export function Editable(origProps: EditableProps) {
     AndroidInputManager | null | undefined
   >()
   const editor = useSlate()
-  createEffect(() =>
+  createEffect(() => {
     console.log(
-      '[TESTING] Editable editor():',
+      '[TESTING] Editable editor().selection:',
+      JSON.stringify(editor().selection),
+    )
+    console.log(
+      '[TESTING] Editable editor().children:',
       JSON.stringify(editor().children, undefined, 2),
-    ),
-  )
+    )
+  })
   // Rerender editor when composition status changed
   const [isComposing, setIsComposing] = createSignal(false)
   const ref = useRef<HTMLDivElement | null>(null)

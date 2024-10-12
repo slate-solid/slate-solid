@@ -23,8 +23,6 @@ export interface ChildrenProps {
 }
 
 export function Children(props: ChildrenProps) {
-  console.log('[TESTING] Children')
-
   const decorate = useDecorate()
   const editor = useSlateStatic()
   const path = SolidEditor.findPath(editor(), props.node)
