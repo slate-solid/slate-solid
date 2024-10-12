@@ -22,7 +22,6 @@ import debounce from 'lodash/debounce'
 import { useSlate } from '../hooks/use-slate'
 import { useRef } from '../hooks/useRef'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
-import { useChildren } from '../hooks/use-children'
 import type {
   RenderElementProps,
   RenderLeafProps,
@@ -71,6 +70,12 @@ export function Editable(origProps: EditableProps) {
     AndroidInputManager | null | undefined
   >()
   const editor = useSlate()
+  createEffect(() =>
+    console.log(
+      '[TESTING] Editable editor():',
+      JSON.stringify(editor().children, undefined, 2),
+    ),
+  )
   // Rerender editor when composition status changed
   const [isComposing, setIsComposing] = createSignal(false)
   const ref = useRef<HTMLDivElement | null>(null)
@@ -83,7 +88,6 @@ export function Editable(origProps: EditableProps) {
     latestElement: null as DOMElement | null,
     hasMarkPlaceholder: false,
   }
-  createEffect(() => console.log('[TESTING] editor:', editor()))
   const onDOMSelectionChange = createOnDOMSelectionChange({
     editor: editor(),
     androidInputManagerRef,

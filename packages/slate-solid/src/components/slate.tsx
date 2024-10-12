@@ -5,7 +5,15 @@ import {
   splitProps,
   type JSX,
 } from 'solid-js'
-import { Descendant, Editor, Node, Operation, Scrubber, Selection } from 'slate'
+import {
+  createEditor,
+  Descendant,
+  Editor,
+  Node,
+  Operation,
+  Scrubber,
+  Selection,
+} from 'slate'
 import { EDITOR_TO_ON_CHANGE } from 'slate-dom'
 import { FocusedContext } from '../hooks/use-focused'
 import { SlateContext, SlateContextValue } from '../hooks/use-slate'
@@ -38,7 +46,7 @@ export const Slate = (props: {
     'initialValue',
   ])
 
-  const editor = createMemo(() => {
+  const initialEditor = createMemo(() => {
     const { editor } = namedProps
     if (!Node.isNodeList(namedProps.initialValue)) {
       throw new Error(
@@ -56,6 +64,12 @@ export const Slate = (props: {
     Object.assign(editor, restProps)
 
     return editor
+  })
+
+  const [editor, setEditor] = createSignal(initialEditor(), {
+    // The editor reference doesn't change, so we have to mark it as !== for
+    // every signal
+    equals: () => false,
   })
 
   const [context, setContext] = createSignal<SlateContextValue>({
@@ -89,6 +103,8 @@ export const Slate = (props: {
       editor,
     }))
     handleSelectorChange(editor())
+
+    setEditor(editor())
   }
 
   createEffect(() => {

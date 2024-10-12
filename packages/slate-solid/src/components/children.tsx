@@ -1,4 +1,4 @@
-import { For, type JSX } from 'solid-js'
+import { createEffect, For, type JSX } from 'solid-js'
 import { type Ancestor, Range, Editor, Element } from 'slate'
 import { SolidEditor } from '../plugin/solid-editor'
 import type {
@@ -43,6 +43,10 @@ export function Children(props: ChildrenProps) {
         const sel =
           props.selection && Range.intersection(range, props.selection)
         const ds = decorate([n, p])
+
+        createEffect(() => {
+          console.log('[TESTING] child', n)
+        })
 
         for (const dec of props.decorations) {
           const d = Range.intersection(dec, range)
