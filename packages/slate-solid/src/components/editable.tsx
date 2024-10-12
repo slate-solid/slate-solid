@@ -33,6 +33,8 @@ import { createOnDOMBeforeInput } from '../utils/createOnDOMBeforeInput'
 import { useTrackUserInput } from '../hooks/use-track-user-input'
 import type { DeferredOperation } from '../utils/types'
 import { Children } from './children'
+import { defaultScrollSelectionIntoView } from '../utils/defaultScrollSelectionIntoView'
+import { useSyncEditableWeakMaps } from '../hooks/use-sync-editable-weak-maps'
 
 export type EditableProps = {
   decorate?: (entry: NodeEntry) => Range[]
@@ -64,7 +66,14 @@ export function Editable(origProps: EditableProps) {
     'disableDefaultStyles',
   ])
 
-  const props = mergeProps({ readOnly: false }, namedProps)
+  const props = mergeProps(
+    {
+      readOnly: false,
+      // renderPlaceholder: TODO: implement this
+      scrollSelectionIntoView: defaultScrollSelectionIntoView,
+    },
+    namedProps,
+  )
 
   const androidInputManagerRef = useRef<
     AndroidInputManager | null | undefined
@@ -101,6 +110,14 @@ export function Editable(origProps: EditableProps) {
   })
 
   const scheduleOnDOMSelectionChange = debounce(onDOMSelectionChange, 0)
+
+  useSyncEditableWeakMaps({
+    editableRef: ref,
+    editor,
+    androidInputManagerRef,
+    scrollSelectionIntoView: props.scrollSelectionIntoView,
+    state,
+  })
 
   const onBeforeInput = createOnDOMBeforeInput({
     editor: editor(),
