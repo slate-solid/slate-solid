@@ -33,10 +33,7 @@ import { defaultDecorate } from '../utils/defaultDecorate'
 import { createOnDOMBeforeInput } from '../utils/createOnDOMBeforeInput'
 import { useTrackUserInput } from '../hooks/use-track-user-input'
 import type { DeferredOperation } from '../utils/types'
-
-const Children = (props: Parameters<typeof useChildren>[0]) => (
-  <>{useChildren(props)}</>
-)
+import { Children } from './children'
 
 export type EditableProps = {
   decorate?: (entry: NodeEntry) => Range[]

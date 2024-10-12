@@ -1,10 +1,9 @@
-import { createEffect, JSX, mergeProps } from 'solid-js'
+import { JSX, mergeProps } from 'solid-js'
 import { direction as getDirection } from 'direction'
 import { Editor, Element as SlateElement, Node, Range } from 'slate'
 import { SolidEditor } from '../plugin/solid-editor'
 import { useReadOnly } from '../hooks/use-read-only'
 import { useSlateStatic } from '../hooks/use-slate-static'
-import { useChildren } from '../hooks/use-children'
 import {
   EDITOR_TO_KEY_TO_ELEMENT,
   ELEMENT_TO_NODE,
@@ -21,6 +20,7 @@ import {
 import Text from './text'
 import { Div, Span } from './html'
 import { DefaultElement } from './defaultElement'
+import { Children } from './children'
 
 export interface ElementProps {
   decorations: Range[]
@@ -56,16 +56,16 @@ const Element = (origProps: ElementProps) => {
     }
   }
 
-  let children: JSX.Element = useChildren({
-    decorations: props.decorations,
-    node: props.element,
-    renderElement: props.renderElement,
-    renderPlaceholder: props.renderPlaceholder,
-    renderLeaf: props.renderLeaf,
-    selection: props.selection,
-  })
-
-  createEffect(() => console.log('[TESTING] element:', props.element))
+  let children: JSX.Element = (
+    <Children
+      decorations={props.decorations}
+      node={props.element}
+      renderElement={props.renderElement}
+      renderPlaceholder={props.renderPlaceholder}
+      renderLeaf={props.renderLeaf}
+      selection={props.selection}
+    />
+  )
 
   // Attributes that the developer must mix into the element in their
   // custom node renderer component.
