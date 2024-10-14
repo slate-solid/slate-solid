@@ -1,0 +1,13 @@
+.button {
+  cursor: pointer;
+  color: #ccc;
+  &.active {
+    color: black;
+  }
+  &.reserved {
+    color: #aaa;
+  }
+  &.active.reserved {
+    color: white;
+  }
+}

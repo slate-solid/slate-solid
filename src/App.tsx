@@ -3,6 +3,7 @@ import { Editable, Slate, withSolid } from '@slate-solid/slate-solid'
 import { createEditor, type Descendant } from 'slate'
 
 import styles from './App.module.css'
+import RichTextExample from './examples/richText'
 
 const initialValue: Descendant[] = [
   {
@@ -42,13 +43,15 @@ const initialValue: Descendant[] = [
 
 const App: Component = () => {
   const editor = withSolid(createEditor())
-  return (
-    <div class={styles.App}>
-      <Slate editor={editor} initialValue={initialValue}>
-        <Editable class={styles.Editable} />
-      </Slate>
-    </div>
-  )
+
+  return <RichTextExample />
+  // return (
+  //   <div class={styles.App}>
+  //     <Slate editor={editor} initialValue={initialValue}>
+  //       <Editable class={styles.Editable} />
+  //     </Slate>
+  //   </div>
+  // )
 }
 
 export default App

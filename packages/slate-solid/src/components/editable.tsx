@@ -206,12 +206,12 @@ export function Editable(origProps: EditableProps) {
           // Allow positioning relative to the editable element.
           position: 'relative',
           // Preserve adjacent whitespace and new lines.
-          ['white-space']: 'pre-wrap',
+          'white-space': 'pre-wrap',
           // Allow words to break if they are too long.
-          ['word-wrap']: 'break-word',
+          'word-wrap': 'break-word',
           // Make the minimum height that of the placeholder.
           ...(placeholderHeight()
-            ? { ['min-height']: `${placeholderHeight()}px` }
+            ? { 'min-height': `${placeholderHeight()}px` }
             : {}),
         }),
     // Allow for passed-in styles to override anything.
