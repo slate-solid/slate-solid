@@ -42,10 +42,6 @@ export function Children(props: ChildrenProps) {
           props.selection && Range.intersection(range, props.selection)
         const ds = decorate([n, p])
 
-        createEffect(() => {
-          console.log('[TESTING] child', n)
-        })
-
         for (const dec of props.decorations) {
           const d = Range.intersection(dec, range)
 

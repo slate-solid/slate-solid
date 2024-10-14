@@ -1,4 +1,4 @@
-import { Editor, type NodeEntry, Range } from 'slate'
+import { Editor, Node, type NodeEntry, Range } from 'slate'
 import {
   CAN_USE_DOM,
   EDITOR_TO_ELEMENT,
@@ -7,12 +7,14 @@ import {
   getDefaultView,
   HAS_BEFORE_INPUT_SUPPORT,
   NODE_TO_ELEMENT,
+  PLACEHOLDER_SYMBOL,
   type DOMElement,
   type DOMRange,
 } from 'slate-dom'
 import { createOnDOMSelectionChange } from '../utils/createOnDOMSelectionChange'
 import {
   createEffect,
+  createMemo,
   createSignal,
   mergeProps,
   splitProps,
@@ -35,6 +37,9 @@ import type { DeferredOperation } from '../utils/types'
 import { Children } from './children'
 import { defaultScrollSelectionIntoView } from '../utils/defaultScrollSelectionIntoView'
 import { useSyncEditableWeakMaps } from '../hooks/use-sync-editable-weak-maps'
+import { Logger } from '../utils/logger'
+
+const logger = new Logger('Editable')
 
 export type EditableProps = {
   decorate?: (entry: NodeEntry) => Range[]
@@ -49,7 +54,7 @@ export type EditableProps = {
   scrollSelectionIntoView?: (editor: SolidEditor, domRange: DOMRange) => void
   // as?: React.ElementType
   disableDefaultStyles?: boolean
-} & JSX.TextareaHTMLAttributes<HTMLDivElement>
+} & Omit<JSX.TextareaHTMLAttributes<HTMLDivElement>, 'style'>
 
 export function Editable(origProps: EditableProps) {
   const [namedProps, attributes] = splitProps(origProps, [
@@ -68,9 +73,11 @@ export function Editable(origProps: EditableProps) {
 
   const props = mergeProps(
     {
+      disableDefaultStyles: false,
       readOnly: false,
       // renderPlaceholder: TODO: implement this
       scrollSelectionIntoView: defaultScrollSelectionIntoView,
+      style: {},
     },
     namedProps,
   )
@@ -78,21 +85,23 @@ export function Editable(origProps: EditableProps) {
   const androidInputManagerRef = useRef<
     AndroidInputManager | null | undefined
   >()
+
   const editor = useSlate()
   createEffect(() => {
-    console.log(
-      '[TESTING] Editable editor().selection:',
-      JSON.stringify(editor().selection),
-    )
-    console.log(
-      '[TESTING] Editable editor().children:',
+    logger.debug('editor().selection:', JSON.stringify(editor().selection))
+    logger.debug(
+      'editor().children:',
       JSON.stringify(editor().children, undefined, 2),
     )
   })
+
   // Rerender editor when composition status changed
   const [isComposing, setIsComposing] = createSignal(false)
   const ref = useRef<HTMLDivElement | null>(null)
   const deferredOperations = useRef<DeferredOperation[]>([])
+  const [placeholderHeight, setPlaceholderHeight] = createSignal<
+    number | undefined
+  >()
   const processing = useRef(false)
   const { onUserInput, receivedUserInput } = useTrackUserInput()
   const state = {
@@ -156,7 +165,58 @@ export function Editable(origProps: EditableProps) {
     }
   })
 
-  const decorations = (props.decorate ?? defaultDecorate)([editor(), []])
+  const showPlaceholder =
+    props.placeholder &&
+    editor().children.length === 1 &&
+    Array.from(Node.texts(editor())).length === 1 &&
+    Node.string(editor()) === '' &&
+    !isComposing()
+
+  const placeHolderResizeHandler = (placeholderEl: HTMLElement | null) => {
+    if (placeholderEl && showPlaceholder) {
+      setPlaceholderHeight(placeholderEl.getBoundingClientRect()?.height)
+    } else {
+      setPlaceholderHeight(undefined)
+    }
+  }
+
+  const decorations = createMemo(() => {
+    const decorations = (props.decorate ?? defaultDecorate)([editor(), []])
+
+    if (showPlaceholder) {
+      const start = Editor.start(editor(), [])
+      decorations.push({
+        [PLACEHOLDER_SYMBOL]: true,
+        placeholder: props.placeholder,
+        onPlaceholderResize: placeHolderResizeHandler,
+        anchor: start,
+        focus: start,
+      })
+    }
+
+    return decorations
+  })
+
+  // TODO: marks
+
+  const style = createMemo<JSX.CSSProperties>(() => ({
+    ...(props.disableDefaultStyles
+      ? {}
+      : {
+          // Allow positioning relative to the editable element.
+          position: 'relative',
+          // Preserve adjacent whitespace and new lines.
+          ['white-space']: 'pre-wrap',
+          // Allow words to break if they are too long.
+          ['word-wrap']: 'break-word',
+          // Make the minimum height that of the placeholder.
+          ...(placeholderHeight()
+            ? { ['min-height']: `${placeholderHeight()}px` }
+            : {}),
+        }),
+    // Allow for passed-in styles to override anything.
+    ...props.style,
+  }))
 
   return (
     <div
@@ -168,6 +228,7 @@ export function Editable(origProps: EditableProps) {
       // explicitly set this
       contentEditable={!props.readOnly}
       ref={ref.current!}
+      style={style()}
       onBeforeInput={onBeforeInput}
       onInput={(_event) => {
         // TODO: Implement this
@@ -191,7 +252,7 @@ export function Editable(origProps: EditableProps) {
         deferredOperations.current = []
       }}>
       <Children
-        decorations={decorations}
+        decorations={decorations()}
         node={editor()}
         renderElement={props.renderElement}
         renderPlaceholder={() => <div>Default Placeholder</div>}

@@ -1,4 +1,4 @@
-import { mergeProps } from 'solid-js'
+import { createEffect, createSignal, mergeProps } from 'solid-js'
 
 /**
  * Leaf strings with text in them.
@@ -41,6 +41,24 @@ export const TextString = (origProps: {
   // We defer to the layout effect above to update the `textContent` of the span element when needed.
   // return <MemoizedText ref={ref}>{initialText}</MemoizedText>
 
+  // let ref!: HTMLSpanElement
+
+  // createEffect(() => {
+  //   if (ref == null) {
+  //     return
+  //   }
+
+  //   const textWithTrailing = getTextContent()
+  //   if (ref.textContent !== textWithTrailing) {
+  //     ref.textContent = textWithTrailing
+  //   }
+  // })
+
+  // return (
+  //   <span ref={ref} data-slate-string>
+  //     {initialText()}
+  //   </span>
+  // )
   return <span data-slate-string>{getTextContent()}</span>
 }
 

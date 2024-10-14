@@ -1,4 +1,3 @@
-import type { JSX } from 'solid-js'
 import { Editor, Element, Node, Range, Transforms } from 'slate'
 import {
   EDITOR_TO_USER_SELECTION,
@@ -17,6 +16,9 @@ import type {
   HTMLInputEventHandler,
 } from './types'
 import { isDOMEventHandled } from './isDOMEventHandled'
+import { Logger } from './logger'
+
+const logger = new Logger('createOnDOMBeforeInput')
 
 export interface CreateOnDOMBeforeInputProps {
   editor: DOMEditor
@@ -46,6 +48,8 @@ export function createOnDOMBeforeInput({
   onUserInput,
 }: CreateOnDOMBeforeInputProps) {
   return (event: HTMLInputEvent): void => {
+    logger.debug('inputType:', event.inputType, event)
+
     const el = SolidEditor.toDOMNode(editor, editor)
     const root = el.getRootNode()
 
