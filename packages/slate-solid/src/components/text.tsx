@@ -11,6 +11,7 @@ import {
 import { RenderLeafProps, RenderPlaceholderProps } from './propTypes'
 import Leaf from './leaf'
 import { useRef } from '../hooks/useRef'
+import { createEffect, For } from 'solid-js'
 
 export interface TextProps {
   decorations: Range[]
@@ -29,23 +30,6 @@ const Text = (props: TextProps) => {
   const ref = useRef<HTMLSpanElement | null>(null)
   const leaves = SlateText.decorations(props.text, props.decorations)
   const key = SolidEditor.findKey(editor(), props.text)
-  const children = []
-
-  for (let i = 0; i < leaves.length; i++) {
-    const leaf = leaves[i]
-
-    children.push(
-      <Leaf
-        isLast={props.isLast && i === leaves.length - 1}
-        // key={`${key.id}-${i}`}
-        renderPlaceholder={props.renderPlaceholder}
-        leaf={leaf}
-        text={props.text}
-        parent={props.parent}
-        renderLeaf={props.renderLeaf}
-      />,
-    )
-  }
 
   // Update element-related weak maps with the DOM element ref.
   const callbackRef = (span: HTMLSpanElement | null) => {
@@ -66,7 +50,19 @@ const Text = (props: TextProps) => {
 
   return (
     <span data-slate-node="text" ref={callbackRef}>
-      {children}
+      <For each={leaves}>
+        {(leaf, i) => (
+          <Leaf
+            isLast={props.isLast && i() === leaves.length - 1}
+            // key={`${key.id}-${i}`}
+            renderPlaceholder={props.renderPlaceholder}
+            leaf={leaf}
+            text={props.text}
+            parent={props.parent}
+            renderLeaf={props.renderLeaf}
+          />
+        )}
+      </For>
     </span>
   )
 }
