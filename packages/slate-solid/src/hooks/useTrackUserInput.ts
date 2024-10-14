@@ -1,6 +1,6 @@
 import { createEffect } from 'solid-js'
 import { SolidEditor } from '../plugin/solid-editor'
-import { useSlateStatic } from './use-slate-static'
+import { useSlateStatic } from './useSlateStatic'
 import { useRef } from './useRef'
 
 export function useTrackUserInput() {

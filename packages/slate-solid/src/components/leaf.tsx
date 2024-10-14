@@ -8,7 +8,7 @@ import {
   EDITOR_TO_FORCE_RENDER,
 } from 'slate-dom'
 import { RenderLeafProps, RenderPlaceholderProps } from './propTypes'
-import { useSlateStatic } from '../hooks/use-slate-static'
+import { useSlateStatic } from '../hooks/useSlateStatic'
 import { IS_WEBKIT, IS_ANDROID } from 'slate-dom'
 import { useRef, type MutableRefObject } from '../hooks/useRef'
 import { DefaultLeaf } from './defaultLeaf'

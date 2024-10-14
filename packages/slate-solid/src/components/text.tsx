@@ -1,6 +1,6 @@
 import type { JSX } from 'solid-js/jsx-runtime'
 import { Element, Range, Text as SlateText } from 'slate'
-import { useSlateStatic } from '../hooks/use-slate-static'
+import { useSlateStatic } from '../hooks/useSlateStatic'
 import { SolidEditor } from '../plugin/solid-editor'
 import { isTextDecorationsEqual } from 'slate-dom'
 import {

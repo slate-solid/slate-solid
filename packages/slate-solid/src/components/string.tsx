@@ -1,7 +1,7 @@
 import { Editor, Text, Path, Element, Node } from 'slate'
 
 import { SolidEditor } from '../plugin/solid-editor'
-import { useSlateStatic } from '../hooks/use-slate-static'
+import { useSlateStatic } from '../hooks/useSlateStatic'
 // import { useIsomorphicLayoutEffect } from '../hooks/use-isomorphic-layout-effect'
 import { MARK_PLACEHOLDER_SYMBOL } from 'slate-dom'
 import { Match, Switch } from 'solid-js'

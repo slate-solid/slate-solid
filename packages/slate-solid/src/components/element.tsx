@@ -2,8 +2,8 @@ import { JSX, mergeProps } from 'solid-js'
 import { direction as getDirection } from 'direction'
 import { Editor, Element as SlateElement, Node, Range } from 'slate'
 import { SolidEditor } from '../plugin/solid-editor'
-import { useReadOnly } from '../hooks/use-read-only'
-import { useSlateStatic } from '../hooks/use-slate-static'
+import { useReadOnly } from '../hooks/useReadOnly'
+import { useSlateStatic } from '../hooks/useSlateStatic'
 import {
   EDITOR_TO_KEY_TO_ELEMENT,
   ELEMENT_TO_NODE,

@@ -2,7 +2,7 @@
  * The default element renderer.
  */
 
-import { useSlateStatic } from '../hooks/use-slate-static'
+import { useSlateStatic } from '../hooks/useSlateStatic'
 import { Div, Span } from './html'
 import type { RenderElementProps } from './propTypes'
 

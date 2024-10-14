@@ -21,7 +21,7 @@ import {
   type JSX,
 } from 'solid-js'
 import debounce from 'lodash/debounce'
-import { useSlate } from '../hooks/use-slate'
+import { useSlate } from '../hooks/useSlate'
 import { useRef } from '../hooks/useRef'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
 import type {
@@ -32,11 +32,11 @@ import type {
 import type { SolidEditor } from '../plugin/solid-editor'
 import { defaultDecorate } from '../utils/defaultDecorate'
 import { createOnDOMBeforeInput } from '../utils/createOnDOMBeforeInput'
-import { useTrackUserInput } from '../hooks/use-track-user-input'
+import { useTrackUserInput } from '../hooks/useTrackUserInput'
 import type { DeferredOperation } from '../utils/types'
 import { Children } from './children'
 import { defaultScrollSelectionIntoView } from '../utils/defaultScrollSelectionIntoView'
-import { useSyncEditableWeakMaps } from '../hooks/use-sync-editable-weak-maps'
+import { useSyncEditableWeakMaps } from '../hooks/useSyncEditableWeakMaps'
 import { Logger } from '../utils/logger'
 
 const logger = new Logger('Editable')

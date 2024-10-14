@@ -8,10 +8,10 @@ import type {
 } from './propTypes'
 import ElementComponent from '../components/element'
 import TextComponent from '../components/text'
-import { useDecorate } from '../hooks/use-decorate'
-import { useSlateStatic } from '../hooks/use-slate-static'
+import { useDecorate } from '../hooks/useDecorate'
+import { useSlateStatic } from '../hooks/useSlateStatic'
 import { NODE_TO_INDEX, NODE_TO_PARENT } from 'slate-dom'
-import { SelectedContext } from '../hooks/use-selected'
+import { SelectedContext } from '../hooks/useSelected'
 
 export interface ChildrenProps {
   decorations: Range[]

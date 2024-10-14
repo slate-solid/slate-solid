@@ -15,13 +15,13 @@ import {
   Selection,
 } from 'slate'
 import { EDITOR_TO_ON_CHANGE } from 'slate-dom'
-import { FocusedContext } from '../hooks/use-focused'
-import { SlateContext, SlateContextValue } from '../hooks/use-slate'
+import { FocusedContext } from '../hooks/useFocused'
+import { SlateContext, SlateContextValue } from '../hooks/useSlate'
 import {
   useSelectorContext,
   SlateSelectorContext,
-} from '../hooks/use-slate-selector'
-import { EditorContext } from '../hooks/use-slate-static'
+} from '../hooks/useSelectorContext'
+import { EditorContext } from '../hooks/useSlateStatic'
 import { SolidEditor } from '../plugin/solid-editor'
 
 /**
