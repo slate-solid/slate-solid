@@ -4,6 +4,7 @@ import { createEditor, type Descendant } from 'slate'
 
 import styles from './App.module.css'
 import RichTextExample from './examples/richText'
+import { ExampleContent } from './examples/components/exampleContent'
 
 const initialValue: Descendant[] = [
   {
@@ -44,7 +45,12 @@ const initialValue: Descendant[] = [
 const App: Component = () => {
   const editor = withSolid(createEditor())
 
-  return <RichTextExample />
+  return (
+    <ExampleContent>
+      <RichTextExample />
+    </ExampleContent>
+  )
+
   // return (
   //   <div class={styles.App}>
   //     <Slate editor={editor} initialValue={initialValue}>

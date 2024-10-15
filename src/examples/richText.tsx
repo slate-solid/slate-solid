@@ -1,3 +1,4 @@
+import { children, createMemo, Match, Switch, type JSX } from 'solid-js'
 import isHotkey from 'is-hotkey'
 import {
   Editable,
@@ -18,7 +19,6 @@ import {
 import { withHistory } from 'slate-history'
 
 import { Button, Icon, Toolbar } from './components'
-import { children, createMemo, Match, Switch } from 'solid-js'
 import type {
   BlockFormat,
   BlockType,
@@ -153,7 +153,9 @@ const isMarkActive = (editor: Editor, format: MarkFormat) => {
 }
 
 const Element = (props: RenderElementProps) => {
-  const style = createMemo(() => ({ textAlign: props.element.align }))
+  const style = createMemo<JSX.CSSProperties>(() => ({
+    'text-align': props.element.align,
+  }))
 
   return (
     <Switch
