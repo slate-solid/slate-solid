@@ -198,21 +198,25 @@ const Element = (props: RenderElementProps) => {
 
 const Leaf = (props: RenderLeafProps) => {
   const resolved = children(() => {
+    let children = props.children
+
     if ('bold' in props.leaf && props.leaf.bold) {
-      return <strong>{props.children}</strong>
+      children = <strong>{props.children}</strong>
     }
 
     if ('code' in props.leaf && props.leaf.code) {
-      return <code>{props.children}</code>
+      children = <code>{props.children}</code>
     }
 
     if ('italic' in props.leaf && props.leaf.italic) {
-      return <em>{props.children}</em>
+      children = <em>{props.children}</em>
     }
 
     if ('underline' in props.leaf && props.leaf.underline) {
-      return <u>{props.children}</u>
+      children = <u>{props.children}</u>
     }
+
+    return children
   })
 
   return <span {...props.attributes}>{resolved()}</span>
