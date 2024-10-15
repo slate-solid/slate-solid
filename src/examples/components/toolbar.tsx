@@ -11,6 +11,8 @@ export interface ToolbarProps {
 
 export function Toolbar(props: ToolbarProps) {
   return (
-    <Menu ref={props.ref} class={classNames(styles.toolbar, props.class)} />
+    <Menu ref={props.ref} class={classNames(styles.toolbar, props.class)}>
+      {props.children}
+    </Menu>
   )
 }

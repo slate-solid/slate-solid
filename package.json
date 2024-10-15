@@ -22,6 +22,7 @@
     "slate": "^0.103.0",
     "slate-dom": "file:./packages/slate-dom",
     "slate-history": "^0.109.0",
+    "solid-icons": "^1.1.0",
     "solid-js": "^1.8.11"
   },
   "workspaces": [

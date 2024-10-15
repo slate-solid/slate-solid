@@ -4,10 +4,10 @@
   &.active {
     color: black;
   }
-  &.reserved {
+  &.reversed {
     color: #aaa;
   }
-  &.active.reserved {
+  &.active.reversed {
     color: white;
   }
 }

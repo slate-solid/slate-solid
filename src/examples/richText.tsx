@@ -18,7 +18,7 @@ import {
 } from 'slate'
 import { withHistory } from 'slate-history'
 
-import { Button, Icon, Toolbar } from './components'
+import { Button, Icon, Toolbar, type IconType } from './components'
 import type {
   BlockFormat,
   BlockType,
@@ -229,7 +229,7 @@ const BlockButton = ({
   icon,
 }: {
   format: BlockFormat
-  icon: string
+  icon: IconType
 }) => {
   const editor = useSlate()
   return (
@@ -248,16 +248,16 @@ const BlockButton = ({
   )
 }
 
-const MarkButton = ({ format, icon }: { format: MarkFormat; icon: string }) => {
+const MarkButton = (props: { format: MarkFormat; icon: IconType }) => {
   const editor = useSlate()
   return (
     <Button
-      active={isMarkActive(editor(), format)}
+      active={isMarkActive(editor(), props.format)}
       onMouseDown={(event) => {
         event.preventDefault()
-        toggleMark(editor(), format)
+        toggleMark(editor(), props.format)
       }}>
-      <Icon>{icon}</Icon>
+      <Icon>{props.icon}</Icon>
     </Button>
   )
 }
