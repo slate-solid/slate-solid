@@ -1,4 +1,10 @@
-import { createEffect, createRenderEffect, For, type JSX } from 'solid-js'
+import {
+  createEffect,
+  createMemo,
+  createRenderEffect,
+  For,
+  type JSX,
+} from 'solid-js'
 import { type Ancestor, Range, Editor, Element } from 'slate'
 import { SolidEditor } from '../plugin/solid-editor'
 import type {
@@ -37,18 +43,25 @@ export function Children(props: ChildrenProps) {
       {(n, i) => {
         const p = path.concat(i())
         // const key = SolidEditor.findKey(editor(), n)
-        const range = Editor.range(editor(), p)
-        const sel =
-          props.selection && Range.intersection(range, props.selection)
-        const ds = decorate([n, p])
+        const range = () => Editor.range(editor(), p)
 
-        for (const dec of props.decorations) {
-          const d = Range.intersection(dec, range)
+        const sel = () =>
+          props.selection && Range.intersection(range(), props.selection)
+        const hasSel = () => !!sel()
 
-          if (d) {
-            ds.push(d)
+        const ds = createMemo(() => {
+          const ds = decorate([n, p])
+
+          for (const dec of props.decorations) {
+            const d = Range.intersection(dec, range())
+
+            if (d) {
+              ds.push(d)
+            }
           }
-        }
+
+          return ds
+        })
 
         createRenderEffect(() => {
           NODE_TO_INDEX.set(n, i())
@@ -60,20 +73,20 @@ export function Children(props: ChildrenProps) {
             {Element.isElement(n) ? (
               <SelectedContext.Provider
                 // key={`provider-${key.id}`}
-                value={!!sel}>
+                value={hasSel}>
                 <ElementComponent
-                  decorations={ds}
+                  decorations={ds()}
                   element={n}
                   // key={key.id}
                   renderElement={props.renderElement}
                   renderPlaceholder={props.renderPlaceholder}
                   renderLeaf={props.renderLeaf}
-                  selection={sel}
+                  selection={sel()}
                 />
               </SelectedContext.Provider>
             ) : (
               <TextComponent
-                decorations={ds}
+                decorations={ds()}
                 // key={key.id}
                 isLast={isLeafBlock && i() === props.node.children.length - 1}
                 parent={props.node}
