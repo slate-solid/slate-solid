@@ -38,6 +38,7 @@ import { Children } from './children'
 import { defaultScrollSelectionIntoView } from '../utils/defaultScrollSelectionIntoView'
 import { useSyncEditableWeakMaps } from '../hooks/useSyncEditableWeakMaps'
 import { Logger } from '../utils/logger'
+import { createOnKeyDown } from '../utils/createOnKeyDown'
 
 const logger = new Logger('Editable')
 
@@ -147,6 +148,13 @@ export function Editable(origProps: EditableProps) {
     onUserInput,
   })
 
+  const onKeyDown = createOnKeyDown({
+    editor: editor(),
+    androidInputManagerRef,
+    readOnly: props.readOnly,
+    onStopComposing: () => setIsComposing(false),
+  })
+
   createEffect(() => {
     window.document.addEventListener('selectionchange', onDOMSelectionChange)
   })
@@ -254,7 +262,7 @@ export function Editable(origProps: EditableProps) {
       }}
       // TODO: There's a lot of event handlers in the React version that need
       // to be implemented
-    >
+      onKeyDown={onKeyDown}>
       <Children
         decorations={decorations()}
         node={editor()}
