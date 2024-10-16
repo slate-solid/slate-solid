@@ -23,6 +23,9 @@ import {
 } from '../hooks/useSelectorContext'
 import { EditorContext } from '../hooks/useSlateStatic'
 import { SolidEditor } from '../plugin/solid-editor'
+import { Logger } from '../utils/logger'
+
+const logger = new Logger('Slate')
 
 /**
  * A wrapper around the provider to handle `onChange` events, because the editor
@@ -81,10 +84,10 @@ export const Slate = (props: {
     useSelectorContext(editor())
 
   const onContextChange = (options?: { operation?: Operation }) => {
-    console.group('onContextChange', options?.operation)
-    console.log('Selection:', JSON.stringify(editor().selection))
-    console.log('Children:', JSON.stringify(editor().children, undefined, 2))
-    console.groupEnd()
+    logger.groupCollapsed('onContextChange', options?.operation)
+    logger.debug('Selection:', JSON.stringify(editor().selection))
+    logger.debug('Children:', JSON.stringify(editor().children, undefined, 2))
+    logger.groupEnd()
 
     if (props.onChange) {
       props.onChange(editor().children)

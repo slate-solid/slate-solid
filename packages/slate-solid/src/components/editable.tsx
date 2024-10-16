@@ -88,11 +88,10 @@ export function Editable(origProps: EditableProps) {
 
   const editor = useSlate()
   createEffect(() => {
-    logger.debug('editor().selection:', JSON.stringify(editor().selection))
-    logger.debug(
-      'editor().children:',
-      JSON.stringify(editor().children, undefined, 2),
-    )
+    logger.groupCollapsed('editor()')
+    logger.debug('selection:', JSON.stringify(editor().selection))
+    logger.debug('children:', JSON.stringify(editor().children, undefined, 2))
+    logger.groupEnd()
   })
 
   // Rerender editor when composition status changed
@@ -229,6 +228,8 @@ export function Editable(origProps: EditableProps) {
       contentEditable={!props.readOnly}
       ref={ref.current!}
       style={style()}
+      // TODO: onBeforeInput has additional logic that needs to be assessed /
+      // maybe implemented
       onBeforeInput={onBeforeInput}
       onInput={(_event) => {
         // TODO: Implement this
@@ -250,7 +251,10 @@ export function Editable(origProps: EditableProps) {
         }
 
         deferredOperations.current = []
-      }}>
+      }}
+      // TODO: There's a lot of event handlers in the React version that need
+      // to be implemented
+    >
       <Children
         decorations={decorations()}
         node={editor()}
