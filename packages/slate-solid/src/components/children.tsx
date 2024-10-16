@@ -1,4 +1,4 @@
-import { createEffect, For, type JSX } from 'solid-js'
+import { createEffect, createRenderEffect, For, type JSX } from 'solid-js'
 import { type Ancestor, Range, Editor, Element } from 'slate'
 import { SolidEditor } from '../plugin/solid-editor'
 import type {
@@ -36,7 +36,7 @@ export function Children(props: ChildrenProps) {
     <For each={props.node.children}>
       {(n, i) => {
         const p = path.concat(i())
-        const key = SolidEditor.findKey(editor(), n)
+        // const key = SolidEditor.findKey(editor(), n)
         const range = Editor.range(editor(), p)
         const sel =
           props.selection && Range.intersection(range, props.selection)
@@ -50,33 +50,39 @@ export function Children(props: ChildrenProps) {
           }
         }
 
-        NODE_TO_INDEX.set(n, i())
-        NODE_TO_PARENT.set(n, props.node)
+        createRenderEffect(() => {
+          NODE_TO_INDEX.set(n, i())
+          NODE_TO_PARENT.set(n, props.node)
+        })
 
-        return Element.isElement(n) ? (
-          <SelectedContext.Provider
-            // key={`provider-${key.id}`}
-            value={!!sel}>
-            <ElementComponent
-              decorations={ds}
-              element={n}
-              // key={key.id}
-              renderElement={props.renderElement}
-              renderPlaceholder={props.renderPlaceholder}
-              renderLeaf={props.renderLeaf}
-              selection={sel}
-            />
-          </SelectedContext.Provider>
-        ) : (
-          <TextComponent
-            decorations={ds}
-            // key={key.id}
-            isLast={isLeafBlock && i() === props.node.children.length - 1}
-            parent={props.node}
-            renderPlaceholder={props.renderPlaceholder}
-            renderLeaf={props.renderLeaf}
-            text={n}
-          />
+        return (
+          <>
+            {Element.isElement(n) ? (
+              <SelectedContext.Provider
+                // key={`provider-${key.id}`}
+                value={!!sel}>
+                <ElementComponent
+                  decorations={ds}
+                  element={n}
+                  // key={key.id}
+                  renderElement={props.renderElement}
+                  renderPlaceholder={props.renderPlaceholder}
+                  renderLeaf={props.renderLeaf}
+                  selection={sel}
+                />
+              </SelectedContext.Provider>
+            ) : (
+              <TextComponent
+                decorations={ds}
+                // key={key.id}
+                isLast={isLeafBlock && i() === props.node.children.length - 1}
+                parent={props.node}
+                renderPlaceholder={props.renderPlaceholder}
+                renderLeaf={props.renderLeaf}
+                text={n}
+              />
+            )}
+          </>
         )
       }}
     </For>
