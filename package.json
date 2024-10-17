@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@slate-solid/slate-solid": "file:./packages/slate-solid",
+    "@solidjs/router": "^0.14.9",
     "slate": "^0.103.0",
     "slate-dom": "file:./packages/slate-dom",
     "slate-history": "^0.109.0",
