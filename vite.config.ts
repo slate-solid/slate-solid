@@ -6,6 +6,7 @@ import path from 'node:path'
 const packagesPath = path.join(__dirname, 'packages')
 
 export default defineConfig({
+  base: '/slate-solid', // Needed for gh-pages
   plugins: [
     /*
     Uncomment the following line to enable solid-devtools.
