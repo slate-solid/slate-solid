@@ -1,0 +1,15 @@
+.Header {
+  --bg: #5187c5;
+  --fg: #fff;
+
+  display: flex;
+  align-items: center;
+  background-color: var(--bg);
+  height: 42px;
+  padding-left: 1rem;
+}
+
+.a {
+  color: var(--fg);
+  text-decoration: none;
+}

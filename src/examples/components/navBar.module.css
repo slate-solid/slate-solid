@@ -1,0 +1,33 @@
+.NavBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #294b87;
+  color: #fff;
+  gap: 0.5rem;
+  height: 42px;
+}
+
+.menuTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  font-size: 1.1rem;
+}
+.menu {
+  background: #ccc;
+  position: absolute;
+  top: 42px;
+  margin: 0;
+  padding: 0.5rem 0;
+  list-style: none;
+}
+
+.menuLink {
+  color: #333;
+  display: flex;
+  padding: 0.2rem 1rem;
+  text-decoration: none;
+}
