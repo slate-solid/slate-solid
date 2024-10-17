@@ -25,6 +25,9 @@
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.11"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.22.4"
+  },
   "workspaces": [
     "packages/*"
   ]
