@@ -10,6 +10,24 @@
   height: 42px;
 }
 
+.content {
+  display: flex;
+  flex-grow: 1;
+  padding-right: 1rem;
+  justify-content: space-between;
+}
+
+.ghLink {
+  display: flex;
+  align-items: center;
+  color: var(--navbar-fg);
+  gap: 0.2rem;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .menuTrigger {
   display: flex;
   align-items: center;
