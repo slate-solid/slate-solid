@@ -61,49 +61,48 @@ const CodeHighlightingExample = () => {
 }
 
 const ElementWrapper = (props: RenderElementProps) => {
-  const { attributes, children, element } = props
   const editor = useSlateStatic()
 
-  if (element.type === CodeBlockType) {
+  if (props.element.type === CodeBlockType) {
     const setLanguage = (language: string) => {
-      const path = SolidEditor.findPath(editor(), element)
+      const path = SolidEditor.findPath(editor(), props.element)
       Transforms.setNodes(editor(), { language }, { at: path })
     }
 
     return (
       <div
-        {...attributes}
+        {...props.attributes}
         class={styles.CodeHighlighting}
         style={{ position: 'relative' }}
         spellcheck={false}>
         <LanguageSelect
-          value={element.language}
+          value={props.element.language}
           onChange={(e) => setLanguage(e.target.value)}
         />
-        {children}
+        {props.children}
       </div>
     )
   }
 
-  if (element.type === CodeLineType) {
+  if (props.element.type === CodeLineType) {
     return (
-      <div {...attributes} style={{ position: 'relative' }}>
-        {children}
+      <div {...props.attributes} style={{ position: 'relative' }}>
+        {props.children}
       </div>
     )
   }
 
-  if (editor().isInline(element)) {
+  if (editor().isInline(props.element)) {
     return (
-      <span {...attributes} style={{ position: 'relative' }}>
-        {children}
+      <span {...props.attributes} style={{ position: 'relative' }}>
+        {props.children}
       </span>
     )
   }
 
   return (
-    <div {...attributes} style={{ position: 'relative' }}>
-      {children}
+    <div {...props.attributes} style={{ position: 'relative' }}>
+      {props.children}
     </div>
   )
 }

@@ -225,6 +225,7 @@ export function Editable(origProps: EditableProps) {
     ...props.style,
   }))
 
+  // TODO: ReadOnlyContext, ComposingContext, DecorateContext, RestoreDOM
   return (
     <div
       role={props.readOnly ? undefined : 'textbox'}
