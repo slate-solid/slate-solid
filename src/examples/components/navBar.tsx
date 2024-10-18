@@ -5,7 +5,7 @@ import styles from './navBar.module.css'
 import { classNames } from '../utils/cssUtils'
 import { routeMap, type RoutePath } from '../routes'
 
-function ghSrcLink(branch: string, path: string) {
+function ghSrcLink(branch: string, path?: string) {
   return `https://github.com/slate-solid/slate-solid/blob/${branch}/${path}`
 }
 
@@ -13,10 +13,12 @@ export function NavBar() {
   const location = useLocation()
 
   const routeKey = () =>
-    location.pathname.replace(import.meta.env.BASE_URL, '') as RoutePath
+    location.pathname
+      .replace(import.meta.env.BASE_URL, '')
+      .replace(/\/$/, '') as RoutePath
 
-  const label = () => routeMap[routeKey()].label
-  const ghHref = () => ghSrcLink('initial-poc', routeMap[routeKey()].src)
+  const label = () => routeMap[routeKey()]?.label
+  const ghHref = () => ghSrcLink('initial-poc', routeMap[routeKey()]?.src)
 
   const [isMenuOpen, setIsMenuOpen] = createSignal(false)
 
@@ -36,7 +38,7 @@ export function NavBar() {
                 href={path}
                 activeClass={styles.active}
                 onClick={() => setIsMenuOpen(false)}>
-                {routeMap[path as RoutePath].label}
+                {routeMap[path as RoutePath]?.label}
               </A>
             </li>
           )}
