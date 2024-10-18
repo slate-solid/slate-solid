@@ -1,17 +1,17 @@
 .Header {
-  --bg: #5187c5;
-  --fg: #fff;
+  --header-bg: var(--blue-2);
+  --header-fg: var(--gray-0);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--bg);
+  background-color: var(--header-bg);
   height: 42px;
   padding: 0 1rem;
 }
 
 .a {
-  color: var(--fg);
+  color: var(--header-fg);
   text-decoration: none;
   &.icon {
     display: inline-flex;

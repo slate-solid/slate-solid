@@ -1,3 +1,13 @@
+:root {
+  --blue-1: #446b9e;
+  --blue-2: #5187c5;
+  --blue-3: #294b87;
+
+  --gray-0: #fff;
+  --gray-1: #414042;
+  --gray-2: #333;
+}
+
 html,
 input,
 textarea {

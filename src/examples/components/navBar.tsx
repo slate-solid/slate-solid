@@ -36,6 +36,7 @@ export function NavBar() {
               <A
                 class={styles.menuLink}
                 href={path}
+                activeClass={styles.active}
                 onClick={() => setIsMenuOpen(false)}>
                 {routeLinks[path as RoutePath]}
               </A>
