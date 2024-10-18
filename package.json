@@ -12,6 +12,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^22.7.5",
+    "@types/prismjs": "^1.26.4",
     "solid-devtools": "^0.29.2",
     "typescript": "^5.3.3",
     "vite": "^5.0.11",
@@ -20,6 +21,7 @@
   "dependencies": {
     "@slate-solid/slate-solid": "file:./packages/slate-solid",
     "@solidjs/router": "^0.14.9",
+    "prismjs": "^1.29.0",
     "slate": "^0.103.0",
     "slate-dom": "file:./packages/slate-dom",
     "slate-history": "^0.109.0",

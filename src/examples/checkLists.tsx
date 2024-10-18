@@ -19,7 +19,7 @@ import {
 import { withHistory } from 'slate-history'
 import styles from './checkLists.module.css'
 import { createMemo } from 'solid-js'
-import { classNames } from './utils'
+import { classNames } from './utils/cssUtils'
 
 const initialValue: Descendant[] = [
   {
@@ -84,7 +84,7 @@ const CheckListsExample = () => {
   )
 }
 
-const withChecklists = (editor: SolidEditor) => {
+const withChecklists = (editor: Editor) => {
   const { deleteBackward } = editor
 
   editor.deleteBackward = (...args) => {

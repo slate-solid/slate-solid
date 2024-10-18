@@ -57,8 +57,10 @@
 .menuLink {
   color: var(--menu-fg);
   display: flex;
+  align-items: center;
   padding: 0.2rem 1rem;
   text-decoration: none;
+  height: 32px;
   &.active {
     background: var(--menu-active-bg);
   }

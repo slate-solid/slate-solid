@@ -120,7 +120,7 @@ const toggleBlock = (editor: Editor, format: BlockFormat) => {
   }
 }
 
-const toggleMark = (editor: SolidEditor, format: MarkFormat) => {
+const toggleMark = (editor: Editor, format: MarkFormat) => {
   const isActive = isMarkActive(editor, format)
 
   if (isActive) {

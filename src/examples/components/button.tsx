@@ -1,5 +1,5 @@
 import { type JSX } from 'solid-js'
-import { classNames } from '../utils'
+import { classNames } from '../utils/cssUtils'
 import styles from './button.module.css'
 
 export type ButtonProps = {

@@ -144,14 +144,14 @@ export type BlockFormat = BlockType | TextAlign
 export type Format = BlockFormat | MarkFormat
 
 export type CustomEditor = BaseEditor &
-  DOMEditor &
+  SolidEditor &
   HistoryEditor & {
     nodeToDecorations?: Map<Element, Range[]>
   }
 
 declare module 'slate' {
   interface CustomTypes {
-    Editor: SolidEditor
+    Editor: CustomEditor
     Element: CustomElement & { align?: TextAlign }
     Text: CustomText | EmptyText
     Range: BaseRange & {

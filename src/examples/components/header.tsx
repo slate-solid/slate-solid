@@ -1,7 +1,7 @@
 import { A } from '@solidjs/router'
 import { BsGithub } from 'solid-icons/bs'
 import styles from './header.module.css'
-import { classNames } from '../utils'
+import { classNames } from '../utils/cssUtils'
 
 export function Header() {
   return (

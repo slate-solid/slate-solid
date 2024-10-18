@@ -1,5 +1,5 @@
 import type { JSX } from 'solid-js'
-import { classNames } from '../utils'
+import { classNames } from '../utils/cssUtils'
 import { Menu } from './menu'
 import styles from './toolbar.module.css'
 

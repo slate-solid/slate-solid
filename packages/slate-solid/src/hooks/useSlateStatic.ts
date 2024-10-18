@@ -13,7 +13,7 @@ export const EditorContext = createContext<Accessor<SolidEditor> | null>(null)
  * Get the current editor object from the Solid context.
  */
 
-export const useSlateStatic = (): Accessor<SolidEditor> => {
+export const useSlateStatic = (): Accessor<Editor> => {
   return useRequiredContext(
     EditorContext,
     'EditorContext',

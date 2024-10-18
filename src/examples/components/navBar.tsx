@@ -2,18 +2,12 @@ import { useLocation, A } from '@solidjs/router'
 import { createSignal, For } from 'solid-js'
 import { BsCodeSlash } from 'solid-icons/bs'
 import styles from './navBar.module.css'
-import { classNames } from '../utils'
-
-const routeLinks = {
-  '/check-lists': ['Checklists', 'src/examples/checkLists.tsx'],
-  '/rich-text': ['Rich Text', 'src/examples/richText.tsx'],
-} as const
+import { classNames } from '../utils/cssUtils'
+import { routeMap, type RoutePath } from '../routes'
 
 function ghSrcLink(branch: string, path: string) {
   return `https://github.com/slate-solid/slate-solid/blob/${branch}/${path}`
 }
-
-type RoutePath = keyof typeof routeLinks
 
 export function NavBar() {
   const location = useLocation()
@@ -21,8 +15,8 @@ export function NavBar() {
   const routeKey = () =>
     location.pathname.replace(import.meta.env.BASE_URL, '') as RoutePath
 
-  const label = () => routeLinks[routeKey()][0]
-  const ghHref = () => ghSrcLink('initial-poc', routeLinks[routeKey()][1])
+  const label = () => routeMap[routeKey()].label
+  const ghHref = () => ghSrcLink('initial-poc', routeMap[routeKey()].src)
 
   const [isMenuOpen, setIsMenuOpen] = createSignal(false)
 
@@ -34,7 +28,7 @@ export function NavBar() {
         ☰
       </div>
       <ul class={classNames(styles.menu, isMenuOpen() && styles.isOpen)}>
-        <For each={Object.keys(routeLinks)}>
+        <For each={Object.keys(routeMap)}>
           {(path) => (
             <li>
               <A
@@ -42,7 +36,7 @@ export function NavBar() {
                 href={path}
                 activeClass={styles.active}
                 onClick={() => setIsMenuOpen(false)}>
-                {routeLinks[path as RoutePath][0]}
+                {routeMap[path as RoutePath].label}
               </A>
             </li>
           )}

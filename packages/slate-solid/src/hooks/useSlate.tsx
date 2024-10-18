@@ -1,5 +1,6 @@
 import { createContext, useContext, type Accessor } from 'solid-js'
 import { SolidEditor } from '../plugin/solid-editor'
+import type { Editor } from 'slate'
 
 /**
  * A SolidJS context for sharing the editor object, in a way that re-renders the
@@ -19,7 +20,7 @@ export const SlateContext = createContext<Accessor<SlateContextValue> | null>(
  * Get the current editor object from the SolidJS context.
  */
 
-export const useSlate = (): Accessor<SolidEditor> => {
+export const useSlate = (): Accessor<Editor> => {
   const context = useContext(SlateContext)
 
   if (!context) {
