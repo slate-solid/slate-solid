@@ -43,6 +43,7 @@ import { ReadOnlyContext } from '../hooks/useReadOnly'
 import { DecorateContext } from '../hooks/useDecorate'
 import { RerenderOnSignal } from './rerenderOnSignal'
 import { ComposingContext } from '../hooks/useComposing'
+import { DefaultPlaceholder } from './defaultPlaceholder'
 
 const logger = new Logger('Editable')
 
@@ -81,7 +82,9 @@ export function Editable(origProps: EditableProps) {
       decorate: defaultDecorate,
       disableDefaultStyles: false,
       readOnly: false,
-      // renderPlaceholder: TODO: implement this
+      renderPlaceholder: (props: RenderPlaceholderProps) => (
+        <DefaultPlaceholder {...props} />
+      ),
       scrollSelectionIntoView: defaultScrollSelectionIntoView,
       style: {},
     },
@@ -177,15 +180,17 @@ export function Editable(origProps: EditableProps) {
     }
   })
 
-  const showPlaceholder =
-    props.placeholder &&
-    editor().children.length === 1 &&
-    Array.from(Node.texts(editor())).length === 1 &&
-    Node.string(editor()) === '' &&
-    !isComposing()
+  const showPlaceholder = createMemo(
+    () =>
+      props.placeholder &&
+      editor().children.length === 1 &&
+      Array.from(Node.texts(editor())).length === 1 &&
+      Node.string(editor()) === '' &&
+      !isComposing(),
+  )
 
   const placeHolderResizeHandler = (placeholderEl: HTMLElement | null) => {
-    if (placeholderEl && showPlaceholder) {
+    if (placeholderEl && showPlaceholder()) {
       setPlaceholderHeight(placeholderEl.getBoundingClientRect()?.height)
     } else {
       setPlaceholderHeight(undefined)
@@ -195,7 +200,7 @@ export function Editable(origProps: EditableProps) {
   const decorations = createMemo(() => {
     const decorations = props.decorate([editor(), []])
 
-    if (showPlaceholder) {
+    if (showPlaceholder()) {
       const start = Editor.start(editor(), [])
       decorations.push({
         [PLACEHOLDER_SYMBOL]: true,
@@ -277,7 +282,7 @@ export function Editable(origProps: EditableProps) {
                 decorations={decorations()}
                 node={editor()}
                 renderElement={props.renderElement}
-                renderPlaceholder={() => <div>Default Placeholder</div>}
+                renderPlaceholder={props.renderPlaceholder}
                 renderLeaf={props.renderLeaf}
                 selection={editor().selection}
               />
