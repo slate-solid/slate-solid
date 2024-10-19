@@ -1,6 +1,6 @@
 import { useLocation, A } from '@solidjs/router'
 import { createSignal, For } from 'solid-js'
-import { BsCodeSlash } from 'solid-icons/bs'
+import { BsCode } from 'solid-icons/bs'
 import styles from './navBar.module.css'
 import { classNames } from '../utils/cssUtils'
 import { routeMap, type RoutePath } from '../routes'
@@ -47,7 +47,7 @@ export function NavBar() {
       <span class={styles.content}>
         <label>{label()}</label>
         <a class={styles.ghLink} target="_blank" href={ghHref()}>
-          <BsCodeSlash />
+          <BsCode />
           Source
         </a>
       </span>
