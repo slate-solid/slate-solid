@@ -5,15 +5,7 @@ import {
   splitProps,
   type JSX,
 } from 'solid-js'
-import {
-  createEditor,
-  Descendant,
-  Editor,
-  Node,
-  Operation,
-  Scrubber,
-  Selection,
-} from 'slate'
+import { Descendant, Editor, Node, Operation, Scrubber, Selection } from 'slate'
 import { EDITOR_TO_ON_CHANGE } from 'slate-dom'
 import { FocusedContext } from '../hooks/useFocused'
 import { SlateContext, SlateContextValue } from '../hooks/useSlate'
@@ -32,7 +24,7 @@ const logger = new Logger('Slate')
  * is a mutable singleton so it won't ever register as "changed" otherwise.
  */
 
-export const Slate = (props: {
+export const Slate = (origProps: {
   editor: SolidEditor
   initialValue: Descendant[]
   children: JSX.Element
@@ -40,7 +32,7 @@ export const Slate = (props: {
   onSelectionChange?: (selection: Selection) => void
   onValueChange?: (value: Descendant[]) => void
 }) => {
-  const [namedProps, restProps] = splitProps(props, [
+  const [props, restProps] = splitProps(origProps, [
     'editor',
     'children',
     'onChange',
@@ -50,23 +42,24 @@ export const Slate = (props: {
   ])
 
   const initialEditor = createMemo(() => {
-    const { editor } = namedProps
-    if (!Node.isNodeList(namedProps.initialValue)) {
+    if (!Node.isNodeList(props.initialValue)) {
       throw new Error(
         `[Slate] initialValue is invalid! Expected a list of elements but got: ${Scrubber.stringify(
-          namedProps.initialValue,
+          props.initialValue,
         )}`,
       )
     }
-    if (!Editor.isEditor(editor)) {
+    if (!Editor.isEditor(props.editor)) {
       throw new Error(
-        `[Slate] editor is invalid! You passed: ${Scrubber.stringify(editor)}`,
+        `[Slate] editor is invalid! You passed: ${Scrubber.stringify(
+          props.editor,
+        )}`,
       )
     }
-    editor.children = namedProps.initialValue
-    Object.assign(editor, restProps)
+    props.editor.children = props.initialValue
+    Object.assign(props.editor, restProps)
 
-    return editor
+    return props.editor
   })
 
   const [editor, setEditor] = createSignal(initialEditor(), {

@@ -48,7 +48,7 @@ const CodeHighlightingExample = () => {
   return (
     <Slate editor={editor()} initialValue={initialValue}>
       <ExampleToolbar />
-      <SetNodeToDecorations />
+      <SetInitialNodeToDecorations />
       <Editable
         decorate={decorate}
         renderElement={ElementWrapper}
@@ -67,6 +67,10 @@ const ElementWrapper = (props: RenderElementProps) => {
     const setLanguage = (language: string) => {
       const path = SolidEditor.findPath(editor(), props.element)
       Transforms.setNodes(editor(), { language }, { at: path })
+
+      // Setting this here to ensure the decorations are available before the
+      // Element component calls `decorate` on each child.
+      setNodeToDecorations(editor())
     }
 
     return (
@@ -219,27 +223,31 @@ const getChildNodeToDecorations = ([
   return nodeToDecorations
 }
 
-// precalculate editor.nodeToDecorations map to use it inside decorate function then
-const SetNodeToDecorations = () => {
+// This component is used for the initial render.
+const SetInitialNodeToDecorations = () => {
+  // This needs to come from the `SlateContext` to ensure `children` has been
+  // initialized
   const editor = useSlate()
 
+  // We only need to call this 1x before initial render. Subsequent calls will
+  // happen explicitly in `setLanguage` callback.
+  setNodeToDecorations(editor())
+
+  return null
+}
+
+function setNodeToDecorations(editor: Editor) {
   const blockEntries = Array.from(
-    Editor.nodes(editor(), {
+    Editor.nodes(editor, {
       at: [],
       mode: 'highest',
       match: (n) => Element.isElement(n) && n.type === CodeBlockType,
     }),
   )
 
-  createRenderEffect(() => {
-    const nodeToDecorations = mergeMaps(
-      ...blockEntries.map(getChildNodeToDecorations),
-    )
-
-    editor().nodeToDecorations = nodeToDecorations
-  })
-
-  return null
+  editor.nodeToDecorations = mergeMaps(
+    ...blockEntries.map(getChildNodeToDecorations),
+  )
 }
 
 const useOnKeydownCallback = (editor: Editor) => {
