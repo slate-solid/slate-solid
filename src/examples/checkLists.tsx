@@ -155,7 +155,7 @@ const CheckListItemElement = (props: RenderElementProps) => {
         />
       </span>
       <span
-        contentEditable={!readOnly}
+        contentEditable={!readOnly()}
         // suppressContentEditableWarning // TODO: This seems to be a React only thing?
         class={classNames(styles.label, checked() && styles.checked)}>
         {props.children}
