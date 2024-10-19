@@ -23,6 +23,11 @@ export const routeMap = {
     component: lazy(() => import('./codeHighlighting')),
     src: 'src/examples/codeHighlighting.tsx',
   },
+  '/read-only': {
+    label: 'Read-only',
+    component: lazy(() => import('./readOnly')),
+    src: 'src/examples/readOnly.tsx',
+  },
   '/rich-text': {
     label: 'Rich Text',
     component: lazy(() => import('./richText')),
