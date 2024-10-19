@@ -43,6 +43,7 @@ import { ReadOnlyContext } from '../hooks/useReadOnly'
 import { DecorateContext } from '../hooks/useDecorate'
 import { RerenderOnSignal } from './rerenderOnSignal'
 import { ComposingContext } from '../hooks/useComposing'
+import { DefaultPlaceholder } from './defaultPlaceholder'
 
 const logger = new Logger('Editable')
 
@@ -81,7 +82,9 @@ export function Editable(origProps: EditableProps) {
       decorate: defaultDecorate,
       disableDefaultStyles: false,
       readOnly: false,
-      // renderPlaceholder: TODO: implement this
+      renderPlaceholder: (props: RenderPlaceholderProps) => (
+        <DefaultPlaceholder {...props} />
+      ),
       scrollSelectionIntoView: defaultScrollSelectionIntoView,
       style: {},
     },
@@ -277,7 +280,7 @@ export function Editable(origProps: EditableProps) {
                 decorations={decorations()}
                 node={editor()}
                 renderElement={props.renderElement}
-                renderPlaceholder={() => <div>Default Placeholder</div>}
+                renderPlaceholder={props.renderPlaceholder}
                 renderLeaf={props.renderLeaf}
                 selection={editor().selection}
               />
