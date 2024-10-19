@@ -100,7 +100,7 @@ const Element = (origProps: ElementProps) => {
   if (Editor.isVoid(editor(), props.element)) {
     attributes['data-slate-void'] = true
 
-    if (!readOnly && isInline) {
+    if (!readOnly() && isInline) {
       attributes.contentEditable = false
     }
 

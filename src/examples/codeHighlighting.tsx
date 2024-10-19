@@ -27,7 +27,7 @@ import {
   SolidEditor,
   useSlateStatic,
 } from '@slate-solid/slate-solid'
-import { createEffect, createMemo, type JSX } from 'solid-js'
+import { createMemo, createRenderEffect, type JSX } from 'solid-js'
 import { withHistory } from 'slate-history'
 import isHotkey from 'is-hotkey'
 import { CodeBlockElement } from './custom-types.d'
@@ -231,7 +231,7 @@ const SetNodeToDecorations = () => {
     }),
   )
 
-  createEffect(() => {
+  createRenderEffect(() => {
     const nodeToDecorations = mergeMaps(
       ...blockEntries.map(getChildNodeToDecorations),
     )

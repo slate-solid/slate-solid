@@ -39,6 +39,9 @@ import { defaultScrollSelectionIntoView } from '../utils/defaultScrollSelectionI
 import { useSyncEditableWeakMaps } from '../hooks/useSyncEditableWeakMaps'
 import { Logger } from '../utils/logger'
 import { createOnKeyDown } from '../utils/createOnKeyDown'
+import { ReadOnlyContext } from '../hooks/useReadOnly'
+import { ComposingContext } from '../hooks/useComposing'
+import { DecorateContext } from '../hooks/useDecorate'
 
 const logger = new Logger('Editable')
 
@@ -74,6 +77,7 @@ export function Editable(origProps: EditableProps) {
 
   const props = mergeProps(
     {
+      decorate: defaultDecorate,
       disableDefaultStyles: false,
       readOnly: false,
       // renderPlaceholder: TODO: implement this
@@ -188,7 +192,7 @@ export function Editable(origProps: EditableProps) {
   }
 
   const decorations = createMemo(() => {
-    const decorations = (props.decorate ?? defaultDecorate)([editor(), []])
+    const decorations = props.decorate([editor(), []])
 
     if (showPlaceholder) {
       const start = Editor.start(editor(), [])
@@ -226,52 +230,60 @@ export function Editable(origProps: EditableProps) {
   }))
 
   // TODO: #3 Editable - Wrap with ReadOnlyContext, ComposingContext, DecorateContext
-  // TODO: RestoreDOM
   return (
-    <div
-      role={props.readOnly ? undefined : 'textbox'}
-      aria-multiline={props.readOnly ? undefined : true}
-      {...attributes}
-      data-slate-editor
-      data-slate-node="value"
-      // explicitly set this
-      contentEditable={!props.readOnly}
-      ref={ref.current!}
-      style={style()}
-      // TODO: onBeforeInput has additional logic that needs to be assessed /
-      // maybe implemented
-      onBeforeInput={onBeforeInput}
-      onInput={(_event) => {
-        // TODO: Implement this
-        // if (isEventHandled(event, attributes.onInput)) {
-        //   return
-        // }
+    <ReadOnlyContext.Provider value={() => props.readOnly}>
+      <ComposingContext.Provider value={isComposing}>
+        <DecorateContext.Provider value={props.decorate}>
+          {/* TODO: RestoreDOM */}
+          {/* <RestoreDOM node={ref} receivedUserInput={receivedUserInput}> */}
+          <div
+            role={props.readOnly ? undefined : 'textbox'}
+            aria-multiline={props.readOnly ? undefined : true}
+            {...attributes}
+            data-slate-editor
+            data-slate-node="value"
+            // explicitly set this
+            contentEditable={!props.readOnly}
+            ref={ref.current!}
+            style={style()}
+            // TODO: onBeforeInput has additional logic that needs to be assessed /
+            // maybe implemented
+            onBeforeInput={onBeforeInput}
+            onInput={(_event) => {
+              // TODO: Implement this
+              // if (isEventHandled(event, attributes.onInput)) {
+              //   return
+              // }
 
-        if (androidInputManagerRef.current) {
-          androidInputManagerRef.current.handleInput()
-          return
-        }
+              if (androidInputManagerRef.current) {
+                androidInputManagerRef.current.handleInput()
+                return
+              }
 
-        // Flush native operations, as native events will have propogated
-        // and we can correctly compare DOM text values in components
-        // to stop rendering, so that browser functions like autocorrect
-        // and spellcheck work as expected.
-        for (const op of deferredOperations.current) {
-          op()
-        }
+              // Flush native operations, as native events will have propogated
+              // and we can correctly compare DOM text values in components
+              // to stop rendering, so that browser functions like autocorrect
+              // and spellcheck work as expected.
+              for (const op of deferredOperations.current) {
+                op()
+              }
 
-        deferredOperations.current = []
-      }}
-      // TODO: #4 Editable - Implement remaining event handlers
-      onKeyDown={onKeyDown}>
-      <Children
-        decorations={decorations()}
-        node={editor()}
-        renderElement={props.renderElement}
-        renderPlaceholder={() => <div>Default Placeholder</div>}
-        renderLeaf={props.renderLeaf}
-        selection={editor().selection}
-      />
-    </div>
+              deferredOperations.current = []
+            }}
+            // TODO: #4 Editable - Implement remaining event handlers
+            onKeyDown={onKeyDown}>
+            <Children
+              decorations={decorations()}
+              node={editor()}
+              renderElement={props.renderElement}
+              renderPlaceholder={() => <div>Default Placeholder</div>}
+              renderLeaf={props.renderLeaf}
+              selection={editor().selection}
+            />
+          </div>
+          {/* </RestoreDOM> */}
+        </DecorateContext.Provider>
+      </ComposingContext.Provider>
+    </ReadOnlyContext.Provider>
   )
 }
