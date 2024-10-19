@@ -18,7 +18,7 @@ export function NavBar() {
       .replace(/\/$/, '') as RoutePath
 
   const label = () => routeMap[routeKey()]?.label
-  const ghHref = () => ghSrcLink('initial-poc', routeMap[routeKey()]?.src)
+  const ghHref = () => ghSrcLink('main', routeMap[routeKey()]?.src)
 
   const [isMenuOpen, setIsMenuOpen] = createSignal(false)
 
