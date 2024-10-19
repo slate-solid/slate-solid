@@ -1,0 +1,7 @@
+.App {
+  display: grid;
+}
+
+.Editable {
+  border: 1px solid #ccc;
+}

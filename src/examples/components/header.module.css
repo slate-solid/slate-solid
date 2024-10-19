@@ -1,0 +1,20 @@
+.Header {
+  --header-bg: var(--blue-2);
+  --header-fg: var(--gray-0);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--header-bg);
+  height: 42px;
+  padding: 0 1rem;
+}
+
+.a {
+  color: var(--header-fg);
+  text-decoration: none;
+  &.icon {
+    display: inline-flex;
+    font-size: 1.2rem;
+  }
+}

@@ -1,0 +1,28 @@
+.CheckLists {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  & + & {
+    margin-top: 0;
+  }
+}
+
+.checkBox {
+  margin-right: 0.75em;
+}
+
+.label {
+  flex: 1;
+  opacity: 1;
+  text-decoration: none;
+
+  &.checked {
+    opacity: 0.666;
+    text-decoration: line-through;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

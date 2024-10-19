@@ -1,0 +1,9 @@
+.menu {
+  & > * {
+    display: inline-block;
+  }
+
+  & > * + * {
+    margin-left: 15px;
+  }
+}

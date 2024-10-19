@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": [
+      "vite/client"
+    ],
+    "noEmit": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@slate-solid/*": [
+        "./packages/*/src"
+      ],
+      "slate-dom": [
+        "./packages/slate-dom/src"
+      ],
+    }
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "./packages/slate-dom"
+    },
+    {
+      "path": "./packages/slate-solid"
+    },
+  ]
+}
