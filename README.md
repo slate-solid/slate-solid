@@ -1,6 +1,8 @@
 # SlateSolid
 
-![SlateJS](src/assets/slate48.png) ➕ ![SolidJS](src/assets/solid48.png)
+<span style="display:flex;align-items:center;gap:.5rem">
+<img alt="SlateSolid" src="src/assets/icons/slate-solid-512.png" width="48"> 🟰 <img alt="SlateJS" src="src/assets/icons/slate48.png" width="48"> ➕ <img alt="SolidJS" src="src/assets/icons/solid48.png" width="48">
+</span>
 
 A _completely_ customizable framework
 for building rich text editors using [SlateJS](https://docs.slatejs.org/) and [SolidJS](https://www.solidjs.com/).
