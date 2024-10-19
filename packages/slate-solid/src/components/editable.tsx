@@ -225,7 +225,8 @@ export function Editable(origProps: EditableProps) {
     ...props.style,
   }))
 
-  // TODO: ReadOnlyContext, ComposingContext, DecorateContext, RestoreDOM
+  // TODO: #3 Editable - Wrap with ReadOnlyContext, ComposingContext, DecorateContext
+  // TODO: RestoreDOM
   return (
     <div
       role={props.readOnly ? undefined : 'textbox'}
@@ -261,8 +262,7 @@ export function Editable(origProps: EditableProps) {
 
         deferredOperations.current = []
       }}
-      // TODO: There's a lot of event handlers in the React version that need
-      // to be implemented
+      // TODO: #4 Editable - Implement remaining event handlers
       onKeyDown={onKeyDown}>
       <Children
         decorations={decorations()}
