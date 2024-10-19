@@ -1,12 +1,12 @@
 ## Icons
 
-Icon generator used for https://favicon.io/favicon-generator/ icons.
+Icons for README were generated using `SvgLetterIcon`
 
-- Text - S
-- Background Color - #477bbe
-- Font Family - Roboto
-
-convert \
- src/assets/icons/slate-solid-32.png \
- -resize 48x48 \
- src/assets/icons/slate-solid-48.png
+```jsx
+<SvgLetterIcon bg="#477bbe" fg="#fff">
+S
+</SvgLetterIcon>
+<SvgLetterIcon bg="#d8d8d8" fg="#505050">
+S
+</SvgLetterIcon>
+```
