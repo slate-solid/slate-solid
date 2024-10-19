@@ -1,10 +1,17 @@
-import { createEffect, createSignal, JSX, mergeProps } from 'solid-js'
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  JSX,
+  mergeProps,
+} from 'solid-js'
 import { Element, Text } from 'slate'
 import { ResizeObserver as ResizeObserverPolyfill } from '@juggle/resize-observer'
 import String from './string'
 import {
   PLACEHOLDER_SYMBOL,
   EDITOR_TO_PLACEHOLDER_ELEMENT,
+  // TODO: what is this?
   EDITOR_TO_FORCE_RENDER,
 } from 'slate-dom'
 import { RenderLeafProps, RenderPlaceholderProps } from './propTypes'
@@ -86,15 +93,6 @@ const Leaf = (origProps: LeafProps) => {
     }
   }
 
-  let children = (
-    <String
-      isLast={props.isLast}
-      leaf={props.leaf}
-      parent={props.parent}
-      text={props.text}
-    />
-  )
-
   const leafIsPlaceholder = () => Boolean(props.leaf[PLACEHOLDER_SYMBOL])
   createEffect(() => {
     if (leafIsPlaceholder()) {
@@ -112,36 +110,49 @@ const Leaf = (origProps: LeafProps) => {
     return () => clearTimeoutRef(showPlaceholderTimeoutRef)
   })
 
-  if (leafIsPlaceholder() && showPlaceholder()) {
-    const placeholderProps: RenderPlaceholderProps = {
-      children: props.leaf.placeholder,
-      attributes: {
-        'data-slate-placeholder': true,
-        style: {
-          position: 'absolute',
-          top: 0,
-          'pointer-events': 'none',
-          width: '100%',
-          'max-width': '100%',
-          display: 'block',
-          opacity: '0.333',
-          'user-select': 'none',
-          'text-decoration': 'none',
-          // Fixes https://github.com/udecode/plate/issues/2315
-          '-webkit-user-modify': IS_WEBKIT ? 'inherit' : undefined,
+  const children = createMemo(() => {
+    let children = (
+      <String
+        isLast={props.isLast}
+        leaf={props.leaf}
+        parent={props.parent}
+        text={props.text}
+      />
+    )
+
+    if (leafIsPlaceholder() && showPlaceholder()) {
+      const placeholderProps: RenderPlaceholderProps = {
+        children: props.leaf.placeholder,
+        attributes: {
+          'data-slate-placeholder': true,
+          style: {
+            position: 'absolute',
+            top: 0,
+            'pointer-events': 'none',
+            width: '100%',
+            'max-width': '100%',
+            display: 'block',
+            opacity: '0.333',
+            'user-select': 'none',
+            'text-decoration': 'none',
+            // Fixes https://github.com/udecode/plate/issues/2315
+            '-webkit-user-modify': IS_WEBKIT ? 'inherit' : undefined,
+          },
+          contentEditable: false,
+          ref: callbackPlaceholderRef,
         },
-        contentEditable: false,
-        ref: callbackPlaceholderRef,
-      },
+      }
+
+      children = (
+        <>
+          {props.renderPlaceholder(placeholderProps)}
+          {children}
+        </>
+      )
     }
 
-    children = (
-      <>
-        {props.renderPlaceholder(placeholderProps)}
-        {children}
-      </>
-    )
-  }
+    return children
+  })
 
   // COMPAT: Having the `data-` attributes on these leaf elements ensures that
   // in certain misbehaving browsers they aren't weirdly cloned/destroyed by
@@ -152,12 +163,16 @@ const Leaf = (origProps: LeafProps) => {
     'data-slate-leaf': true,
   }
 
-  return props.renderLeaf({
-    attributes,
-    children,
-    leaf: props.leaf,
-    text: props.text,
-  })
+  return (
+    <>
+      {props.renderLeaf({
+        attributes,
+        children: children(),
+        leaf: props.leaf,
+        text: props.text,
+      })}
+    </>
+  )
 }
 
 // TODO: Figure out if there is something comparable that needs to be done for SolidJS
