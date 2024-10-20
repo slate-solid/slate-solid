@@ -20,9 +20,9 @@ export interface StringProps {
  */
 const String = (props: StringProps) => {
   const editor = useSlateStatic()
-  const path = SolidEditor.findPath(editor(), props.text)
-  const parentPath = Path.parent(path)
-  const isMarkPlaceholder = Boolean(props.leaf[MARK_PLACEHOLDER_SYMBOL])
+  const path = () => SolidEditor.findPath(editor(), props.text)
+  const parentPath = () => Path.parent(path())
+  const isMarkPlaceholder = () => Boolean(props.leaf[MARK_PLACEHOLDER_SYMBOL])
 
   return (
     <Switch fallback={<TextString text={props.leaf.text} />}>
@@ -45,9 +45,9 @@ const String = (props: StringProps) => {
           props.parent.children[props.parent.children.length - 1] ===
             props.text &&
           !editor().isInline(props.parent) &&
-          Editor.string(editor(), parentPath) === ''
+          Editor.string(editor(), parentPath()) === ''
         }>
-        <ZeroWidthString isLineBreak isMarkPlaceholder={isMarkPlaceholder} />
+        <ZeroWidthString isLineBreak isMarkPlaceholder={isMarkPlaceholder()} />
       </Match>
 
       {/*
@@ -56,7 +56,7 @@ const String = (props: StringProps) => {
        * inserted next to it still.
        */}
       <Match when={props.leaf.text === ''}>
-        <ZeroWidthString isMarkPlaceholder={isMarkPlaceholder} />
+        <ZeroWidthString isMarkPlaceholder={isMarkPlaceholder()} />
       </Match>
 
       {/*

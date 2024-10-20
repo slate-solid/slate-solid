@@ -1,4 +1,5 @@
 import {
+  BsPlus,
   Bs1SquareFill,
   Bs2SquareFill,
   BsJustify,
@@ -13,16 +14,17 @@ import {
   BsTypeItalic,
   BsTypeUnderline,
 } from 'solid-icons/bs'
-import { createEffect } from 'solid-js'
 import { Dynamic } from 'solid-js/web'
 
 export interface IconProps {
   class?: string
   ref?: HTMLSpanElement
+  size?: number
   children: IconType
 }
 
 export const iconTypeMap = {
+  add: BsPlus,
   format_bold: BsTypeBold,
   format_italic: BsTypeItalic,
   format_underlined: BsTypeUnderline,
@@ -43,5 +45,5 @@ export const iconTypeMap = {
 export type IconType = keyof typeof iconTypeMap
 
 export function Icon(props: IconProps) {
-  return <Dynamic component={iconTypeMap[props.children]} />
+  return <Dynamic size={props.size} component={iconTypeMap[props.children]} />
 }

@@ -1,0 +1,17 @@
+.form {
+  box-shadow: 0 0 0 3px #ddd;
+  padding: 8px;
+}
+
+.inputText {
+  margin: 8px 0;
+}
+
+.unsetWidthStyle {
+  width: unset;
+}
+
+.editorWrapper {
+  padding: 20px;
+  border: 2px solid #ddd;
+}

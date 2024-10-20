@@ -1,10 +1,4 @@
-import {
-  createEffect,
-  createMemo,
-  createRenderEffect,
-  For,
-  type JSX,
-} from 'solid-js'
+import { createMemo, For, type JSX } from 'solid-js'
 import { type Ancestor, Range, Editor, Element } from 'slate'
 import { SolidEditor } from '../plugin/solid-editor'
 import type {
@@ -31,9 +25,9 @@ export interface ChildrenProps {
 export function Children(props: ChildrenProps) {
   const decorate = useDecorate()
   const editor = useSlateStatic()
-  const path = SolidEditor.findPath(editor(), props.node)
+  const nodePath = () => SolidEditor.findPath(editor(), props.node)
 
-  const isLeafBlock =
+  const isLeafBlock = () =>
     Element.isElement(props.node) &&
     !editor().isInline(props.node) &&
     Editor.hasInlines(editor(), props.node)
@@ -41,16 +35,28 @@ export function Children(props: ChildrenProps) {
   return (
     <For each={props.node.children}>
       {(n, i) => {
-        const p = path.concat(i())
+        // This needs to run before Slate apis are called in this loop. This
+        // seems to be the easiest way to do this since effects won't run until
+        // after accessor calls throughout the loop
+        const updateWeakMaps = () => {
+          NODE_TO_INDEX.set(n, i())
+          NODE_TO_PARENT.set(n, props.node)
+        }
+
+        const childPath = () => {
+          updateWeakMaps()
+          return nodePath().concat(i())
+        }
+
         // const key = SolidEditor.findKey(editor(), n)
-        const range = () => Editor.range(editor(), p)
+        const range = () => Editor.range(editor(), childPath())
 
         const sel = () =>
           props.selection && Range.intersection(range(), props.selection)
         const hasSel = () => !!sel()
 
         const ds = createMemo(() => {
-          const ds = decorate([n, p])
+          const ds = decorate([n, childPath()])
 
           for (const dec of props.decorations) {
             const d = Range.intersection(dec, range())
@@ -61,11 +67,6 @@ export function Children(props: ChildrenProps) {
           }
 
           return ds
-        })
-
-        createRenderEffect(() => {
-          NODE_TO_INDEX.set(n, i())
-          NODE_TO_PARENT.set(n, props.node)
         })
 
         return (
@@ -88,7 +89,7 @@ export function Children(props: ChildrenProps) {
               <TextComponent
                 decorations={ds()}
                 // key={key.id}
-                isLast={isLeafBlock && i() === props.node.children.length - 1}
+                isLast={isLeafBlock() && i() === props.node.children.length - 1}
                 parent={props.node}
                 renderPlaceholder={props.renderPlaceholder}
                 renderLeaf={props.renderLeaf}
