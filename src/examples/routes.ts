@@ -28,10 +28,15 @@ export const routeMap = {
     component: lazy(() => import('./customPlaceholder')),
     src: 'src/examples/customPlaceholder.tsx',
   },
-  '/editable-voide': {
+  '/editable-voids': {
     label: 'Editable Voids',
     component: lazy(() => import('./editableVoids')),
     src: 'src/examples/editableVoids.tsx',
+  },
+  '/embeds': {
+    label: 'Embeds',
+    component: lazy(() => import('./embeds')),
+    src: 'src/examples/embeds.tsx',
   },
   '/read-only': {
     label: 'Read-only',
