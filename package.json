@@ -19,6 +19,7 @@
     "vite-plugin-solid": "^2.8.2"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.0.3",
     "@slate-solid/slate-solid": "file:./packages/slate-solid",
     "@solidjs/router": "^0.14.9",
     "prismjs": "^1.29.0",
