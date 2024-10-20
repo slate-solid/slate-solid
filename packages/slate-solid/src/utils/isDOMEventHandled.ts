@@ -1,11 +1,9 @@
-import type { HTMLInputEvent, HTMLInputEventHandler } from './types'
-
 /**
  * Check if a DOM event is overrided by a handler.
  */
-export const isDOMEventHandled = (
-  event: HTMLInputEvent,
-  handler?: HTMLInputEventHandler,
+export const isDOMEventHandled = <TEvent extends Event>(
+  event: TEvent,
+  handler?: (event: TEvent) => void | boolean,
 ) => {
   if (!handler) {
     return false

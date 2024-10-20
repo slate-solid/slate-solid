@@ -33,7 +33,11 @@ import type { SolidEditor } from '../plugin/solid-editor'
 import { defaultDecorate } from '../utils/defaultDecorate'
 import { createOnDOMBeforeInput } from '../utils/createOnDOMBeforeInput'
 import { useTrackUserInput } from '../hooks/useTrackUserInput'
-import type { DeferredOperation } from '../utils/types'
+import type {
+  DeferredOperation,
+  HTMLInputEventHandler,
+  HTMLMouseEventHandler,
+} from '../utils/types'
 import { Children } from './children'
 import { defaultScrollSelectionIntoView } from '../utils/defaultScrollSelectionIntoView'
 import { useSyncEditableWeakMaps } from '../hooks/useSyncEditableWeakMaps'
@@ -44,6 +48,8 @@ import { DecorateContext } from '../hooks/useDecorate'
 import { RerenderOnSignal } from './rerenderOnSignal'
 import { ComposingContext } from '../hooks/useComposing'
 import { DefaultPlaceholder } from './defaultPlaceholder'
+import { createOnClick } from '../utils/createOnClick'
+import { createOnInput } from '../utils/createOnInput'
 
 const logger = new Logger('Editable')
 
@@ -146,14 +152,31 @@ export function Editable(origProps: EditableProps) {
     onBeforeInput:
       //TODO: figure out if SolidJS bound functions need to be handled
       typeof props.onDOMBeforeInput === 'function'
-        ? (props.onDOMBeforeInput as JSX.InputEventHandler<
-            HTMLDivElement,
-            InputEvent
-          >)
+        ? (props.onDOMBeforeInput as HTMLInputEventHandler)
         : undefined,
     onDOMSelectionChange,
     onStopComposing: () => setIsComposing(false),
     onUserInput,
+  })
+
+  const onClick = createOnClick({
+    editor: editor(),
+    readOnly: props.readOnly,
+    onClick:
+      //TODO: figure out if SolidJS bound functions need to be handled
+      typeof attributes.onClick === 'function'
+        ? (attributes.onClick as HTMLMouseEventHandler)
+        : undefined,
+  })
+
+  const onInput = createOnInput({
+    androidInputManagerRef,
+    deferredOperations,
+    onInput:
+      //TODO: figure out if SolidJS bound functions need to be handled
+      typeof attributes.onInput === 'function'
+        ? (attributes.onInput as HTMLInputEventHandler)
+        : undefined,
   })
 
   const onKeyDown = createOnKeyDown({
@@ -255,27 +278,8 @@ export function Editable(origProps: EditableProps) {
               // TODO: onBeforeInput has additional logic that needs to be assessed /
               // maybe implemented
               onBeforeInput={onBeforeInput}
-              onInput={(_event) => {
-                // TODO: Implement this
-                // if (isEventHandled(event, attributes.onInput)) {
-                //   return
-                // }
-
-                if (androidInputManagerRef.current) {
-                  androidInputManagerRef.current.handleInput()
-                  return
-                }
-
-                // Flush native operations, as native events will have propogated
-                // and we can correctly compare DOM text values in components
-                // to stop rendering, so that browser functions like autocorrect
-                // and spellcheck work as expected.
-                for (const op of deferredOperations.current) {
-                  op()
-                }
-
-                deferredOperations.current = []
-              }}
+              onClick={onClick}
+              onInput={onInput}
               // TODO: #4 Editable - Implement remaining event handlers
               onKeyDown={onKeyDown}>
               <Children
