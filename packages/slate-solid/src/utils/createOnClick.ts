@@ -1,8 +1,9 @@
+import type { JSX } from 'solid-js'
 import { isDOMNode, TRIPLE_CLICK, type DOMEditor } from 'slate-dom'
 import { SolidEditor } from '../plugin/solid-editor'
 import { Editor, Element, Node, Path, Transforms } from 'slate'
-import { isDOMEventHandled } from './isDOMEventHandled'
-import type { HTMLMouseEvent, HTMLMouseEventHandler } from './types'
+import { isEventHandled } from './isEventHandled'
+import type { HTMLMouseEvent } from './types'
 
 export function createOnClick({
   editor,
@@ -11,12 +12,12 @@ export function createOnClick({
 }: {
   editor: DOMEditor
   readOnly: boolean
-  onClick?: HTMLMouseEventHandler
+  onClick?: JSX.EventHandlerUnion<HTMLDivElement, MouseEvent>
 }) {
   return (event: HTMLMouseEvent) => {
     if (
       SolidEditor.hasTarget(editor, event.target) &&
-      !isDOMEventHandled(event, onClick) &&
+      !isEventHandled(event, onClick) &&
       isDOMNode(event.target)
     ) {
       const node = SolidEditor.toSlateNode(editor, event.target)

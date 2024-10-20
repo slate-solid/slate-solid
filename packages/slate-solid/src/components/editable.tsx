@@ -149,11 +149,7 @@ export function Editable(origProps: EditableProps) {
     processing,
     readOnly: props.readOnly,
     scheduleOnDOMSelectionChange,
-    onBeforeInput:
-      //TODO: figure out if SolidJS bound functions need to be handled
-      typeof props.onDOMBeforeInput === 'function'
-        ? (props.onDOMBeforeInput as HTMLInputEventHandler)
-        : undefined,
+    onBeforeInput: props.onDOMBeforeInput,
     onDOMSelectionChange,
     onStopComposing: () => setIsComposing(false),
     onUserInput,
@@ -162,21 +158,13 @@ export function Editable(origProps: EditableProps) {
   const onClick = createOnClick({
     editor: editor(),
     readOnly: props.readOnly,
-    onClick:
-      //TODO: figure out if SolidJS bound functions need to be handled
-      typeof attributes.onClick === 'function'
-        ? (attributes.onClick as HTMLMouseEventHandler)
-        : undefined,
+    onClick: attributes.onClick,
   })
 
   const onInput = createOnInput({
     androidInputManagerRef,
     deferredOperations,
-    onInput:
-      //TODO: figure out if SolidJS bound functions need to be handled
-      typeof attributes.onInput === 'function'
-        ? (attributes.onInput as HTMLInputEventHandler)
-        : undefined,
+    onInput: attributes.onInput,
   })
 
   const onKeyDown = createOnKeyDown({

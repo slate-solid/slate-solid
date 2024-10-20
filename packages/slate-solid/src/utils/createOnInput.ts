@@ -1,11 +1,8 @@
+import type { JSX } from 'solid-js'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
 import type { MutableRefObject } from '../hooks/useRef'
-import { isDOMEventHandled } from './isDOMEventHandled'
-import type {
-  DeferredOperation,
-  HTMLInputEvent,
-  HTMLInputEventHandler,
-} from './types'
+import { isEventHandled } from './isEventHandled'
+import type { DeferredOperation, HTMLInputEvent } from './types'
 
 export function createOnInput({
   androidInputManagerRef,
@@ -16,10 +13,10 @@ export function createOnInput({
     AndroidInputManager | null | undefined
   >
   deferredOperations: MutableRefObject<DeferredOperation[]>
-  onInput?: HTMLInputEventHandler
+  onInput?: JSX.EventHandlerUnion<HTMLDivElement, InputEvent>
 }) {
   return (event: HTMLInputEvent) => {
-    if (isDOMEventHandled(event, onInput)) {
+    if (isEventHandled(event, onInput)) {
       return
     }
 
