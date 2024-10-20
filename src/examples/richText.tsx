@@ -39,13 +39,16 @@ const HOTKEYS = {
 const LIST_TYPES = ['numbered-list', 'bulleted-list'] as const
 const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify'] as const
 
-const RichTextExample = () => {
+export const RichTextExample = () => {
   const renderElement = (props: RenderElementProps) => <Element {...props} />
   const renderLeaf = (props: RenderLeafProps) => <Leaf {...props} />
   const editor = createMemo(() => withHistory(withSolid(createEditor())))
-
+  const e = () => {
+    ;(editor() as any).id = 'XXXX'
+    return editor()
+  }
   return (
-    <Slate editor={editor()} initialValue={initialValue}>
+    <Slate editor={e()} initialValue={initialValue}>
       <Toolbar>
         <MarkButton format="bold" icon="format_bold" />
         <MarkButton format="italic" icon="format_italic" />
