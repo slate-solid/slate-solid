@@ -33,11 +33,7 @@ import type { SolidEditor } from '../plugin/solid-editor'
 import { defaultDecorate } from '../utils/defaultDecorate'
 import { createOnDOMBeforeInput } from '../utils/createOnDOMBeforeInput'
 import { useTrackUserInput } from '../hooks/useTrackUserInput'
-import type {
-  DeferredOperation,
-  HTMLInputEventHandler,
-  HTMLMouseEventHandler,
-} from '../utils/types'
+import type { DeferredOperation } from '../utils/types'
 import { Children } from './children'
 import { defaultScrollSelectionIntoView } from '../utils/defaultScrollSelectionIntoView'
 import { useSyncEditableWeakMaps } from '../hooks/useSyncEditableWeakMaps'
@@ -50,6 +46,7 @@ import { ComposingContext } from '../hooks/useComposing'
 import { DefaultPlaceholder } from './defaultPlaceholder'
 import { createOnClick } from '../utils/createOnClick'
 import { createOnInput } from '../utils/createOnInput'
+import { createOnBlur } from '../utils/createOnBlur'
 
 const logger = new Logger('Editable')
 
@@ -153,6 +150,13 @@ export function Editable(origProps: EditableProps) {
     onDOMSelectionChange,
     onStopComposing: () => setIsComposing(false),
     onUserInput,
+  })
+
+  const onBlur = createOnBlur({
+    editor,
+    readOnly: () => props.readOnly,
+    state,
+    onBlur: attributes.onBlur,
   })
 
   const onClick = createOnClick({
@@ -263,9 +267,14 @@ export function Editable(origProps: EditableProps) {
               contentEditable={!props.readOnly}
               ref={ref.current!}
               style={style()}
-              // TODO: onBeforeInput has additional logic that needs to be assessed /
-              // maybe implemented
+              // TODO: The `slate-react` has the following note:
+              // COMPAT: Certain browsers don't support the `beforeinput` event, so we
+              // fall back to React's leaky polyfill instead just for it. It
+              // only works for the `insertText` input type. Not sure if SolidJS
+              // polyfills this as well. TBD what browsers need to be concerned
+              // with this.
               onBeforeInput={onBeforeInput}
+              onBlur={onBlur}
               onClick={onClick}
               onInput={onInput}
               // TODO: #4 Editable - Implement remaining event handlers

@@ -3,7 +3,7 @@ import { isDOMNode, TRIPLE_CLICK, type DOMEditor } from 'slate-dom'
 import { SolidEditor } from '../plugin/solid-editor'
 import { Editor, Element, Node, Path, Transforms } from 'slate'
 import { isEventHandled } from './isEventHandled'
-import type { HTMLMouseEvent } from './types'
+import type { HTMLEvent } from './types'
 
 export function createOnClick({
   editor,
@@ -14,7 +14,7 @@ export function createOnClick({
   readOnly: boolean
   onClick?: JSX.EventHandlerUnion<HTMLDivElement, MouseEvent>
 }) {
-  return (event: HTMLMouseEvent) => {
+  return (event: HTMLEvent<MouseEvent>) => {
     if (
       SolidEditor.hasTarget(editor, event.target) &&
       !isEventHandled(event, onClick) &&

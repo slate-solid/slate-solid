@@ -10,7 +10,7 @@ import type { DebouncedFunc } from 'lodash'
 import { SolidEditor } from '../plugin/solid-editor'
 import type { MutableRefObject } from '../hooks/useRef'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
-import type { DeferredOperation, HTMLInputEvent } from './types'
+import type { DeferredOperation, HTMLEvent } from './types'
 import { isEventHandled } from './isEventHandled'
 import { Logger } from './logger'
 import type { JSX } from 'solid-js/jsx-runtime'
@@ -44,7 +44,7 @@ export function createOnDOMBeforeInput({
   onStopComposing,
   onUserInput,
 }: CreateOnDOMBeforeInputProps) {
-  return (event: HTMLInputEvent): void => {
+  return (event: HTMLEvent<InputEvent>): void => {
     logger.debug('inputType:', event.inputType, event)
 
     const el = SolidEditor.toDOMNode(editor, editor)

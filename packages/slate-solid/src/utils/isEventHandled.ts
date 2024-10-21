@@ -8,8 +8,8 @@ export const isEventHandled = <
   TEvent extends Event,
   TElement extends HTMLElement = HTMLDivElement,
 >(
-  event: HTMLEvent<TElement, TEvent>,
-  handler?: JSX.EventHandlerUnion<TElement, HTMLEvent<TElement, TEvent>>,
+  event: HTMLEvent<TEvent, TElement>,
+  handler?: JSX.EventHandlerUnion<TElement, HTMLEvent<TEvent, TElement>>,
 ) => {
   // TODO: Determine if we need to handle SolidJS bound events
   if (!handler || typeof handler !== 'function') {
