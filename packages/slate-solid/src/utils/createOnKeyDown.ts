@@ -1,3 +1,4 @@
+import type { Accessor, JSX } from 'solid-js'
 import { SolidEditor } from '../plugin/solid-editor'
 import {
   HAS_BEFORE_INPUT_SUPPORT,
@@ -12,13 +13,15 @@ import { direction as getDirection } from 'direction'
 import type { MutableRefObject } from '../hooks/useRef'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
 import type { HTMLEvent } from './types'
+import { isEventHandled } from './isEventHandled'
 
 export interface CreateOnKeyDownProps {
-  editor: DOMEditor
+  editor: Accessor<DOMEditor>
   androidInputManagerRef: MutableRefObject<
     AndroidInputManager | null | undefined
   >
-  readOnly: boolean
+  readOnly: Accessor<boolean>
+  onKeyDown?: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent>
   onStopComposing: () => void
 }
 
@@ -26,10 +29,11 @@ export function createOnKeyDown({
   editor,
   androidInputManagerRef,
   readOnly,
+  onKeyDown,
   onStopComposing,
 }: CreateOnKeyDownProps) {
   return (event: HTMLEvent<KeyboardEvent>) => {
-    if (!readOnly && SolidEditor.hasEditableTarget(editor, event.target)) {
+    if (!readOnly() && SolidEditor.hasEditableTarget(editor(), event.target)) {
       androidInputManagerRef.current?.handleKeyDown(event)
 
       // const { nativeEvent } = event
@@ -40,24 +44,24 @@ export function createOnKeyDown({
       // so we sometimes might end up stuck in a composition state even though we
       // aren't composing any more.
       if (
-        SolidEditor.isComposing(editor) &&
+        SolidEditor.isComposing(editor()) &&
         nativeEvent.isComposing === false
       ) {
-        IS_COMPOSING.set(editor, false)
+        IS_COMPOSING.set(editor(), false)
         onStopComposing()
       }
 
       // TODO: Implement this
-      // if (
-      //   isEventHandled(event, attributes.onKeyDown) ||
-      //   SolidEditor.isComposing(editor)
-      // ) {
-      //   return
-      // }
+      if (
+        isEventHandled(event, onKeyDown) ||
+        SolidEditor.isComposing(editor())
+      ) {
+        return
+      }
 
-      const { selection } = editor
+      const { selection } = editor()
       const element =
-        editor.children[selection !== null ? selection.focus.path[0] : 0]
+        editor().children[selection !== null ? selection.focus.path[0] : 0]
       const isRTL = getDirection(Node.string(element)) === 'rtl'
 
       // COMPAT: Since we prevent the default behavior on
@@ -66,7 +70,7 @@ export function createOnKeyDown({
       // hotkeys ourselves. (2019/11/06)
       if (Hotkeys.isRedo(nativeEvent)) {
         event.preventDefault()
-        const maybeHistoryEditor: any = editor
+        const maybeHistoryEditor: any = editor()
 
         if (typeof maybeHistoryEditor.redo === 'function') {
           maybeHistoryEditor.redo()
@@ -77,7 +81,7 @@ export function createOnKeyDown({
 
       if (Hotkeys.isUndo(nativeEvent)) {
         event.preventDefault()
-        const maybeHistoryEditor: any = editor
+        const maybeHistoryEditor: any = editor()
 
         if (typeof maybeHistoryEditor.undo === 'function') {
           maybeHistoryEditor.undo()
@@ -92,19 +96,19 @@ export function createOnKeyDown({
       // (2017/10/17)
       if (Hotkeys.isMoveLineBackward(nativeEvent)) {
         event.preventDefault()
-        Transforms.move(editor, { unit: 'line', reverse: true })
+        Transforms.move(editor(), { unit: 'line', reverse: true })
         return
       }
 
       if (Hotkeys.isMoveLineForward(nativeEvent)) {
         event.preventDefault()
-        Transforms.move(editor, { unit: 'line' })
+        Transforms.move(editor(), { unit: 'line' })
         return
       }
 
       if (Hotkeys.isExtendLineBackward(nativeEvent)) {
         event.preventDefault()
-        Transforms.move(editor, {
+        Transforms.move(editor(), {
           unit: 'line',
           edge: 'focus',
           reverse: true,
@@ -114,7 +118,7 @@ export function createOnKeyDown({
 
       if (Hotkeys.isExtendLineForward(nativeEvent)) {
         event.preventDefault()
-        Transforms.move(editor, { unit: 'line', edge: 'focus' })
+        Transforms.move(editor(), { unit: 'line', edge: 'focus' })
         return
       }
 
@@ -127,9 +131,9 @@ export function createOnKeyDown({
         event.preventDefault()
 
         if (selection && Range.isCollapsed(selection)) {
-          Transforms.move(editor, { reverse: !isRTL })
+          Transforms.move(editor(), { reverse: !isRTL })
         } else {
-          Transforms.collapse(editor, {
+          Transforms.collapse(editor(), {
             edge: isRTL ? 'end' : 'start',
           })
         }
@@ -141,9 +145,9 @@ export function createOnKeyDown({
         event.preventDefault()
 
         if (selection && Range.isCollapsed(selection)) {
-          Transforms.move(editor, { reverse: isRTL })
+          Transforms.move(editor(), { reverse: isRTL })
         } else {
-          Transforms.collapse(editor, {
+          Transforms.collapse(editor(), {
             edge: isRTL ? 'start' : 'end',
           })
         }
@@ -155,10 +159,10 @@ export function createOnKeyDown({
         event.preventDefault()
 
         if (selection && Range.isExpanded(selection)) {
-          Transforms.collapse(editor, { edge: 'focus' })
+          Transforms.collapse(editor(), { edge: 'focus' })
         }
 
-        Transforms.move(editor, {
+        Transforms.move(editor(), {
           unit: 'word',
           reverse: !isRTL,
         })
@@ -169,10 +173,10 @@ export function createOnKeyDown({
         event.preventDefault()
 
         if (selection && Range.isExpanded(selection)) {
-          Transforms.collapse(editor, { edge: 'focus' })
+          Transforms.collapse(editor(), { edge: 'focus' })
         }
 
-        Transforms.move(editor, {
+        Transforms.move(editor(), {
           unit: 'word',
           reverse: isRTL,
         })
@@ -196,13 +200,13 @@ export function createOnKeyDown({
 
         if (Hotkeys.isSoftBreak(nativeEvent)) {
           event.preventDefault()
-          Editor.insertSoftBreak(editor)
+          Editor.insertSoftBreak(editor())
           return
         }
 
         if (Hotkeys.isSplitBlock(nativeEvent)) {
           event.preventDefault()
-          Editor.insertBreak(editor)
+          Editor.insertBreak(editor())
           return
         }
 
@@ -210,11 +214,11 @@ export function createOnKeyDown({
           event.preventDefault()
 
           if (selection && Range.isExpanded(selection)) {
-            Editor.deleteFragment(editor, {
+            Editor.deleteFragment(editor(), {
               direction: 'backward',
             })
           } else {
-            Editor.deleteBackward(editor)
+            Editor.deleteBackward(editor())
           }
 
           return
@@ -224,11 +228,11 @@ export function createOnKeyDown({
           event.preventDefault()
 
           if (selection && Range.isExpanded(selection)) {
-            Editor.deleteFragment(editor, {
+            Editor.deleteFragment(editor(), {
               direction: 'forward',
             })
           } else {
-            Editor.deleteForward(editor)
+            Editor.deleteForward(editor())
           }
 
           return
@@ -238,11 +242,11 @@ export function createOnKeyDown({
           event.preventDefault()
 
           if (selection && Range.isExpanded(selection)) {
-            Editor.deleteFragment(editor, {
+            Editor.deleteFragment(editor(), {
               direction: 'backward',
             })
           } else {
-            Editor.deleteBackward(editor, { unit: 'line' })
+            Editor.deleteBackward(editor(), { unit: 'line' })
           }
 
           return
@@ -252,11 +256,11 @@ export function createOnKeyDown({
           event.preventDefault()
 
           if (selection && Range.isExpanded(selection)) {
-            Editor.deleteFragment(editor, {
+            Editor.deleteFragment(editor(), {
               direction: 'forward',
             })
           } else {
-            Editor.deleteForward(editor, { unit: 'line' })
+            Editor.deleteForward(editor(), { unit: 'line' })
           }
 
           return
@@ -266,11 +270,11 @@ export function createOnKeyDown({
           event.preventDefault()
 
           if (selection && Range.isExpanded(selection)) {
-            Editor.deleteFragment(editor, {
+            Editor.deleteFragment(editor(), {
               direction: 'backward',
             })
           } else {
-            Editor.deleteBackward(editor, { unit: 'word' })
+            Editor.deleteBackward(editor(), { unit: 'word' })
           }
 
           return
@@ -280,11 +284,11 @@ export function createOnKeyDown({
           event.preventDefault()
 
           if (selection && Range.isExpanded(selection)) {
-            Editor.deleteFragment(editor, {
+            Editor.deleteFragment(editor(), {
               direction: 'forward',
             })
           } else {
-            Editor.deleteForward(editor, { unit: 'word' })
+            Editor.deleteForward(editor(), { unit: 'word' })
           }
 
           return
@@ -299,16 +303,16 @@ export function createOnKeyDown({
               Hotkeys.isDeleteForward(nativeEvent)) &&
             Range.isCollapsed(selection)
           ) {
-            const currentNode = Node.parent(editor, selection.anchor.path)
+            const currentNode = Node.parent(editor(), selection.anchor.path)
 
             if (
               Element.isElement(currentNode) &&
-              Editor.isVoid(editor, currentNode) &&
-              (Editor.isInline(editor, currentNode) ||
-                Editor.isBlock(editor, currentNode))
+              Editor.isVoid(editor(), currentNode) &&
+              (Editor.isInline(editor(), currentNode) ||
+                Editor.isBlock(editor(), currentNode))
             ) {
               event.preventDefault()
-              Editor.deleteBackward(editor, { unit: 'block' })
+              Editor.deleteBackward(editor(), { unit: 'block' })
 
               return
             }

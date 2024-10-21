@@ -180,9 +180,9 @@ export function Editable(origProps: EditableProps) {
   })
 
   const onKeyDown = createOnKeyDown({
-    editor: editor(),
+    editor,
     androidInputManagerRef,
-    readOnly: props.readOnly,
+    readOnly: () => props.readOnly,
     onStopComposing: () => setIsComposing(false),
   })
 
