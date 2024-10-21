@@ -48,6 +48,9 @@ import { createOnClick } from '../utils/createOnClick'
 import { createOnInput } from '../utils/createOnInput'
 import { createOnBlur } from '../utils/createOnBlur'
 import { createOnFocus } from '../utils/createOnFocus'
+import { createOnCompositionStart } from '../utils/createOnCompositionStart'
+import { createOnCompositionEnd } from '../utils/createOnCompositionEnd'
+import { createOnCompositionUpdate } from '../utils/createOnCompositionUpdate'
 
 const logger = new Logger('Editable')
 
@@ -164,6 +167,26 @@ export function Editable(origProps: EditableProps) {
     editor: editor(),
     readOnly: props.readOnly,
     onClick: attributes.onClick,
+  })
+
+  const onCompositionEnd = createOnCompositionEnd({
+    androidInputManagerRef,
+    editor,
+    onCompositionEnd: attributes.onCompositionEnd,
+    onStopComposing: () => setIsComposing(false),
+  })
+
+  const onCompositionStart = createOnCompositionStart({
+    androidInputManagerRef,
+    editor,
+    onCompositionStart: attributes.onCompositionStart,
+    onStartComposing: () => setIsComposing(true),
+  })
+
+  const onCompositionUpdate = createOnCompositionUpdate({
+    editor,
+    onCompositionUpdate: attributes.onCompositionUpdate,
+    onStartComposing: () => setIsComposing(true),
   })
 
   const onFocus = createOnFocus({
@@ -284,6 +307,9 @@ export function Editable(origProps: EditableProps) {
               onBeforeInput={onBeforeInput}
               onBlur={onBlur}
               onClick={onClick}
+              onCompositionEnd={onCompositionEnd}
+              onCompositionStart={onCompositionStart}
+              onCompositionUpdate={onCompositionUpdate}
               onFocus={onFocus}
               onInput={onInput}
               // TODO: #4 Editable - Implement remaining event handlers

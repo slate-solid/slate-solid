@@ -1,5 +1,5 @@
 import { IS_ANDROID, IS_IOS } from 'slate-dom'
-import { mergeProps } from 'solid-js'
+import { createMemo, mergeProps } from 'solid-js'
 
 /**
  * Leaf strings without text, render as zero-width strings.
@@ -14,21 +14,25 @@ export const ZeroWidthString = (origProps: {
     origProps,
   )
 
-  const attributes: {
-    'data-slate-zero-width': string
-    'data-slate-length': number
-    'data-slate-mark-placeholder'?: boolean
-  } = {
-    'data-slate-zero-width': props.isLineBreak ? 'n' : 'z',
-    'data-slate-length': length,
-  }
+  const attributes = createMemo(() => {
+    const attributes: {
+      'data-slate-zero-width': string
+      'data-slate-length': number
+      'data-slate-mark-placeholder'?: boolean
+    } = {
+      'data-slate-zero-width': props.isLineBreak ? 'n' : 'z',
+      'data-slate-length': length,
+    }
 
-  if (props.isMarkPlaceholder) {
-    attributes['data-slate-mark-placeholder'] = true
-  }
+    if (props.isMarkPlaceholder) {
+      attributes['data-slate-mark-placeholder'] = true
+    }
+
+    return attributes
+  })
 
   return (
-    <span {...attributes}>
+    <span {...attributes()}>
       {!(IS_ANDROID || IS_IOS) || !props.isLineBreak ? '\uFEFF' : null}
       {props.isLineBreak ? <br /> : null}
     </span>
