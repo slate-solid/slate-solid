@@ -38,6 +38,11 @@ export const routeMap = {
     component: lazy(() => import('./embeds')),
     src: 'src/examples/embeds.tsx',
   },
+  '/huge-document': {
+    label: 'Huge Document',
+    component: lazy(() => import('./hugeDocument')),
+    src: 'src/examples/hugeDocument.tsx',
+  },
   '/read-only': {
     label: 'Read-only',
     component: lazy(() => import('./readOnly')),

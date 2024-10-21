@@ -4,20 +4,29 @@ export type DeferredOperation = () => void
 
 // Extracted from SolidJS `InputEventHandler` type
 export type HTMLEvent<
-  TElement extends HTMLElement,
   TEvent extends Event,
+  TElement extends HTMLElement = HTMLDivElement,
 > = TEvent & {
   currentTarget: TElement
   target: globalThis.Element
 }
 
-export type HTMLInputEvent<TElement extends HTMLElement = HTMLDivElement> =
-  HTMLEvent<TElement, InputEvent>
+/** Events */
+// export type HTMLInputEvent<TElement extends HTMLElement = HTMLDivElement> =
+//   HTMLEvent<InputEvent, TElement>
 
-export type HTMLKeyboardEvent<TElement extends HTMLElement = HTMLDivElement> =
-  HTMLEvent<TElement, KeyboardEvent>
+// export type HTMLKeyboardEvent<TElement extends HTMLElement = HTMLDivElement> =
+//   HTMLEvent<KeyboardEvent, TElement>
 
-export type HTMLInputEventHandler<T = HTMLDivElement> = JSX.InputEventHandler<
-  T,
-  InputEvent
->
+// export type HTMLMouseEvent<TElement extends HTMLElement = HTMLDivElement> =
+//   HTMLEvent<MouseEvent, TElement>
+
+/** Handlers */
+// export type HTMLInputEventHandler<T = HTMLDivElement> = JSX.InputEventHandler<
+//   T,
+//   InputEvent
+// >
+// export type HTMLMouseEventHandler<T = HTMLDivElement> = JSX.EventHandler<
+//   T,
+//   MouseEvent
+// >

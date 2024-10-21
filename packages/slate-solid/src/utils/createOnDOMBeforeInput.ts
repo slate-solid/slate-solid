@@ -10,13 +10,10 @@ import type { DebouncedFunc } from 'lodash'
 import { SolidEditor } from '../plugin/solid-editor'
 import type { MutableRefObject } from '../hooks/useRef'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
-import type {
-  DeferredOperation,
-  HTMLInputEvent,
-  HTMLInputEventHandler,
-} from './types'
-import { isDOMEventHandled } from './isDOMEventHandled'
+import type { DeferredOperation, HTMLEvent } from './types'
+import { isEventHandled } from './isEventHandled'
 import { Logger } from './logger'
+import type { JSX } from 'solid-js/jsx-runtime'
 
 const logger = new Logger('createOnDOMBeforeInput')
 
@@ -29,7 +26,7 @@ export interface CreateOnDOMBeforeInputProps {
   scheduleOnDOMSelectionChange: DebouncedFunc<DebouncedFunc<() => void>>
   processing: MutableRefObject<boolean>
   readOnly: boolean
-  onBeforeInput?: HTMLInputEventHandler
+  onBeforeInput?: JSX.EventHandlerUnion<HTMLDivElement, InputEvent>
   onDOMSelectionChange: DebouncedFunc<() => void>
   onStopComposing: () => void
   onUserInput: () => void
@@ -47,7 +44,7 @@ export function createOnDOMBeforeInput({
   onStopComposing,
   onUserInput,
 }: CreateOnDOMBeforeInputProps) {
-  return (event: HTMLInputEvent): void => {
+  return (event: HTMLEvent<InputEvent>): void => {
     logger.debug('inputType:', event.inputType, event)
 
     const el = SolidEditor.toDOMNode(editor, editor)
@@ -79,7 +76,7 @@ export function createOnDOMBeforeInput({
     if (
       !readOnly &&
       SolidEditor.hasEditableTarget(editor, event.target) &&
-      !isDOMEventHandled(event, onBeforeInput)
+      !isEventHandled(event, onBeforeInput)
     ) {
       // COMPAT: BeforeInput events aren't cancelable on android, so we have to handle them differently using the android input manager.
       if (androidInputManagerRef.current) {

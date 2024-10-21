@@ -44,6 +44,10 @@ import { DecorateContext } from '../hooks/useDecorate'
 import { RerenderOnSignal } from './rerenderOnSignal'
 import { ComposingContext } from '../hooks/useComposing'
 import { DefaultPlaceholder } from './defaultPlaceholder'
+import { createOnClick } from '../utils/createOnClick'
+import { createOnInput } from '../utils/createOnInput'
+import { createOnBlur } from '../utils/createOnBlur'
+import { createOnFocus } from '../utils/createOnFocus'
 
 const logger = new Logger('Editable')
 
@@ -143,17 +147,36 @@ export function Editable(origProps: EditableProps) {
     processing,
     readOnly: props.readOnly,
     scheduleOnDOMSelectionChange,
-    onBeforeInput:
-      //TODO: figure out if SolidJS bound functions need to be handled
-      typeof props.onDOMBeforeInput === 'function'
-        ? (props.onDOMBeforeInput as JSX.InputEventHandler<
-            HTMLDivElement,
-            InputEvent
-          >)
-        : undefined,
+    onBeforeInput: props.onDOMBeforeInput,
     onDOMSelectionChange,
     onStopComposing: () => setIsComposing(false),
     onUserInput,
+  })
+
+  const onBlur = createOnBlur({
+    editor,
+    readOnly: () => props.readOnly,
+    state,
+    onBlur: attributes.onBlur,
+  })
+
+  const onClick = createOnClick({
+    editor: editor(),
+    readOnly: props.readOnly,
+    onClick: attributes.onClick,
+  })
+
+  const onFocus = createOnFocus({
+    editor,
+    readOnly: () => props.readOnly,
+    state,
+    onFocus: attributes.onFocus,
+  })
+
+  const onInput = createOnInput({
+    androidInputManagerRef,
+    deferredOperations,
+    onInput: attributes.onInput,
   })
 
   const onKeyDown = createOnKeyDown({
@@ -252,30 +275,17 @@ export function Editable(origProps: EditableProps) {
               contentEditable={!props.readOnly}
               ref={ref.current!}
               style={style()}
-              // TODO: onBeforeInput has additional logic that needs to be assessed /
-              // maybe implemented
+              // TODO: The `slate-react` has the following note:
+              // COMPAT: Certain browsers don't support the `beforeinput` event, so we
+              // fall back to React's leaky polyfill instead just for it. It
+              // only works for the `insertText` input type. Not sure if SolidJS
+              // polyfills this as well. TBD what browsers need to be concerned
+              // with this.
               onBeforeInput={onBeforeInput}
-              onInput={(_event) => {
-                // TODO: Implement this
-                // if (isEventHandled(event, attributes.onInput)) {
-                //   return
-                // }
-
-                if (androidInputManagerRef.current) {
-                  androidInputManagerRef.current.handleInput()
-                  return
-                }
-
-                // Flush native operations, as native events will have propogated
-                // and we can correctly compare DOM text values in components
-                // to stop rendering, so that browser functions like autocorrect
-                // and spellcheck work as expected.
-                for (const op of deferredOperations.current) {
-                  op()
-                }
-
-                deferredOperations.current = []
-              }}
+              onBlur={onBlur}
+              onClick={onClick}
+              onFocus={onFocus}
+              onInput={onInput}
               // TODO: #4 Editable - Implement remaining event handlers
               onKeyDown={onKeyDown}>
               <Children

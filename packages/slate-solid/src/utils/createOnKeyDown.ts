@@ -11,7 +11,7 @@ import { Editor, Element, Node, Range, Transforms } from 'slate'
 import { direction as getDirection } from 'direction'
 import type { MutableRefObject } from '../hooks/useRef'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
-import type { HTMLKeyboardEvent } from './types'
+import type { HTMLEvent } from './types'
 
 export interface CreateOnKeyDownProps {
   editor: DOMEditor
@@ -28,7 +28,7 @@ export function createOnKeyDown({
   readOnly,
   onStopComposing,
 }: CreateOnKeyDownProps) {
-  return (event: HTMLKeyboardEvent) => {
+  return (event: HTMLEvent<KeyboardEvent>) => {
     if (!readOnly && SolidEditor.hasEditableTarget(editor, event.target)) {
       androidInputManagerRef.current?.handleKeyDown(event)
 
