@@ -47,6 +47,7 @@ import { DefaultPlaceholder } from './defaultPlaceholder'
 import { createOnClick } from '../utils/createOnClick'
 import { createOnInput } from '../utils/createOnInput'
 import { createOnBlur } from '../utils/createOnBlur'
+import { createOnFocus } from '../utils/createOnFocus'
 
 const logger = new Logger('Editable')
 
@@ -165,6 +166,13 @@ export function Editable(origProps: EditableProps) {
     onClick: attributes.onClick,
   })
 
+  const onFocus = createOnFocus({
+    editor,
+    readOnly: () => props.readOnly,
+    state,
+    onFocus: attributes.onFocus,
+  })
+
   const onInput = createOnInput({
     androidInputManagerRef,
     deferredOperations,
@@ -276,6 +284,7 @@ export function Editable(origProps: EditableProps) {
               onBeforeInput={onBeforeInput}
               onBlur={onBlur}
               onClick={onClick}
+              onFocus={onFocus}
               onInput={onInput}
               // TODO: #4 Editable - Implement remaining event handlers
               onKeyDown={onKeyDown}>
