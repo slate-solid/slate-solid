@@ -8,7 +8,7 @@ import {
   type RenderLeafProps,
   type RenderElementProps,
   type SolidEditor,
-} from '@slate-solid/slate-solid'
+} from '@slate-solid/core'
 import {
   Editor,
   Transforms,

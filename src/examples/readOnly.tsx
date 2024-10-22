@@ -1,5 +1,5 @@
 import { createMemo } from 'solid-js'
-import { Slate, Editable, withSolid } from '@slate-solid/slate-solid'
+import { Slate, Editable, withSolid } from '@slate-solid/core'
 import { createEditor, Descendant } from 'slate'
 
 const ReadOnlyExample = () => {

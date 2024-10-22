@@ -28,10 +28,10 @@
   ],
   "references": [
     {
-      "path": "./packages/slate-dom"
+      "path": "./packages/core"
     },
     {
-      "path": "./packages/slate-solid"
+      "path": "./packages/slate-dom"
     },
   ]
 }

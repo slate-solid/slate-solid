@@ -13,7 +13,7 @@ import {
   useSlateStatic,
   SolidEditor,
   type RenderElementProps,
-} from '@slate-solid/slate-solid'
+} from '@slate-solid/core'
 import type { VideoElement as VideoElementType } from './custom-types'
 
 const EmbedsExample = () => {

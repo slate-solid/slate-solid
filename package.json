@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^9.0.3",
-    "@slate-solid/slate-solid": "file:./packages/slate-solid",
+    "@slate-solid/core": "file:./packages/core",
     "@solidjs/router": "^0.14.9",
     "prismjs": "^1.29.0",
     "slate": "^0.103.0",

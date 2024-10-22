@@ -26,7 +26,7 @@ import {
   useSlate,
   SolidEditor,
   useSlateStatic,
-} from '@slate-solid/slate-solid'
+} from '@slate-solid/core'
 import { createMemo, createRenderEffect, type JSX } from 'solid-js'
 import { withHistory } from 'slate-history'
 import isHotkey from 'is-hotkey'
