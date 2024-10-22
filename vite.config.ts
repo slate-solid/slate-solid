@@ -30,7 +30,7 @@ export default defineConfig({
       },
       {
         find: /^slate-dom$/,
-        replacement: `${packagesPath}/slate-dom/src`,
+        replacement: `${packagesPath}/slate-dom-preview/src`,
       },
     ],
   },
