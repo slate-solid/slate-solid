@@ -13,3 +13,24 @@ for building rich text editors using [SlateJS](https://docs.slatejs.org/) and [S
 ## Demo
 
 Check out the [_SlateSolid_ live demo](https://slate-solid.github.io/slate-solid/)!
+
+## Installation
+
+Create a new SolidJS project (if you don't already have one)
+
+```sh
+npx degit solidjs/templates/ts my-app
+cd my-app
+npm i
+```
+
+Install `SlateSolid`
+
+```sh
+npm install slate
+
+# For now `slate-dom` is an alias until ianstormtaylor/slate/pull/5734 is merged
+npm install slate-dom@npm:@slate-solid/slate-dom-preview
+
+npm install @slate-solid/core
+```
