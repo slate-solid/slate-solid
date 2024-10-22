@@ -20,10 +20,14 @@
   "devDependencies": {
     "@types/lodash": "^4.17.7",
     "slate": "^0.103.0",
-    "slate-dom": "file:../slate-dom-preview"
+    "slate-dom": "npm:@slate-solid/slate-dom-preview@^1.0.0"
   },
   "peerDependencies": {
     "slate": ">=0.99.0",
-    "slate-dom": "1.0.0"
+    "slate-dom": ">=1.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "preview"
   }
 }
