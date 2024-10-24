@@ -38,3 +38,30 @@ Install `SlateSolid`
 ```sh
 npm install @slate-solid/core
 ```
+
+Minimal example:
+
+```typescript
+import { Editable, Slate, withSolid } from '@slate-solid/core'
+import { createEditor } from 'slate'
+import { createMemo } from 'solid-js'
+
+const initialValue = [
+  {
+    type: 'paragraph',
+    children: [{ text: 'A line of text in a paragraph.' }],
+  },
+]
+
+export function App() {
+  const editor = createMemo(() => withSolid(createEditor()))
+
+  return (
+    <Slate editor={editor()} initialValue={initialValue}>
+      <Editable />
+    </Slate>
+  )
+}
+
+export default App
+```
