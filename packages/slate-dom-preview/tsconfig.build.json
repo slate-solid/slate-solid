@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Disable project configuration for tsup builds
+    // https://github.com/egoist/tsup/issues/647
+    "composite": false
+  }
+}
