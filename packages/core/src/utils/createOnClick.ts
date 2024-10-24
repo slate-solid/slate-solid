@@ -35,7 +35,7 @@ export function createOnClick({
         let blockPath = path
         if (!(Element.isElement(node) && Editor.isBlock(editor, node))) {
           const block = Editor.above(editor, {
-            match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
+            match: n => Element.isElement(n) && Editor.isBlock(editor, n),
             at: path,
           })
 

@@ -94,7 +94,7 @@ export const Slate = (origProps: {
         props.onValueChange?.(editor().children)
     }
 
-    setContext((prevContext) => ({
+    setContext(prevContext => ({
       v: prevContext.v + 1,
       editor,
     }))
