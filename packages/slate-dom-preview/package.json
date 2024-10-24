@@ -19,7 +19,7 @@
   "scripts": {
     "build": "tsc -p .",
     "clean": "rm -rf dist/ tsconfig.tsbuildinfo",
-    "preparex": "npm run clean && npm run build"
+    "prepare": "npm run clean && npm run build"
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
