@@ -17,7 +17,6 @@ import {
   createMemo,
   createSignal,
   mergeProps,
-  onMount,
   splitProps,
   type JSX,
 } from 'solid-js'
@@ -212,10 +211,6 @@ export function Editable(origProps: EditableProps) {
 
   createEffect(() => {
     window.document.addEventListener('selectionchange', onDOMSelectionChange)
-  })
-
-  onMount(() => {
-    console.log('mount:', ref.current)
   })
 
   createEffect(() => {
