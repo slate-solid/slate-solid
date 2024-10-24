@@ -46,7 +46,8 @@ const String = (props: StringProps) => {
             props.text &&
           !editor().isInline(props.parent) &&
           Editor.string(editor(), parentPath()) === ''
-        }>
+        }
+      >
         <ZeroWidthString isLineBreak isMarkPlaceholder={isMarkPlaceholder()} />
       </Match>
 

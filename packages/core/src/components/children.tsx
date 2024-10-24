@@ -74,7 +74,8 @@ export function Children(props: ChildrenProps) {
             {Element.isElement(n) ? (
               <SelectedContext.Provider
                 // key={`provider-${key.id}`}
-                value={hasSel}>
+                value={hasSel}
+              >
                 <ElementComponent
                   decorations={ds()}
                   element={n}

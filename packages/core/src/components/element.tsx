@@ -124,7 +124,8 @@ const Element = (origProps: ElementProps) => {
             color: 'transparent',
             outline: 'none',
             position: 'absolute',
-          }}>
+          }}
+        >
           <Text
             renderPlaceholder={props.renderPlaceholder}
             decorations={[]}

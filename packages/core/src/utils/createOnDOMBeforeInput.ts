@@ -159,7 +159,7 @@ export function createOnDOMBeforeInput({
         ) {
           const block = Editor.above(editor, {
             at: anchor.path,
-            match: (n) => Element.isElement(n) && Editor.isBlock(editor, n),
+            match: n => Element.isElement(n) && Editor.isBlock(editor, n),
           })
 
           if (block && Node.string(block[0]).includes('\t')) {
