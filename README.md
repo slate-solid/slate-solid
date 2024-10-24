@@ -13,3 +13,63 @@ for building rich text editors using [SlateJS](https://docs.slatejs.org/) and [S
 ## Demo
 
 Check out the [_SlateSolid_ live demo](https://slate-solid.github.io/slate-solid/)!
+
+## Installation
+
+Create a new SolidJS project (if you don't already have one)
+
+```sh
+npx degit solidjs/templates/ts my-app
+cd my-app
+npm i
+```
+
+Install peer dependencies:
+
+```sh
+npm install slate
+
+# For now `slate-dom` is an alias until ianstormtaylor/slate/pull/5734 is merged
+npm install slate-dom@npm:@slate-solid/slate-dom-preview
+```
+
+Install `SlateSolid`
+
+```sh
+npm install @slate-solid/core
+```
+
+Add this to `vite.config.ts`
+
+```typescript
+optimizeDeps: {
+  include: ['is-hotkey', 'lodash/debounce', 'lodash/throttle'],
+},
+```
+
+Minimal example:
+
+```typescript
+import { Editable, Slate, withSolid } from '@slate-solid/core'
+import { createEditor } from 'slate'
+import { createMemo } from 'solid-js'
+
+const initialValue = [
+  {
+    type: 'paragraph',
+    children: [{ text: 'A line of text in a paragraph.' }],
+  },
+]
+
+export function App() {
+  const editor = createMemo(() => withSolid(createEditor()))
+
+  return (
+    <Slate editor={editor()} initialValue={initialValue}>
+      <Editable />
+    </Slate>
+  )
+}
+
+export default App
+```

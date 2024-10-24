@@ -1,11 +1,32 @@
 {
   "name": "@slate-solid/core",
   "description": "",
-  "version": "1.0.0",
+  "version": "1.0.7",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slate-solid/slate-solid",
+    "directory": "packages/core"
+  },
+  "type": "module",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {},
+  "browser": {},
+  "exports": {
+    "solid": {
+      "development": "./dist/index.js",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -p .",
+    "clean": "rm -rf dist/ tsconfig.tsbuildinfo",
+    "prepare": "npm run clean && npm run build"
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
@@ -15,9 +36,13 @@
   "devDependencies": {
     "@types/lodash": "^4.17.7",
     "slate": "^0.103.0",
-    "slate-dom": "file:../slate-dom-preview"
+    "slate-dom": "npm:@slate-solid/slate-dom-preview@^1.0.6"
   },
   "peerDependencies": {
-    "slate": ">=0.99.0"
+    "slate": ">=0.99.0",
+    "slate-dom": ">=1.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

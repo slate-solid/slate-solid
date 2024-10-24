@@ -1,3 +1,11 @@
+# Contributing to SlateSolid
+
+## Local Dev
+
+1. Clone this repo.
+1. `npm install`
+1. `npm start`
+
 ## Icons
 
 Icons for README were generated using `SvgLetterIcon`
@@ -10,3 +18,5 @@ S
 S
 </SvgLetterIcon>
 ```
+
+## Npm Builds

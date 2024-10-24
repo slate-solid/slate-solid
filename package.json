@@ -1,12 +1,12 @@
 {
-  "name": "vite-template-solid",
+  "name": "@slate-solid/slate-solid",
   "version": "0.0.0",
   "description": "",
   "scripts": {
     "start": "vite",
     "dev": "vite",
     "ts:check": "tsc --build --watch tsconfig.json",
-    "build": "vite build && cp dist/index.html dist/404.html",
+    "build": "npm run ts:check && vite build && cp dist/index.html dist/404.html",
     "serve": "vite preview"
   },
   "license": "MIT",

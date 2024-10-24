@@ -1,9 +1,26 @@
 {
   "name": "@slate-solid/slate-dom-preview",
   "description": "",
-  "version": "1.0.0",
+  "version": "1.0.7",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "typesVersions": {},
+  "browser": {},
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slate-solid/slate-solid",
+    "directory": "packages/slate-dom-preview"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "clean": "rm -rf dist/ tsconfig.tsbuildinfo",
+    "prepare": "npm run clean && npm run build"
+  },
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
     "direction": "^1.0.4",
@@ -26,5 +43,8 @@
   },
   "peerDependencies": {
     "slate": ">=0.99.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

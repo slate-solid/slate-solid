@@ -95,7 +95,7 @@ export function Editable(origProps: EditableProps) {
       scrollSelectionIntoView: defaultScrollSelectionIntoView,
       style: {},
     },
-    namedProps,
+    namedProps
   )
 
   const androidInputManagerRef = useRef<
@@ -232,7 +232,7 @@ export function Editable(origProps: EditableProps) {
       editor().children.length === 1 &&
       Array.from(Node.texts(editor())).length === 1 &&
       Node.string(editor()) === '' &&
-      !isComposing(),
+      !isComposing()
   )
 
   const placeHolderResizeHandler = (placeholderEl: HTMLElement | null) => {
@@ -313,7 +313,8 @@ export function Editable(origProps: EditableProps) {
               onFocus={onFocus}
               onInput={onInput}
               // TODO: #4 Editable - Implement remaining event handlers
-              onKeyDown={onKeyDown}>
+              onKeyDown={onKeyDown}
+            >
               <Children
                 decorations={decorations()}
                 node={editor()}
