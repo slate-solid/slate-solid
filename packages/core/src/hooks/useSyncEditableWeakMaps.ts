@@ -38,6 +38,7 @@ export function useSyncEditableWeakMaps({
   scrollSelectionIntoView,
   state,
 }: UseSyncEditableWeakMapsProps) {
+  // This needs to run in `createEffect` to ensure `ref.current` has been set.
   createEffect(() => {
     // Update element-related weak maps with the DOM element ref.
     let window

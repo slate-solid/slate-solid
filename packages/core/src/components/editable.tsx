@@ -213,6 +213,7 @@ export function Editable(origProps: EditableProps) {
     window.document.addEventListener('selectionchange', onDOMSelectionChange)
   })
 
+  // This needs to run in `createEffect` to ensure `ref.current` has been set.
   createEffect(() => {
     // Update element-related weak maps with the DOM element ref.
     let window
