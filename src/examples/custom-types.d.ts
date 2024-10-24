@@ -1,4 +1,4 @@
-import type { SolidEditor } from '@slate-solid/slate-solid'
+import type { SolidEditor } from '@slate-solid/core'
 import { Descendant, BaseEditor, BaseRange, Range, Element } from 'slate'
 import { DOMEditor } from 'slate-dom'
 import { HistoryEditor } from 'slate-history'

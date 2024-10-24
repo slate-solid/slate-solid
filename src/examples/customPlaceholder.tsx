@@ -1,6 +1,6 @@
 import { createMemo } from 'solid-js'
 import { createEditor, Descendant } from 'slate'
-import { Slate, Editable, withSolid } from '@slate-solid/slate-solid'
+import { Slate, Editable, withSolid } from '@slate-solid/core'
 import { withHistory } from 'slate-history'
 
 const initialValue: Descendant[] = [

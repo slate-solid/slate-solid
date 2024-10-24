@@ -6,7 +6,7 @@ import {
   useSlateStatic,
   withSolid,
   type RenderElementProps,
-} from '@slate-solid/slate-solid'
+} from '@slate-solid/core'
 import { withHistory } from 'slate-history'
 
 import { RichTextExample } from './richText'

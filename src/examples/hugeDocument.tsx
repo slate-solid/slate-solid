@@ -6,7 +6,7 @@ import {
   Editable,
   withSolid,
   type RenderElementProps,
-} from '@slate-solid/slate-solid'
+} from '@slate-solid/core'
 
 const HEADINGS = 100
 const PARAGRAPHS = 7

@@ -1,5 +1,5 @@
 {
-  "name": "@slate-solid/slate-solid",
+  "name": "@slate-solid/core",
   "description": "",
   "version": "1.0.0",
   "license": "MIT",
@@ -15,7 +15,7 @@
   "devDependencies": {
     "@types/lodash": "^4.17.7",
     "slate": "^0.103.0",
-    "slate-dom": "file:../slate-dom"
+    "slate-dom": "file:../slate-dom-preview"
   },
   "peerDependencies": {
     "slate": ">=0.99.0"
