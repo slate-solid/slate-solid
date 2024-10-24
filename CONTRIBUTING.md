@@ -20,8 +20,3 @@ S
 ```
 
 ## Npm Builds
-
-Using `tsup` with `tsup-preset-solid` based on this template repo:
-https://github.com/solidjs-community/solid-lib-starter
-
-Note that `tsup` does not seem to support tsconfig project configurations, therefore `tsconfig.build.json` sets `composite: false`.

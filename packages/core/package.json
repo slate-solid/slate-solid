@@ -26,7 +26,7 @@
   "scripts": {
     "build": "tsc -p .",
     "clean": "rm -rf dist/ tsconfig.tsbuildinfo",
-    "prepare": "npm run clean && npm run build"
+    "preparex": "npm run clean && npm run build"
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
