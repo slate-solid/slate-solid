@@ -296,10 +296,7 @@ export function Editable(origProps: EditableProps) {
               data-slate-node="value"
               // explicitly set this
               contentEditable={!props.readOnly}
-              ref={r => {
-                console.log('r:', r)
-                ref.current = r
-              }}
+              ref={ref.current!}
               style={style()}
               // TODO: The `slate-react` has the following note:
               // COMPAT: Certain browsers don't support the `beforeinput` event, so we
