@@ -47,9 +47,7 @@ export function useSyncEditableWeakMaps({
       NODE_TO_ELEMENT.set(editor(), ref.current)
       ELEMENT_TO_NODE.set(ref.current, editor())
     } else {
-      console.log('DELETING')
       NODE_TO_ELEMENT.delete(editor())
-      return
     }
 
     // Make sure the DOM selection state is in sync.
