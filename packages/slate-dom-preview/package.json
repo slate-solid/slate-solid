@@ -1,7 +1,7 @@
 {
   "name": "@slate-solid/slate-dom-preview",
   "description": "",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -17,9 +17,9 @@
     "directory": "packages/slate-dom-preview"
   },
   "scripts": {
-    "build": "tsup --tsconfig tsconfig.build.json && npm run ts:types",
-    "ts:types": "tsc -p tsconfig.build.json --declaration --emitDeclarationOnly",
-    "prepare": "npm run build"
+    "build": "tsc -p .",
+    "clean": "rm -rf dist/ tsconfig.tsbuildinfo",
+    "prepare": "npm run clean && npm run build"
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",

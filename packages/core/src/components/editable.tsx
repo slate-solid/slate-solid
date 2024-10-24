@@ -17,6 +17,7 @@ import {
   createMemo,
   createSignal,
   mergeProps,
+  onMount,
   splitProps,
   type JSX,
 } from 'solid-js'
@@ -95,7 +96,7 @@ export function Editable(origProps: EditableProps) {
       scrollSelectionIntoView: defaultScrollSelectionIntoView,
       style: {},
     },
-    namedProps,
+    namedProps
   )
 
   const androidInputManagerRef = useRef<
@@ -213,6 +214,10 @@ export function Editable(origProps: EditableProps) {
     window.document.addEventListener('selectionchange', onDOMSelectionChange)
   })
 
+  onMount(() => {
+    console.log('mount:', ref.current)
+  })
+
   createEffect(() => {
     // Update element-related weak maps with the DOM element ref.
     let window
@@ -232,7 +237,7 @@ export function Editable(origProps: EditableProps) {
       editor().children.length === 1 &&
       Array.from(Node.texts(editor())).length === 1 &&
       Node.string(editor()) === '' &&
-      !isComposing(),
+      !isComposing()
   )
 
   const placeHolderResizeHandler = (placeholderEl: HTMLElement | null) => {
@@ -296,7 +301,10 @@ export function Editable(origProps: EditableProps) {
               data-slate-node="value"
               // explicitly set this
               contentEditable={!props.readOnly}
-              ref={ref.current!}
+              ref={r => {
+                console.log('r:', r)
+                ref.current = r
+              }}
               style={style()}
               // TODO: The `slate-react` has the following note:
               // COMPAT: Certain browsers don't support the `beforeinput` event, so we
@@ -313,7 +321,8 @@ export function Editable(origProps: EditableProps) {
               onFocus={onFocus}
               onInput={onInput}
               // TODO: #4 Editable - Implement remaining event handlers
-              onKeyDown={onKeyDown}>
+              onKeyDown={onKeyDown}
+            >
               <Children
                 decorations={decorations()}
                 node={editor()}

@@ -24,10 +24,10 @@ export default defineConfig({
   resolve: {
     alias: [
       // TODO: This should be dev only
-      {
-        find: /^@slate-solid\/(.*)/,
-        replacement: `${packagesPath}/$1/src`,
-      },
+      // {
+      //   find: /^@slate-solid\/(.*)/,
+      //   replacement: `${packagesPath}/$1/src`,
+      // },
       {
         find: /^slate-dom$/,
         replacement: `${packagesPath}/slate-dom-preview/src`,

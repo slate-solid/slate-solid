@@ -1,7 +1,7 @@
 {
   "name": "@slate-solid/core",
   "description": "",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "license": "MIT",
   "main": "./dist/index.js",
   "files": [
@@ -19,23 +19,14 @@
   "browser": {},
   "exports": {
     "solid": {
-      "development": "./dist/dev.jsx",
+      "development": "./dist/index.jsx",
       "import": "./dist/index.jsx"
-    },
-    "development": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/dev.js"
-      }
-    },
-    "import": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "tsup --tsconfig tsconfig.build.json",
-    "prepare": "npm run build"
+    "build": "tsc -p .",
+    "clean": "rm -rf dist/ tsconfig.tsbuildinfo",
+    "prepare": "npm run clean && npm run build"
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
@@ -45,7 +36,7 @@
   "devDependencies": {
     "@types/lodash": "^4.17.7",
     "slate": "^0.103.0",
-    "slate-dom": "npm:@slate-solid/slate-dom-preview@^1.0.0"
+    "slate-dom": "npm:@slate-solid/slate-dom-preview@^1.0.6"
   },
   "peerDependencies": {
     "slate": ">=0.99.0",

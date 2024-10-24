@@ -47,7 +47,9 @@ export function useSyncEditableWeakMaps({
       NODE_TO_ELEMENT.set(editor(), ref.current)
       ELEMENT_TO_NODE.set(ref.current, editor())
     } else {
+      console.log('DELETING')
       NODE_TO_ELEMENT.delete(editor())
+      return
     }
 
     // Make sure the DOM selection state is in sync.
@@ -125,7 +127,7 @@ export function useSyncEditableWeakMaps({
           // Ensure selection is inside the mark placeholder
           if (
             anchorNode?.parentElement?.hasAttribute(
-              'data-slate-mark-placeholder',
+              'data-slate-mark-placeholder'
             )
           ) {
             return
@@ -159,14 +161,14 @@ export function useSyncEditableWeakMaps({
             newDomRange.endContainer,
             newDomRange.endOffset,
             newDomRange.startContainer,
-            newDomRange.startOffset,
+            newDomRange.startOffset
           )
         } else {
           domSelection.setBaseAndExtent(
             newDomRange.startContainer,
             newDomRange.startOffset,
             newDomRange.endContainer,
-            newDomRange.endOffset,
+            newDomRange.endOffset
           )
         }
         scrollSelectionIntoView(editor(), newDomRange)
