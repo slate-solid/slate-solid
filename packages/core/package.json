@@ -9,7 +9,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/slate-solid/slate-solid",
+    "url": "git+https://github.com/slate-solid/slate-solid.git",
     "directory": "packages/core"
   },
   "type": "module",
@@ -26,7 +26,7 @@
   "scripts": {
     "build": "tsc -p .",
     "clean": "rm -rf dist/ tsconfig.tsbuildinfo",
-    "prepare": "npm run clean && npm run build"
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
