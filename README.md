@@ -39,6 +39,14 @@ Install `SlateSolid`
 npm install @slate-solid/core
 ```
 
+Add this to `vite.config.ts`
+
+```typescript
+optimizeDeps: {
+  include: ['is-hotkey', 'lodash/debounce', 'lodash/throttle'],
+},
+```
+
 Minimal example:
 
 ```typescript
