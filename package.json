@@ -5,7 +5,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "ts:check": "tsc --build --watch tsconfig.json",
+    "ts:check": "tsc --build tsconfig.json",
     "build": "npm run ts:check && vite build && cp dist/index.html dist/404.html",
     "serve": "vite preview"
   },
