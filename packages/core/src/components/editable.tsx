@@ -29,7 +29,7 @@ import type {
   RenderLeafProps,
   RenderPlaceholderProps,
 } from './propTypes'
-import type { SolidEditor } from '../plugin/solid-editor'
+import { SolidEditor } from '../plugin/solid-editor'
 import { defaultDecorate } from '../utils/defaultDecorate'
 import { createOnDOMBeforeInput } from '../utils/createOnDOMBeforeInput'
 import { useTrackUserInput } from '../hooks/useTrackUserInput'
@@ -210,7 +210,14 @@ export function Editable(origProps: EditableProps) {
   })
 
   createEffect(() => {
-    window.document.addEventListener('selectionchange', onDOMSelectionChange)
+    const window = SolidEditor.getWindow(editor())
+
+    window.document.addEventListener(
+      'selectionchange',
+      scheduleOnDOMSelectionChange,
+    )
+
+    // TODO: Implement drag / drop handling
   })
 
   // This needs to run in `createEffect` to ensure `ref.current` has been set.
@@ -323,7 +330,19 @@ export function Editable(origProps: EditableProps) {
               // then you will select the whole text node when you select part the of text
               // this magic zIndex="-1" will fix it
               zindex={-1}
-              ref={ref.current!}
+              ref={node => {
+                if (node == null) {
+                  onDOMSelectionChange.cancel()
+                  scheduleOnDOMSelectionChange.cancel()
+
+                  EDITOR_TO_ELEMENT.delete(editor())
+                  NODE_TO_ELEMENT.delete(editor())
+                }
+
+                ref.current = node
+
+                // TODO: Implement forward ref for ref passed into Editable
+              }}
               style={style()}
               // TODO: The `slate-react` has the following note:
               // COMPAT: Certain browsers don't support the `beforeinput` event, so we
