@@ -143,11 +143,15 @@ const Element = (origProps: ElementProps) => {
     return children
   })
 
-  return props.renderElement({
-    attributes: attributes(),
-    children,
-    element: props.element,
-  })
+  return (
+    <>
+      {props.renderElement({
+        attributes: attributes(),
+        children,
+        element: props.element,
+      })}
+    </>
+  )
 }
 
 // TODO: Figure out if there needs to be something similar in SolidJS
