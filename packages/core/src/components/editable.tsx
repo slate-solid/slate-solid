@@ -293,10 +293,34 @@ export function Editable(origProps: EditableProps) {
               role={props.readOnly ? undefined : 'textbox'}
               aria-multiline={props.readOnly ? undefined : true}
               {...attributes}
+              // COMPAT: Certain browsers don't support the `beforeinput` event, so we'd
+              // have to use hacks to make these replacement-based features work.
+              // For SSR situations HAS_BEFORE_INPUT_SUPPORT is false and results in prop
+              // mismatch warning app moves to browser. Pass-through consumer props when
+              // not CAN_USE_DOM (SSR) and default to falsy value
+              spellcheck={
+                HAS_BEFORE_INPUT_SUPPORT || !CAN_USE_DOM
+                  ? attributes.spellcheck
+                  : false
+              }
+              // @ts-ignore
+              autocorrect={
+                HAS_BEFORE_INPUT_SUPPORT || !CAN_USE_DOM
+                  ? // @ts-ignore
+                    attributes.autocorrect
+                  : 'false'
+              }
+              autocapitalize={
+                HAS_BEFORE_INPUT_SUPPORT || !CAN_USE_DOM
+                  ? attributes.autocapitalize
+                  : 'off'
+              }
               data-slate-editor
               data-slate-node="value"
               // explicitly set this
               contentEditable={!props.readOnly}
+              // @ts-ignore
+              zindex={-1}
               ref={ref.current!}
               style={style()}
               // TODO: The `slate-react` has the following note:
