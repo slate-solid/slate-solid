@@ -17,6 +17,8 @@ import {
   createMemo,
   createSignal,
   mergeProps,
+  onCleanup,
+  onMount,
   splitProps,
   type JSX,
 } from 'solid-js'
@@ -209,15 +211,25 @@ export function Editable(origProps: EditableProps) {
     onStopComposing: () => setIsComposing(false),
   })
 
-  createEffect(() => {
+  onMount(() => {
     const window = SolidEditor.getWindow(editor())
-
     window.document.addEventListener(
       'selectionchange',
       scheduleOnDOMSelectionChange,
     )
 
     // TODO: Implement drag / drop handling
+  })
+
+  onCleanup(() => {
+    const window = SolidEditor.getWindow(editor())
+
+    window.document.removeEventListener(
+      'selectionchange',
+      scheduleOnDOMSelectionChange,
+    )
+
+    // TODO: Cleanup drag / drop handling
   })
 
   // This needs to run in `createEffect` to ensure `ref.current` has been set.
