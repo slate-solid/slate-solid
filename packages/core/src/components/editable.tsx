@@ -319,6 +319,9 @@ export function Editable(origProps: EditableProps) {
               data-slate-node="value"
               // explicitly set this
               contentEditable={!props.readOnly}
+              // in some cases, a decoration needs access to the range / selection to decorate a text node,
+              // then you will select the whole text node when you select part the of text
+              // this magic zIndex="-1" will fix it
               // @ts-ignore
               zindex={-1}
               ref={ref.current!}
