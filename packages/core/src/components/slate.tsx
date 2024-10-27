@@ -104,10 +104,11 @@ export const Slate = (origProps: {
   }
 
   createEffect(() => {
-    EDITOR_TO_ON_CHANGE.set(props.editor, onContextChange)
+    const editor = props.editor
+    EDITOR_TO_ON_CHANGE.set(editor, onContextChange)
 
     return () => {
-      EDITOR_TO_ON_CHANGE.set(props.editor, () => {})
+      EDITOR_TO_ON_CHANGE.set(editor, () => {})
     }
   })
 
