@@ -303,10 +303,10 @@ export function Editable(origProps: EditableProps) {
                   ? attributes.spellcheck
                   : false
               }
-              // @ts-ignore
+              // @ts-expect-error autocorrect is not included in the types
               autocorrect={
                 HAS_BEFORE_INPUT_SUPPORT || !CAN_USE_DOM
-                  ? // @ts-ignore
+                  ? // @ts-expect-error autocorrect is not included in the types
                     attributes.autocorrect
                   : 'false'
               }
@@ -322,7 +322,6 @@ export function Editable(origProps: EditableProps) {
               // in some cases, a decoration needs access to the range / selection to decorate a text node,
               // then you will select the whole text node when you select part the of text
               // this magic zIndex="-1" will fix it
-              // @ts-ignore
               zindex={-1}
               ref={ref.current!}
               style={style()}
