@@ -1,4 +1,4 @@
-import { type JSX } from 'solid-js'
+import { splitProps, type JSX } from 'solid-js'
 import { classNames } from '../utils/cssUtils'
 import styles from './button.module.css'
 
@@ -10,9 +10,18 @@ export type ButtonProps = {
   children: JSX.Element
 } & JSX.HTMLAttributes<HTMLSpanElement>
 
-export function Button(props: ButtonProps) {
+export function Button(origProps: ButtonProps) {
+  const [props, restProps] = splitProps(origProps, [
+    'ref',
+    'children',
+    'class',
+    'active',
+    'reversed',
+    'onMouseDown',
+  ])
   return (
     <span
+      {...restProps}
       ref={props.ref}
       class={classNames(
         styles.button,
@@ -20,7 +29,8 @@ export function Button(props: ButtonProps) {
         props.active && styles.active,
         props.reversed && styles.reversed,
       )}
-      onMouseDown={props.onMouseDown}>
+      onMouseDown={() => props.onMouseDown}
+    >
       {props.children}
     </span>
   )

@@ -38,6 +38,11 @@ export const routeMap = {
     component: lazy(() => import('./embeds')),
     src: 'src/examples/embeds.tsx',
   },
+  '/hovering-toolbar': {
+    label: 'Hovering Toolbar',
+    component: lazy(() => import('./hoveringToolbar')),
+    src: 'src/examples/hoveringToolbar.tsx',
+  },
   '/huge-document': {
     label: 'Huge Document',
     component: lazy(() => import('./hugeDocument')),
