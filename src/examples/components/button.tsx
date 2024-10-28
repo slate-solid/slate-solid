@@ -29,7 +29,7 @@ export function Button(origProps: ButtonProps) {
         props.active && styles.active,
         props.reversed && styles.reversed,
       )}
-      onMouseDown={() => props.onMouseDown}
+      onMouseDown={props?.onMouseDown}
     >
       {props.children}
     </span>
