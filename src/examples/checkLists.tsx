@@ -8,17 +8,17 @@ import {
   type RenderElementProps,
 } from '@slate-solid/core'
 import {
-  Editor,
-  Transforms,
-  Range,
-  Point,
-  createEditor,
   Descendant,
+  Editor,
+  Point,
+  Range,
   Element as SlateElement,
+  Transforms,
+  createEditor,
 } from 'slate'
 import { withHistory } from 'slate-history'
-import styles from './checkLists.module.css'
 import { createMemo } from 'solid-js'
+import styles from './checkLists.module.css'
 import { classNames } from './utils/cssUtils'
 
 const initialValue: Descendant[] = [
@@ -78,7 +78,7 @@ const CheckListsExample = () => {
         renderElement={renderElement}
         placeholder="Get to work…"
         spellcheck
-        autofocus
+        autoFocus
       />
     </Slate>
   )

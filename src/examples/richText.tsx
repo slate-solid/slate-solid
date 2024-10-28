@@ -1,22 +1,22 @@
-import { children, createMemo, Match, Switch, type JSX } from 'solid-js'
-import isHotkey from 'is-hotkey'
 import {
   Editable,
-  withSolid,
-  useSlate,
   Slate,
-  type RenderLeafProps,
+  useSlate,
+  withSolid,
   type RenderElementProps,
+  type RenderLeafProps,
   type SolidEditor,
 } from '@slate-solid/core'
+import isHotkey from 'is-hotkey'
 import {
+  Descendant,
   Editor,
+  Element as SlateElement,
   Transforms,
   createEditor,
-  Descendant,
-  Element as SlateElement,
 } from 'slate'
 import { withHistory } from 'slate-history'
+import { Match, Switch, children, createMemo, type JSX } from 'solid-js'
 
 import { Button, Icon, Toolbar, type IconType } from './components'
 import type {
@@ -69,7 +69,7 @@ export const RichTextExample = () => {
         renderLeaf={renderLeaf}
         placeholder="Enter some rich text…"
         spellcheck
-        autofocus
+        autoFocus
         // TODO: I don't think `onKeyDown` is implemented yet
         onKeyDown={(event) => {
           for (const hotkey in HOTKEYS) {

@@ -1,17 +1,17 @@
-import { Editor, Node, type NodeEntry, Range } from 'slate'
+import debounce from 'lodash/debounce'
+import { Editor, Node, Range, type NodeEntry } from 'slate'
 import {
   CAN_USE_DOM,
   EDITOR_TO_ELEMENT,
   EDITOR_TO_WINDOW,
   ELEMENT_TO_NODE,
-  getDefaultView,
   HAS_BEFORE_INPUT_SUPPORT,
   NODE_TO_ELEMENT,
   PLACEHOLDER_SYMBOL,
+  getDefaultView,
   type DOMElement,
   type DOMRange,
 } from 'slate-dom'
-import { createOnDOMSelectionChange } from '../utils/createOnDOMSelectionChange'
 import {
   createEffect,
   createMemo,
@@ -20,37 +20,37 @@ import {
   splitProps,
   type JSX,
 } from 'solid-js'
-import debounce from 'lodash/debounce'
-import { useSlate } from '../hooks/useSlate'
-import { useRef } from '../hooks/useRef'
 import type { AndroidInputManager } from '../hooks/android-input-manager/android-input-manager'
+import { ComposingContext } from '../hooks/useComposing'
+import { DecorateContext } from '../hooks/useDecorate'
+import { ReadOnlyContext } from '../hooks/useReadOnly'
+import { useRef } from '../hooks/useRef'
+import { useSlate } from '../hooks/useSlate'
+import { useSyncEditableWeakMaps } from '../hooks/useSyncEditableWeakMaps'
+import { useTrackUserInput } from '../hooks/useTrackUserInput'
+import type { SolidEditor } from '../plugin/solid-editor'
+import { createOnBlur } from '../utils/createOnBlur'
+import { createOnClick } from '../utils/createOnClick'
+import { createOnCompositionEnd } from '../utils/createOnCompositionEnd'
+import { createOnCompositionStart } from '../utils/createOnCompositionStart'
+import { createOnCompositionUpdate } from '../utils/createOnCompositionUpdate'
+import { createOnDOMBeforeInput } from '../utils/createOnDOMBeforeInput'
+import { createOnDOMSelectionChange } from '../utils/createOnDOMSelectionChange'
+import { createOnFocus } from '../utils/createOnFocus'
+import { createOnInput } from '../utils/createOnInput'
+import { createOnKeyDown } from '../utils/createOnKeyDown'
+import { defaultDecorate } from '../utils/defaultDecorate'
+import { defaultScrollSelectionIntoView } from '../utils/defaultScrollSelectionIntoView'
+import { Logger } from '../utils/logger'
+import type { DeferredOperation } from '../utils/types'
+import { Children } from './children'
+import { DefaultPlaceholder } from './defaultPlaceholder'
 import type {
   RenderElementProps,
   RenderLeafProps,
   RenderPlaceholderProps,
 } from './propTypes'
-import type { SolidEditor } from '../plugin/solid-editor'
-import { defaultDecorate } from '../utils/defaultDecorate'
-import { createOnDOMBeforeInput } from '../utils/createOnDOMBeforeInput'
-import { useTrackUserInput } from '../hooks/useTrackUserInput'
-import type { DeferredOperation } from '../utils/types'
-import { Children } from './children'
-import { defaultScrollSelectionIntoView } from '../utils/defaultScrollSelectionIntoView'
-import { useSyncEditableWeakMaps } from '../hooks/useSyncEditableWeakMaps'
-import { Logger } from '../utils/logger'
-import { createOnKeyDown } from '../utils/createOnKeyDown'
-import { ReadOnlyContext } from '../hooks/useReadOnly'
-import { DecorateContext } from '../hooks/useDecorate'
 import { RerenderOnSignal } from './rerenderOnSignal'
-import { ComposingContext } from '../hooks/useComposing'
-import { DefaultPlaceholder } from './defaultPlaceholder'
-import { createOnClick } from '../utils/createOnClick'
-import { createOnInput } from '../utils/createOnInput'
-import { createOnBlur } from '../utils/createOnBlur'
-import { createOnFocus } from '../utils/createOnFocus'
-import { createOnCompositionStart } from '../utils/createOnCompositionStart'
-import { createOnCompositionEnd } from '../utils/createOnCompositionEnd'
-import { createOnCompositionUpdate } from '../utils/createOnCompositionUpdate'
 
 const logger = new Logger('Editable')
 
