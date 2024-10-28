@@ -223,7 +223,6 @@ export function Editable(origProps: EditableProps) {
 
   onCleanup(() => {
     const window = SolidEditor.getWindow(editor())
-
     window.document.removeEventListener(
       'selectionchange',
       scheduleOnDOMSelectionChange,
