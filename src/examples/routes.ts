@@ -63,6 +63,11 @@ export const routeMap = {
     component: lazy(() => import('./styling')),
     src: 'src/examples/styling.tsx',
   },
+  '/plaintext': {
+    label: 'Plain Text',
+    component: lazy(() => import('./plaintext')),
+    src: 'src/examples/plaintext.tsx',
+  },
 }
 
 export type RoutePath = keyof typeof routeMap
