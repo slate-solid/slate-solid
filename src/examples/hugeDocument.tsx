@@ -5,8 +5,8 @@ import {
   withSolid,
   type RenderElementProps,
 } from '@slate-solid/core'
-import { createEditor, Descendant } from 'slate'
-import { createMemo, Match, Switch } from 'solid-js'
+import { Descendant, createEditor } from 'slate'
+import { Match, Switch, createMemo } from 'solid-js'
 
 const HEADINGS = 100
 const PARAGRAPHS = 7
@@ -31,7 +31,7 @@ const HugeDocumentExample = () => {
   const editor = createMemo(() => withSolid(createEditor()))
   return (
     <Slate editor={editor()} initialValue={initialValue}>
-      <Editable renderElement={renderElement} spellcheck autoFocus />
+      <Editable renderElement={renderElement} spellcheck autofocus />
     </Slate>
   )
 }

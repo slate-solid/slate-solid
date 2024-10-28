@@ -78,7 +78,7 @@ const CheckListsExample = () => {
         renderElement={renderElement}
         placeholder="Get to work…"
         spellcheck
-        autoFocus
+        autofocus
       />
     </Slate>
   )

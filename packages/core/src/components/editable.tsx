@@ -71,7 +71,6 @@ export type EditableProps = {
 
 export function Editable(origProps: EditableProps) {
   const [namedProps, attributes] = splitProps(origProps, [
-    'autofocus',
     'decorate',
     'onDOMBeforeInput',
     'placeholder',

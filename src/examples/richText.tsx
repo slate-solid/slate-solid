@@ -69,7 +69,7 @@ export const RichTextExample = () => {
         renderLeaf={renderLeaf}
         placeholder="Enter some rich text…"
         spellcheck
-        autoFocus
+        autofocus
         // TODO: I don't think `onKeyDown` is implemented yet
         onKeyDown={(event) => {
           for (const hotkey in HOTKEYS) {
