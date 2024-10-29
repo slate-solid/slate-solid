@@ -1,12 +1,12 @@
-import { createMemo, Match, Switch } from 'solid-js'
 import { faker } from '@faker-js/faker'
-import { createEditor, Descendant } from 'slate'
 import {
-  Slate,
   Editable,
+  Slate,
   withSolid,
   type RenderElementProps,
 } from '@slate-solid/core'
+import { Descendant, createEditor } from 'slate'
+import { Match, Switch, createMemo } from 'solid-js'
 
 const HEADINGS = 100
 const PARAGRAPHS = 7
