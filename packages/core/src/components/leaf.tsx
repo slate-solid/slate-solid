@@ -8,12 +8,7 @@ import {
 import { Element, Text } from 'slate'
 import { ResizeObserver as ResizeObserverPolyfill } from '@juggle/resize-observer'
 import String from './string'
-import {
-  PLACEHOLDER_SYMBOL,
-  EDITOR_TO_PLACEHOLDER_ELEMENT,
-  // TODO: what is this?
-  EDITOR_TO_FORCE_RENDER,
-} from 'slate-dom'
+import { PLACEHOLDER_SYMBOL, EDITOR_TO_PLACEHOLDER_ELEMENT } from 'slate-dom'
 import { RenderLeafProps, RenderPlaceholderProps } from './propTypes'
 import { useSlateStatic } from '../hooks/useSlateStatic'
 import { IS_WEBKIT, IS_ANDROID } from 'slate-dom'

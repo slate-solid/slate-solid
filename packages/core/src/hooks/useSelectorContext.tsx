@@ -1,10 +1,12 @@
-import { createContext, createEffect, useContext } from 'solid-js'
+import { createContext } from 'solid-js'
 import { Editor } from 'slate'
 import { useRef } from './useRef'
 
-function isError(error: any): error is Error {
-  return error instanceof Error
-}
+// TODO: This was used by `useSlateSelector` in slate-react. TBD whether we need
+// it.
+// function isError(error: any): error is Error {
+//   return error instanceof Error
+// }
 
 type EditorChangeHandler = (editor: Editor) => void
 /**
@@ -14,7 +16,7 @@ type EditorChangeHandler = (editor: Editor) => void
 export const SlateSelectorContext = createContext<{
   getSlate: () => Editor
   addEventListener: (callback: EditorChangeHandler) => () => void
-}>({} as any)
+}>()
 
 /**
  * Create selector context with editor updating on every editor change
@@ -22,6 +24,7 @@ export const SlateSelectorContext = createContext<{
 export function useSelectorContext(editor: Editor) {
   const eventListeners: EditorChangeHandler[] = []
 
+  // TODO: This can probably be simplified to not need `useRef`
   const slateRef = useRef<{
     editor: Editor
   }>({ editor }).current
