@@ -217,6 +217,10 @@ export function Editable(origProps: EditableProps) {
       scheduleOnDOMSelectionChange,
     )
 
+    if (ref.current && attributes.autofocus) {
+      ref.current.focus()
+    }
+
     // TODO: Implement drag / drop handling
   })
 
