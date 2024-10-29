@@ -1,5 +1,5 @@
 import { IS_ANDROID, IS_IOS } from 'slate-dom'
-import { createMemo, mergeProps } from 'solid-js'
+import { createMemo, mergeProps, Show } from 'solid-js'
 
 /**
  * Leaf strings without text, render as zero-width strings.
@@ -33,8 +33,12 @@ export const ZeroWidthString = (origProps: {
 
   return (
     <span {...attributes()}>
-      {!(IS_ANDROID || IS_IOS) || !props.isLineBreak ? '\uFEFF' : null}
-      {props.isLineBreak ? <br /> : null}
+      <Show when={!(IS_ANDROID || IS_IOS) || !props.isLineBreak}>
+        {'\uFEFF'}
+      </Show>
+      <Show when={props.isLineBreak}>
+        <br />
+      </Show>
     </span>
   )
 }

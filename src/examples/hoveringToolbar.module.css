@@ -9,4 +9,6 @@
   background-color: #222;
   border-radius: 4px;
   transition: opacity 0.75s;
+  /* This addresses a bug where toggling a button causes text selection change */
+  user-select: none;
 }

@@ -28,18 +28,18 @@ export interface TextProps {
 const Text = (props: TextProps) => {
   const editor = useSlateStatic()
   const ref = useRef<HTMLSpanElement | null>(null)
-  const leaves = SlateText.decorations(props.text, props.decorations)
-  const key = SolidEditor.findKey(editor(), props.text)
+  const leaves = () => SlateText.decorations(props.text, props.decorations)
+  const key = () => SolidEditor.findKey(editor(), props.text)
 
   // Update element-related weak maps with the DOM element ref.
   const callbackRef = (span: HTMLSpanElement | null) => {
     const KEY_TO_ELEMENT = EDITOR_TO_KEY_TO_ELEMENT.get(editor())
     if (span) {
-      KEY_TO_ELEMENT?.set(key, span)
+      KEY_TO_ELEMENT?.set(key(), span)
       NODE_TO_ELEMENT.set(props.text, span)
       ELEMENT_TO_NODE.set(span, props.text)
     } else {
-      KEY_TO_ELEMENT?.delete(key)
+      KEY_TO_ELEMENT?.delete(key())
       NODE_TO_ELEMENT.delete(props.text)
       if (ref.current) {
         ELEMENT_TO_NODE.delete(ref.current)
@@ -50,7 +50,7 @@ const Text = (props: TextProps) => {
 
   return (
     <span data-slate-node="text" ref={callbackRef}>
-      <For each={leaves}>
+      <For each={leaves()}>
         {(leaf, i) => (
           <Leaf
             isLast={props.isLast && i() === leaves.length - 1}

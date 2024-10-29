@@ -2,6 +2,7 @@ import {
   createEffect,
   createMemo,
   createSignal,
+  onCleanup,
   splitProps,
   type JSX,
 } from 'solid-js'
@@ -105,10 +106,9 @@ export const Slate = (origProps: {
 
   createEffect(() => {
     EDITOR_TO_ON_CHANGE.set(props.editor, onContextChange)
-
-    return () => {
-      EDITOR_TO_ON_CHANGE.set(props.editor, () => {})
-    }
+  })
+  onCleanup(() => {
+    EDITOR_TO_ON_CHANGE.set(props.editor, () => {})
   })
 
   const [isFocused, setIsFocused] = createSignal(
