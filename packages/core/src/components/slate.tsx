@@ -63,6 +63,7 @@ export const Slate = (origProps: {
     return props.editor
   })
 
+  // eslint-disable-next-line solid/reactivity
   const [editor, setEditor] = createSignal(initialEditor(), {
     // The editor reference doesn't change, so we have to mark it as !== for
     // every signal

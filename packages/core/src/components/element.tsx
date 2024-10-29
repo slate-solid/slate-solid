@@ -66,7 +66,7 @@ const Element = (origProps: ElementProps) => {
       'data-slate-inline'?: true
       contentEditable?: false
       dir?: 'rtl'
-      ref: any
+      ref: (ref: HTMLElement | null) => void
     } = {
       'data-slate-node': 'element',
       ref,
