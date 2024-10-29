@@ -17,7 +17,6 @@ export function Button(origProps: ButtonProps) {
     'class',
     'active',
     'reversed',
-    'onMouseDown',
   ])
   return (
     <span
@@ -29,7 +28,6 @@ export function Button(origProps: ButtonProps) {
         props.active && styles.active,
         props.reversed && styles.reversed,
       )}
-      onMouseDown={props?.onMouseDown}
     >
       {props.children}
     </span>
