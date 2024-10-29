@@ -1,18 +1,18 @@
 /**
  * The default element renderer.
  */
-
 import { useSlateStatic } from '../hooks/useSlateStatic'
-import { Div, Span } from './html'
+import { DynamicElement } from './html'
 import type { RenderElementProps } from './propTypes'
 
 export const DefaultElement = (props: RenderElementProps) => {
-  const { attributes, children, element } = props
   const editor = useSlateStatic()
-  const Tag = editor().isInline(element) ? Span : Div
+
+  const elType = () => (editor().isInline(props.element) ? 'span' : 'div')
+
   return (
-    <Tag {...attributes} style={{ position: 'relative' }}>
-      {children}
-    </Tag>
+    <DynamicElement {...props.attributes} type={elType()}>
+      {props.children}
+    </DynamicElement>
   )
 }

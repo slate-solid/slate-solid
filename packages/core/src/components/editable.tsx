@@ -17,6 +17,8 @@ import {
   createMemo,
   createSignal,
   mergeProps,
+  onCleanup,
+  onMount,
   splitProps,
   type JSX,
 } from 'solid-js'
@@ -28,7 +30,7 @@ import { useRef } from '../hooks/useRef'
 import { useSlate } from '../hooks/useSlate'
 import { useSyncEditableWeakMaps } from '../hooks/useSyncEditableWeakMaps'
 import { useTrackUserInput } from '../hooks/useTrackUserInput'
-import type { SolidEditor } from '../plugin/solid-editor'
+import { SolidEditor } from '../plugin/solid-editor'
 import { createOnBlur } from '../utils/createOnBlur'
 import { createOnClick } from '../utils/createOnClick'
 import { createOnCompositionEnd } from '../utils/createOnCompositionEnd'
@@ -208,8 +210,24 @@ export function Editable(origProps: EditableProps) {
     onStopComposing: () => setIsComposing(false),
   })
 
-  createEffect(() => {
-    window.document.addEventListener('selectionchange', onDOMSelectionChange)
+  onMount(() => {
+    const window = SolidEditor.getWindow(editor())
+    window.document.addEventListener(
+      'selectionchange',
+      scheduleOnDOMSelectionChange,
+    )
+
+    // TODO: Implement drag / drop handling
+  })
+
+  onCleanup(() => {
+    const window = SolidEditor.getWindow(editor())
+    window.document.removeEventListener(
+      'selectionchange',
+      scheduleOnDOMSelectionChange,
+    )
+
+    // TODO: Cleanup drag / drop handling
   })
 
   // This needs to run in `createEffect` to ensure `ref.current` has been set.
@@ -302,10 +320,10 @@ export function Editable(origProps: EditableProps) {
                   ? attributes.spellcheck
                   : false
               }
-              // @ts-ignore
+              // @ts-expect-error autocorrect is not included in the types
               autocorrect={
                 HAS_BEFORE_INPUT_SUPPORT || !CAN_USE_DOM
-                  ? // @ts-ignore
+                  ? // @ts-expect-error autocorrect is not included in the types
                     attributes.autocorrect
                   : 'false'
               }
@@ -321,9 +339,20 @@ export function Editable(origProps: EditableProps) {
               // in some cases, a decoration needs access to the range / selection to decorate a text node,
               // then you will select the whole text node when you select part the of text
               // this magic zIndex="-1" will fix it
-              // @ts-ignore
               zindex={-1}
-              ref={ref.current!}
+              ref={node => {
+                if (node == null) {
+                  onDOMSelectionChange.cancel()
+                  scheduleOnDOMSelectionChange.cancel()
+
+                  EDITOR_TO_ELEMENT.delete(editor())
+                  NODE_TO_ELEMENT.delete(editor())
+                }
+
+                ref.current = node
+
+                // TODO: Implement forward ref for ref passed into Editable
+              }}
               style={style()}
               // TODO: The `slate-react` has the following note:
               // COMPAT: Certain browsers don't support the `beforeinput` event, so we

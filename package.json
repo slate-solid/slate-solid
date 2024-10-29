@@ -10,6 +10,7 @@
     "serve": "vite preview"
   },
   "license": "MIT",
+  "type": "module",
   "devDependencies": {
     "@types/node": "^22.7.5",
     "@types/prismjs": "^1.26.4",
