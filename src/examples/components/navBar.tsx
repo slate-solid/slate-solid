@@ -22,22 +22,31 @@ export function NavBar() {
 
   const [isMenuOpen, setIsMenuOpen] = createSignal(false)
 
+  // Sort by label
+  const routePaths = Object.keys(routeMap).sort((a, b) =>
+    routeMap[a as RoutePath].label.localeCompare(
+      routeMap[b as RoutePath].label,
+    ),
+  )
+
   return (
     <nav class={styles.NavBar}>
       <div
         class={styles.menuTrigger}
-        onClick={() => setIsMenuOpen((isOpen) => !isOpen)}>
+        onClick={() => setIsMenuOpen(isOpen => !isOpen)}
+      >
         ☰
       </div>
       <ul class={classNames(styles.menu, isMenuOpen() && styles.isOpen)}>
-        <For each={Object.keys(routeMap)}>
-          {(path) => (
+        <For each={routePaths}>
+          {path => (
             <li>
               <A
                 class={styles.menuLink}
                 href={path}
                 activeClass={styles.active}
-                onClick={() => setIsMenuOpen(false)}>
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {routeMap[path as RoutePath]?.label}
               </A>
             </li>
