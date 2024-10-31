@@ -92,7 +92,7 @@ const withChecklists = (editor: Editor) => {
 
     if (selection && Range.isCollapsed(selection)) {
       const [match] = Editor.nodes(editor, {
-        match: (n) =>
+        match: n =>
           !Editor.isEditor(n) &&
           SlateElement.isElement(n) &&
           n.type === 'check-list-item',
@@ -107,7 +107,7 @@ const withChecklists = (editor: Editor) => {
             type: 'paragraph',
           }
           Transforms.setNodes(editor, newProperties, {
-            match: (n) =>
+            match: n =>
               !Editor.isEditor(n) &&
               SlateElement.isElement(n) &&
               n.type === 'check-list-item',
@@ -145,7 +145,7 @@ const CheckListItemElement = (props: RenderElementProps) => {
         <input
           type="checkbox"
           checked={checked()}
-          onChange={(event) => {
+          onChange={event => {
             const path = SolidEditor.findPath(editor(), props.element)
             const newProperties: Partial<SlateElement> = {
               checked: event.target.checked,
@@ -157,7 +157,8 @@ const CheckListItemElement = (props: RenderElementProps) => {
       <span
         contentEditable={!readOnly()}
         // suppressContentEditableWarning // TODO: This seems to be a React only thing?
-        class={classNames(styles.label, checked() && styles.checked)}>
+        class={classNames(styles.label, checked() && styles.checked)}
+      >
         {props.children}
       </span>
     </div>

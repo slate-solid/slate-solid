@@ -21,7 +21,7 @@ const EmbedsExample = () => {
   return (
     <Slate editor={editor()} initialValue={initialValue}>
       <Editable
-        renderElement={(props) => <Element {...props} />}
+        renderElement={props => <Element {...props} />}
         placeholder="Enter some text..."
       />
     </Slate>
@@ -30,8 +30,7 @@ const EmbedsExample = () => {
 
 const withEmbeds = (editor: Editor) => {
   const { isVoid } = editor
-  editor.isVoid = (element) =>
-    element.type === 'video' ? true : isVoid(element)
+  editor.isVoid = element => (element.type === 'video' ? true : isVoid(element))
   return editor
 }
 
@@ -75,7 +74,8 @@ const VideoElement = (
           style={{
             padding: '75% 0 0 0',
             position: 'relative',
-          }}>
+          }}
+        >
           <iframe
             src={`${safeUrl()}?title=0&byline=0&portrait=0`}
             // @ts-ignore
@@ -91,7 +91,7 @@ const VideoElement = (
         </div>
         <UrlInput
           url={props.element.url}
-          onChange={(val) => {
+          onChange={val => {
             const path = SolidEditor.findPath(editor(), props.element)
             const newProperties: Partial<SlateElement> = {
               url: val,
@@ -112,12 +112,12 @@ const UrlInput = (props: { url: string; onChange: (url: string) => void }) => {
   return (
     <input
       value={value()}
-      onClick={(e) => e.stopPropagation()}
+      onClick={e => e.stopPropagation()}
       style={{
         'margin-top': '5px',
         'box-sizing': 'border-box',
       }}
-      onChange={(e) => {
+      onChange={e => {
         const newUrl = e.target.value
         setValue(newUrl)
         props.onChange(newUrl)

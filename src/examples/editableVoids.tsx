@@ -26,7 +26,7 @@ const EditableVoidsExample = () => {
       </Toolbar>
 
       <Editable
-        renderElement={(props) => <Element {...props} />}
+        renderElement={props => <Element {...props} />}
         placeholder="Enter some text..."
       />
     </Slate>
@@ -36,7 +36,7 @@ const EditableVoidsExample = () => {
 const withEditableVoids = (editor: Editor) => {
   const { isVoid } = editor
 
-  editor.isVoid = (element) => {
+  editor.isVoid = element => {
     return element.type === 'editable-void' ? true : isVoid(element)
   }
 
@@ -74,7 +74,7 @@ const EditableVoid = (props: RenderElementProps) => {
           class={styles.inputText}
           type="text"
           value={inputValue()}
-          onChange={(e) => {
+          onChange={e => {
             setInputValue(e.target.value)
           }}
         />
@@ -108,10 +108,11 @@ const InsertEditableVoidButton = () => {
   const editor = useSlateStatic()
   return (
     <Button
-      onMouseDown={(event) => {
+      onMouseDown={event => {
         event.preventDefault()
         insertEditableVoid(editor())
-      }}>
+      }}
+    >
       <Icon size={24} children="add" />
     </Button>
   )

@@ -1,8 +1,4 @@
-import {
-  Editable,
-  Slate,
-  withSolid
-} from '@slate-solid/core'
+import { Editable, Slate, withSolid } from '@slate-solid/core'
 import { Descendant, createEditor } from 'slate'
 import { withHistory } from 'slate-history'
 import { createMemo, createSignal } from 'solid-js'
