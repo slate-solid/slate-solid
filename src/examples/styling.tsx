@@ -1,8 +1,4 @@
-import {
-  Editable,
-  Slate,
-  withSolid
-} from '@slate-solid/core'
+import { Editable, Slate, withSolid } from '@slate-solid/core'
 import { createEditor } from 'slate'
 import { withHistory } from 'slate-history'
 import { createMemo, createSignal } from 'solid-js'
@@ -12,7 +8,7 @@ const StylingExample = () => {
   const editor1 = createMemo(() => withHistory(withSolid(createEditor())), [])
   const editor2 = createMemo(() => withHistory(withSolid(createEditor())), [])
   return (
-    <div style={{ display: 'flex', "flex-direction": 'column', gap: '40px' }}>
+    <div style={{ display: 'flex', 'flex-direction': 'column', gap: '40px' }}>
       <Slate
         editor={editor1()}
         initialValue={[
@@ -24,8 +20,8 @@ const StylingExample = () => {
       >
         <Editable
           style={{
-            "background-color": 'rgb(255, 230, 156)',
-            "min-height": '200px',
+            'background-color': 'rgb(255, 230, 156)',
+            'min-height': '200px',
             outline: 'rgb(0, 128, 0) solid 2px',
           }}
         />

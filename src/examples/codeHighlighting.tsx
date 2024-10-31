@@ -78,10 +78,11 @@ const ElementWrapper = (props: RenderElementProps) => {
         {...props.attributes}
         class={styles.CodeHighlighting}
         style={{ position: 'relative' }}
-        spellcheck={false}>
+        spellcheck={false}
+      >
         <LanguageSelect
           value={props.element.language}
-          onChange={(e) => setLanguage(e.target.value)}
+          onChange={e => setLanguage(e.target.value)}
         />
         {props.children}
       </div>
@@ -126,7 +127,7 @@ const CodeBlockButton = () => {
       editor(),
       { type: CodeBlockType, language: 'html', children: [] },
       {
-        match: (n) => Element.isElement(n) && n.type === ParagraphType,
+        match: n => Element.isElement(n) && n.type === ParagraphType,
         split: true,
       },
     )
@@ -134,7 +135,7 @@ const CodeBlockButton = () => {
       editor(),
       { type: CodeLineType },
       {
-        match: (n) =>
+        match: n =>
           Element.isElement(n) && n.type === (ParagraphType as string),
       },
     )
@@ -144,10 +145,11 @@ const CodeBlockButton = () => {
     <Button
       data-test-id="code-block-button"
       active
-      onMouseDown={(event) => {
+      onMouseDown={event => {
         event.preventDefault()
         handleClick()
-      }}>
+      }}
+    >
       <Icon children="code" />
     </Button>
   )
@@ -183,7 +185,7 @@ const getChildNodeToDecorations = ([
 ]: NodeEntry<CodeBlockElement>) => {
   const nodeToDecorations = new Map<Element, Range[]>()
 
-  const text = block.children.map((line) => Node.string(line)).join('\n')
+  const text = block.children.map(line => Node.string(line)).join('\n')
   const language = block.language
   const tokens = Prism.tokenize(text, Prism.languages[language])
   const normalizedTokens = normalizeTokens(tokens) // make tokens flat and grouped by line
@@ -211,7 +213,7 @@ const getChildNodeToDecorations = ([
         anchor: { path, offset: start },
         focus: { path, offset: end },
         token: true,
-        ...Object.fromEntries(token.types.map((type) => [type, true])),
+        ...Object.fromEntries(token.types.map(type => [type, true])),
       }
 
       nodeToDecorations.get(element)!.push(range)
@@ -241,7 +243,7 @@ function setNodeToDecorations(editor: Editor) {
     Editor.nodes(editor, {
       at: [],
       mode: 'highest',
-      match: (n) => Element.isElement(n) && n.type === CodeBlockType,
+      match: n => Element.isElement(n) && n.type === CodeBlockType,
     }),
   )
 
@@ -269,7 +271,8 @@ const LanguageSelect = (props: JSX.IntrinsicElements['select']) => {
       data-test-id="language-select"
       contentEditable={false}
       class={styles.LanguageSelect}
-      {...props}>
+      {...props}
+    >
       <option value="css">CSS</option>
       <option value="html">HTML</option>
       <option value="java">Java</option>
@@ -301,7 +304,7 @@ const toChildren = (content: string) => [{ text: content }]
 const toCodeLines = (content: string): Element[] =>
   content
     .split('\n')
-    .map((line) => ({ type: CodeLineType, children: toChildren(line) }))
+    .map(line => ({ type: CodeLineType, children: toChildren(line) }))
 
 const initialValue: Element[] = [
   {

@@ -8,30 +8,22 @@
     "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "types": [
-      "vite/client"
-    ],
+    "types": ["vite/client"],
     "noEmit": true,
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "@slate-solid/*": [
-        "./packages/*/src"
-      ],
-      "slate-dom": [
-        "./packages/slate-dom-preview/src"
-      ],
+      "@slate-solid/*": ["./packages/*/src"],
+      "slate-dom": ["./packages/slate-dom-preview/src"]
     }
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "references": [
     {
       "path": "./packages/core"
     },
     {
       "path": "./packages/slate-dom-preview"
-    },
+    }
   ]
 }

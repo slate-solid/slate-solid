@@ -71,7 +71,7 @@ export const RichTextExample = () => {
         spellcheck
         autofocus
         // TODO: I don't think `onKeyDown` is implemented yet
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           for (const hotkey in HOTKEYS) {
             if (isHotkey(hotkey, event as any)) {
               event.preventDefault()
@@ -94,7 +94,7 @@ const toggleBlock = (editor: Editor, format: BlockFormat) => {
   const isList = LIST_TYPES.includes(format as ListType)
 
   Transforms.unwrapNodes(editor, {
-    match: (n) =>
+    match: n =>
       !Editor.isEditor(n) &&
       SlateElement.isElement(n) &&
       LIST_TYPES.includes(n.type as ListType) &&
@@ -111,8 +111,8 @@ const toggleBlock = (editor: Editor, format: BlockFormat) => {
       type: isActive
         ? 'paragraph'
         : isList
-        ? 'list-item'
-        : (format as Exclude<BlockFormat, TextAlign>),
+          ? 'list-item'
+          : (format as Exclude<BlockFormat, TextAlign>),
     }
   }
   Transforms.setNodes<SlateElement>(editor, newProperties)
@@ -140,7 +140,7 @@ const isBlockActive = (editor: Editor, format: Format, blockType = 'type') => {
   const [match] = Array.from(
     Editor.nodes(editor, {
       at: Editor.unhangRange(editor, selection),
-      match: (n) =>
+      match: n =>
         !Editor.isEditor(n) &&
         SlateElement.isElement(n) &&
         n[blockType as 'type'] === format,
@@ -166,7 +166,8 @@ const Element = (props: RenderElementProps) => {
         <p style={style()} {...props.attributes}>
           {props.children}
         </p>
-      }>
+      }
+    >
       <Match when={props.element.type === 'block-quote'}>
         <blockquote style={style()} {...props.attributes}>
           {props.children}
@@ -242,10 +243,11 @@ const BlockButton = ({
         format,
         TEXT_ALIGN_TYPES.includes(format as TextAlign) ? 'align' : 'type',
       )}
-      onMouseDown={(event) => {
+      onMouseDown={event => {
         event.preventDefault()
         toggleBlock(editor(), format)
-      }}>
+      }}
+    >
       <Icon>{icon}</Icon>
     </Button>
   )
@@ -256,10 +258,11 @@ const MarkButton = (props: { format: MarkFormat; icon: IconType }) => {
   return (
     <Button
       active={isMarkActive(editor(), props.format)}
-      onMouseDown={(event) => {
+      onMouseDown={event => {
         event.preventDefault()
         toggleMark(editor(), props.format)
-      }}>
+      }}
+    >
       <Icon>{props.icon}</Icon>
     </Button>
   )

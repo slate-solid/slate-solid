@@ -13,7 +13,8 @@ export function Header() {
       <a
         class={classNames(styles.a, styles.icon)}
         target="_blank"
-        href="https://github.com/slate-solid/slate-solid">
+        href="https://github.com/slate-solid/slate-solid"
+      >
         <BsGithub />
       </a>
     </header>
