@@ -104,9 +104,11 @@ export function Editable(origProps: EditableProps) {
   >()
 
   const editor = useSlate()
+  const selection = createMemo(() => editor().selection)
+
   createEffect(() => {
     logger.groupCollapsed('editor()')
-    logger.debug('selection:', JSON.stringify(editor().selection))
+    logger.debug('selection:', JSON.stringify(selection()))
     logger.debug('children:', JSON.stringify(editor().children, undefined, 2))
     logger.groupEnd()
   })
@@ -265,22 +267,26 @@ export function Editable(origProps: EditableProps) {
     }
   }
 
-  const decorations = createMemo(() => {
-    const decorations = props.decorate([editor(), []])
+  const decorations = createMemo(
+    () => {
+      const decorations = props.decorate([editor(), []])
 
-    if (showPlaceholder()) {
-      const start = Editor.start(editor(), [])
-      decorations.push({
-        [PLACEHOLDER_SYMBOL]: true,
-        placeholder: props.placeholder,
-        onPlaceholderResize: placeHolderResizeHandler,
-        anchor: start,
-        focus: start,
-      })
-    }
+      if (showPlaceholder()) {
+        const start = Editor.start(editor(), [])
+        decorations.push({
+          [PLACEHOLDER_SYMBOL]: true,
+          placeholder: props.placeholder,
+          onPlaceholderResize: placeHolderResizeHandler,
+          anchor: start,
+          focus: start,
+        })
+      }
 
-    return decorations
-  })
+      return decorations
+    },
+    undefined,
+    { equals: (a, b) => a.length === b.length || a === b },
+  )
 
   // TODO: marks
 
@@ -381,7 +387,7 @@ export function Editable(origProps: EditableProps) {
                 renderElement={props.renderElement}
                 renderPlaceholder={props.renderPlaceholder}
                 renderLeaf={props.renderLeaf}
-                selection={editor().selection}
+                selection={selection}
               />
             </div>
             {/* </RestoreDOM> */}

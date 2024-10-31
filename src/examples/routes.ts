@@ -13,6 +13,11 @@ const redirectToDefaultRoute = {
 }
 
 export const routeMap = {
+  '/debug-rendering': {
+    label: 'Debug Rendering',
+    component: lazy(() => import('./_debugRendering')),
+    src: 'src/examples/_debugRendering.tsx',
+  },
   '/check-lists': {
     label: 'Checklists',
     component: lazy(() => import('./checkLists')),
