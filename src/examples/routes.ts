@@ -75,6 +75,9 @@ export const routeMap = {
   },
 }
 
+export type RouteParams = {
+  devtools?: 'open'
+}
 export type RoutePath = keyof typeof routeMap
 
 export const routes = [
