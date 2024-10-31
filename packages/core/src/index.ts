@@ -1,4 +1,5 @@
 export * from './plugin/solid-editor'
+export * from './components/debugRender'
 export * from './components/editable'
 export type * from './components/propTypes'
 export * from './components/slate'

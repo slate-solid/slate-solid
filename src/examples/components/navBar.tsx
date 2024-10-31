@@ -22,12 +22,19 @@ export function NavBar() {
 
   const [isMenuOpen, setIsMenuOpen] = createSignal(false)
 
+  // Ignore any src files prefixed with _
+  const ignoreUnderscorePrefixed = /\/_[^/]+$/
+
   // Sort by label
-  const routePaths = Object.keys(routeMap).sort((a, b) =>
-    routeMap[a as RoutePath].label.localeCompare(
-      routeMap[b as RoutePath].label,
-    ),
-  )
+  const routePaths = Object.keys(routeMap)
+    .filter(
+      path => !ignoreUnderscorePrefixed.test(routeMap[path as RoutePath].src),
+    )
+    .sort((a, b) =>
+      routeMap[a as RoutePath].label.localeCompare(
+        routeMap[b as RoutePath].label,
+      ),
+    )
 
   return (
     <nav class={styles.NavBar}>

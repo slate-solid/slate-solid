@@ -1,4 +1,4 @@
-import { createMemo, For, type JSX } from 'solid-js'
+import { createMemo, For, type Accessor, type JSX } from 'solid-js'
 import { type Ancestor, Range, Editor, Element } from 'slate'
 import { SolidEditor } from '../plugin/solid-editor'
 import type {
@@ -19,13 +19,20 @@ export interface ChildrenProps {
   renderElement?: (props: RenderElementProps) => JSX.Element
   renderPlaceholder: (props: RenderPlaceholderProps) => JSX.Element
   renderLeaf?: (props: RenderLeafProps) => JSX.Element
-  selection: Range | null
+  selection: Accessor<Range | null>
 }
 
 export function Children(props: ChildrenProps) {
   const decorate = useDecorate()
   const editor = useSlateStatic()
-  const nodePath = () => SolidEditor.findPath(editor(), props.node)
+  const nodePath = createMemo(
+    () => SolidEditor.findPath(editor(), props.node),
+    undefined,
+    {
+      // TODO: Is this going to be a performance issue?
+      equals: (a, b) => JSON.stringify(a) === JSON.stringify(b),
+    },
+  )
 
   const isLeafBlock = () =>
     Element.isElement(props.node) &&
@@ -52,7 +59,7 @@ export function Children(props: ChildrenProps) {
         const range = () => Editor.range(editor(), childPath())
 
         const sel = () =>
-          props.selection && Range.intersection(range(), props.selection)
+          props.selection() && Range.intersection(range(), props.selection()!)
         const hasSel = () => !!sel()
 
         const ds = createMemo(() => {

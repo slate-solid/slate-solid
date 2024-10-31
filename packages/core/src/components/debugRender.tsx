@@ -2,7 +2,7 @@ import { onCleanup, onMount, type JSX } from 'solid-js'
 
 export interface DebugRenderProps {
   label: string
-  children?: JSX.Element
+  children?: JSX.Element | string
 }
 
 /**

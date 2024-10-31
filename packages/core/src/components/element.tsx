@@ -41,8 +41,12 @@ const Element = (origProps: ElementProps) => {
   )
   const editor = useSlateStatic()
   const readOnly = useReadOnly()
-  const isInline = () => editor().isInline(props.element)
-  const isVoid = () => Editor.isVoid(editor(), props.element)
+  const isInline = createMemo(() => editor().isInline(props.element))
+  const isVoid = createMemo(() => Editor.isVoid(editor(), props.element))
+  const hasInlines = createMemo(() =>
+    Editor.hasInlines(editor(), props.element),
+  )
+
   const key = () => SolidEditor.findKey(editor(), props.element)
   const ref = (ref: HTMLElement | null) => {
     // Update element-related weak maps with the DOM element ref.
@@ -78,7 +82,7 @@ const Element = (origProps: ElementProps) => {
 
     // If it's a block node with inline children, add the proper `dir` attribute
     // for text direction.
-    if (!isInline() && Editor.hasInlines(editor(), props.element)) {
+    if (!isInline() && hasInlines()) {
       const text = Node.string(props.element)
       const dir = getDirection(text)
 
@@ -107,7 +111,7 @@ const Element = (origProps: ElementProps) => {
         renderElement={props.renderElement}
         renderPlaceholder={props.renderPlaceholder}
         renderLeaf={props.renderLeaf}
-        selection={props.selection}
+        selection={() => props.selection}
       />
     )
 
@@ -143,15 +147,15 @@ const Element = (origProps: ElementProps) => {
     return children
   })
 
-  return (
-    <>
-      {props.renderElement({
-        attributes: attributes(),
-        children,
-        element: props.element,
-      })}
-    </>
+  const el = createMemo(() =>
+    props.renderElement({
+      attributes: attributes(),
+      children: children(),
+      element: props.element,
+    }),
   )
+
+  return <>{el()}</>
 }
 
 // TODO: Figure out if there needs to be something similar in SolidJS
