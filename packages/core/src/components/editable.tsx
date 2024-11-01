@@ -53,7 +53,7 @@ import type {
   RenderPlaceholderProps,
 } from './propTypes'
 import { RerenderOnSignal } from './rerenderOnSignal'
-import { isArrayEqual } from '../utils/isArrayEqual'
+import { isArrayEqual } from '../utils/isEqual'
 
 const logger = new Logger('Editable')
 

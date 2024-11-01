@@ -12,7 +12,7 @@ import { useDecorate } from '../hooks/useDecorate'
 import { useSlateStatic } from '../hooks/useSlateStatic'
 import { NODE_TO_INDEX, NODE_TO_PARENT } from 'slate-dom'
 import { SelectedContext } from '../hooks/useSelected'
-import { isArrayEqual } from '../utils/isArrayEqual'
+import { isArrayEqual, isJsonStringEqual } from '../utils/isEqual'
 
 export interface ChildrenProps {
   decorations: Range[]
@@ -31,7 +31,7 @@ export function Children(props: ChildrenProps) {
     undefined,
     {
       // TODO: Is this going to be a performance issue?
-      equals: (a, b) => JSON.stringify(a) === JSON.stringify(b),
+      equals: isJsonStringEqual,
     },
   )
 
