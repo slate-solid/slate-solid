@@ -1,9 +1,9 @@
-import { useLocation, A } from '@solidjs/router'
+import { useLocation, A, useSearchParams } from '@solidjs/router'
 import { createSignal, For } from 'solid-js'
 import { BsCode } from 'solid-icons/bs'
 import styles from './navBar.module.css'
 import { classNames } from '../utils/cssUtils'
-import { routeMap, type RoutePath } from '../routes'
+import { routeMap, RouteParams, type RoutePath } from '../routes'
 
 function ghSrcLink(branch: string, path?: string) {
   return `https://github.com/slate-solid/slate-solid/blob/${branch}/${path}`
@@ -11,6 +11,7 @@ function ghSrcLink(branch: string, path?: string) {
 
 export function NavBar() {
   const location = useLocation()
+  const [query] = useSearchParams<RouteParams>()
 
   const routeKey = () =>
     location.pathname
@@ -36,6 +37,15 @@ export function NavBar() {
       ),
     )
 
+  const withQuery = (path: string) => {
+    const { devtools } = query
+    if (devtools == null) {
+      return path
+    }
+
+    return `${path}?devtools${devtools === 'open' ? '=open' : ''}`
+  }
+
   return (
     <nav class={styles.NavBar}>
       <div
@@ -50,7 +60,7 @@ export function NavBar() {
             <li>
               <A
                 class={styles.menuLink}
-                href={path}
+                href={withQuery(path)}
                 activeClass={styles.active}
                 onClick={() => setIsMenuOpen(false)}
               >
