@@ -78,6 +78,13 @@ export function Children(props: ChildrenProps) {
             return ds
           },
           undefined,
+          // This check is important. It noticably improved performance of the
+          // Huge Document example `slate-solid/issues/15` and seems to get rid
+          // of some cases in IOS where selectoin had to be re-synced
+          // `slate-solid/issues/11`. It's possible there will need to be
+          // additional optimization for cases where custom decorations are
+          // being used (decorations.length > 0) since reference equality won't
+          // match even if decorations don't change.
           { equals: isArrayEqual },
         )
 

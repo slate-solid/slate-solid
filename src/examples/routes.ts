@@ -18,6 +18,11 @@ export const routeMap = {
     component: lazy(() => import('./_debugRendering')),
     src: 'src/examples/_debugRendering.tsx',
   },
+  '/rendering-experiment': {
+    label: 'Rendering Experiment',
+    component: lazy(() => import('./_renderingExperiment')),
+    src: 'src/examples/_renderingExperiment.tsx',
+  },
   '/check-lists': {
     label: 'Checklists',
     component: lazy(() => import('./checkLists')),
