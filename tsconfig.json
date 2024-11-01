@@ -11,6 +11,7 @@
     "types": ["vite/client"],
     "noEmit": true,
     "isolatedModules": true,
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@slate-solid/*": ["./packages/*/src"],
