@@ -53,6 +53,7 @@ import type {
   RenderPlaceholderProps,
 } from './propTypes'
 import { RerenderOnSignal } from './rerenderOnSignal'
+import { isArrayEqual } from '../utils/isArrayEqual'
 
 const logger = new Logger('Editable')
 
@@ -285,7 +286,7 @@ export function Editable(origProps: EditableProps) {
       return decorations
     },
     undefined,
-    { equals: (a, b) => a.length === b.length || a === b },
+    { equals: isArrayEqual },
   )
 
   // TODO: marks
