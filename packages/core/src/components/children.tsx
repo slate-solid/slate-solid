@@ -12,6 +12,7 @@ import { useDecorate } from '../hooks/useDecorate'
 import { useSlateStatic } from '../hooks/useSlateStatic'
 import { NODE_TO_INDEX, NODE_TO_PARENT } from 'slate-dom'
 import { SelectedContext } from '../hooks/useSelected'
+import { isArrayEqual } from '../utils/isArrayEqual'
 
 export interface ChildrenProps {
   decorations: Range[]
@@ -62,19 +63,23 @@ export function Children(props: ChildrenProps) {
           props.selection() && Range.intersection(range(), props.selection()!)
         const hasSel = () => !!sel()
 
-        const ds = createMemo(() => {
-          const ds = decorate([n, childPath()])
+        const ds = createMemo(
+          () => {
+            const ds = decorate([n, childPath()])
 
-          for (const dec of props.decorations) {
-            const d = Range.intersection(dec, range())
+            for (const dec of props.decorations) {
+              const d = Range.intersection(dec, range())
 
-            if (d) {
-              ds.push(d)
+              if (d) {
+                ds.push(d)
+              }
             }
-          }
 
-          return ds
-        })
+            return ds
+          },
+          undefined,
+          { equals: isArrayEqual },
+        )
 
         return (
           <>
