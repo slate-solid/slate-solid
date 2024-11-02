@@ -1,4 +1,10 @@
-import { createMemo, For, type Accessor, type JSX } from 'solid-js'
+import {
+  createEffect,
+  createMemo,
+  For,
+  type Accessor,
+  type JSX,
+} from 'solid-js'
 import { type Ancestor, Range, Editor, Element } from 'slate'
 import { SolidEditor } from '../plugin/solid-editor'
 import type {
@@ -43,18 +49,7 @@ export function Children(props: ChildrenProps) {
   return (
     <For each={props.node.children}>
       {(n, i) => {
-        // This needs to run before Slate apis are called in this loop. This
-        // seems to be the easiest way to do this since effects won't run until
-        // after accessor calls throughout the loop
-        const updateWeakMaps = () => {
-          NODE_TO_INDEX.set(n, i())
-          NODE_TO_PARENT.set(n, props.node)
-        }
-
-        const childPath = () => {
-          updateWeakMaps()
-          return nodePath().concat(i())
-        }
+        const childPath = () => nodePath().concat(i())
 
         // const key = SolidEditor.findKey(editor(), n)
         const range = () => Editor.range(editor(), childPath())

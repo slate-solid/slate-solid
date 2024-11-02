@@ -17,6 +17,7 @@ import {
 import { EditorContext } from '../hooks/useSlateStatic'
 import { SolidEditor } from '../plugin/solid-editor'
 import { Logger } from '../utils/logger'
+import { setNodeWeakMaps } from '../utils/setNodeWeakMaps'
 
 const logger = new Logger('Slate')
 
@@ -60,6 +61,8 @@ export const Slate = (origProps: {
     props.editor.children = props.initialValue
     Object.assign(props.editor, restProps)
 
+    setNodeWeakMaps(props.editor)
+
     return props.editor
   })
 
@@ -83,6 +86,8 @@ export const Slate = (origProps: {
     logger.debug('Selection:', JSON.stringify(editor().selection))
     logger.debug('Children:', JSON.stringify(editor().children, undefined, 2))
     logger.groupEnd()
+
+    setNodeWeakMaps(editor(), options?.operation)
 
     if (props.onChange) {
       props.onChange(editor().children)
