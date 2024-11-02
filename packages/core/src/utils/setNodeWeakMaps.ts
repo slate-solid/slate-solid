@@ -25,7 +25,7 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
   // of the editor should not be impacted and can be skipped over.
   let childFilterIndex = getTopLevelFilterIndex(operation)
 
-  // Traverse the node tree (or sub-tree if childFilterIndex is not unull).
+  // Traverse the node tree (or sub-tree if childFilterIndex is not null).
   // Using a queue to avoid recursive function calls.
   const queue: Ancestor[] = [editor]
   while (queue.length > 0) {
