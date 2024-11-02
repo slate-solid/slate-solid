@@ -25,7 +25,6 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
 
   let childFilterIndex = getTopLevelFilterIndex(operation)
 
-  let c = 0
   while (queue.length > 0) {
     const parent = queue.shift()!
     const children = parent.children
@@ -41,7 +40,6 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
         queue.push(child)
       }
 
-      ++c
       NODE_TO_INDEX.set(child, i)
       NODE_TO_PARENT.set(child, parent)
     }
@@ -49,8 +47,6 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
     // Only applies to top level, so clear any existing filter
     childFilterIndex = null
   }
-
-  console.log(`Processed ${c} nodes.`)
 }
 
 /**
