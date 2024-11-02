@@ -20,11 +20,14 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
     return
   }
 
-  console.log(editor, operation)
-  const queue: Ancestor[] = [editor]
-
+  // Optimization to only process sub trees for certain operations. e.g. a text
+  // only change should only impact its ancestor tree. Other direct child nodes
+  // of the editor should not be impacted and can be skipped over.
   let childFilterIndex = getTopLevelFilterIndex(operation)
 
+  // Traverse the node tree (or sub-tree if childFilterIndex is not unull).
+  // Using a queue to avoid recursive function calls.
+  const queue: Ancestor[] = [editor]
   while (queue.length > 0) {
     const parent = queue.shift()!
     const children = parent.children
