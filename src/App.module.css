@@ -1,7 +1,7 @@
 .App {
   display: grid;
-}
 
-.Editable {
-  border: 1px solid #ccc;
+  [data-slate-editor]:global {
+    padding: 0.5rem 1rem;
+  }
 }
