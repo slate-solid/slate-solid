@@ -1,4 +1,3 @@
-import type { SolidEditor } from '@slate-solid/core'
 import {
   Ancestor,
   Text,
@@ -7,6 +6,7 @@ import {
   type SetSelectionOperation,
 } from 'slate'
 import { NODE_TO_INDEX, NODE_TO_PARENT } from 'slate-dom'
+import type { SolidEditor } from '../plugin/solid-editor'
 
 /**
  * Set WeakMap entries related to nodes in the Slate data model. These provide
