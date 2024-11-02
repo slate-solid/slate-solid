@@ -1,12 +1,5 @@
-import {
-  createEffect,
-  createMemo,
-  For,
-  type Accessor,
-  type JSX,
-} from 'solid-js'
+import { createMemo, For, type Accessor, type JSX } from 'solid-js'
 import { type Ancestor, Range, Editor, Element } from 'slate'
-import { SolidEditor } from '../plugin/solid-editor'
 import type {
   RenderElementProps,
   RenderLeafProps,
@@ -16,9 +9,8 @@ import ElementComponent from '../components/element'
 import TextComponent from '../components/text'
 import { useDecorate } from '../hooks/useDecorate'
 import { useSlateStatic } from '../hooks/useSlateStatic'
-import { NODE_TO_INDEX, NODE_TO_PARENT } from 'slate-dom'
 import { SelectedContext } from '../hooks/useSelected'
-import { isArrayEqual, isJsonStringEqual } from '../utils/isEqual'
+import { NODE_TO_PATH } from '../utils/weakMaps'
 
 export interface ChildrenProps {
   decorations: Range[]
@@ -32,14 +24,6 @@ export interface ChildrenProps {
 export function Children(props: ChildrenProps) {
   const decorate = useDecorate()
   const editor = useSlateStatic()
-  const nodePath = createMemo(
-    () => SolidEditor.findPath(editor(), props.node),
-    undefined,
-    {
-      // TODO: Is this going to be a performance issue?
-      equals: isJsonStringEqual,
-    },
-  )
 
   const isLeafBlock = () =>
     Element.isElement(props.node) &&
@@ -49,39 +33,28 @@ export function Children(props: ChildrenProps) {
   return (
     <For each={props.node.children}>
       {(n, i) => {
-        const childPath = () => nodePath().concat(i())
+        const childPath = () => NODE_TO_PATH.get(n)!
 
         // const key = SolidEditor.findKey(editor(), n)
-        const range = () => Editor.range(editor(), childPath())
+        const range = createMemo(() => Editor.range(editor(), childPath()))
 
         const sel = () =>
           props.selection() && Range.intersection(range(), props.selection()!)
         const hasSel = () => !!sel()
 
-        const ds = createMemo(
-          () => {
-            const ds = decorate([n, childPath()])
+        const ds = createMemo(() => {
+          const ds = decorate([n, childPath()])
 
-            for (const dec of props.decorations) {
-              const d = Range.intersection(dec, range())
+          for (const dec of props.decorations) {
+            const d = Range.intersection(dec, range())
 
-              if (d) {
-                ds.push(d)
-              }
+            if (d) {
+              ds.push(d)
             }
+          }
 
-            return ds
-          },
-          undefined,
-          // This check is important. It noticably improved performance of the
-          // Huge Document example `slate-solid/issues/15` and seems to get rid
-          // of some cases in IOS where selectoin had to be re-synced
-          // `slate-solid/issues/11`. It's possible there will need to be
-          // additional optimization for cases where custom decorations are
-          // being used (decorations.length > 0) since reference equality won't
-          // match even if decorations don't change.
-          { equals: isArrayEqual },
-        )
+          return ds
+        })
 
         return (
           <>

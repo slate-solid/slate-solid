@@ -7,6 +7,7 @@ import {
 } from 'slate'
 import { NODE_TO_INDEX, NODE_TO_PARENT } from 'slate-dom'
 import type { SolidEditor } from '../plugin/solid-editor'
+import { NODE_TO_PATH } from './weakMaps'
 
 /**
  * Set WeakMap entries related to nodes in the Slate data model. These provide
@@ -27,9 +28,9 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
 
   // Traverse the node tree (or sub-tree if childFilterIndex is not null).
   // Using a queue to avoid recursive function calls.
-  const queue: Ancestor[] = [editor]
+  const queue: [Ancestor, number[]][] = [[editor, []]]
   while (queue.length > 0) {
-    const parent = queue.shift()!
+    const [parent, parentPath] = queue.shift()!
     const children = parent.children
 
     for (let i = 0; i < children.length; ++i) {
@@ -39,12 +40,15 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
 
       const child = children[i]
 
+      const childPath = [...parentPath, i]
+
       if (!Text.isText(child)) {
-        queue.push(child)
+        queue.push([child, childPath])
       }
 
       NODE_TO_INDEX.set(child, i)
       NODE_TO_PARENT.set(child, parent)
+      NODE_TO_PATH.set(child, childPath)
     }
 
     // Only applies to top level, so clear any existing filter
