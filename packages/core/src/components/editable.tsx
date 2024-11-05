@@ -210,6 +210,7 @@ export function Editable(origProps: EditableProps) {
     editor,
     androidInputManagerRef,
     readOnly: () => props.readOnly,
+    onKeyDown: attributes.onKeyDown,
     onStopComposing: () => setIsComposing(false),
   })
 
