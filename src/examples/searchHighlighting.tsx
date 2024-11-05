@@ -14,7 +14,7 @@ import styles from './searchHighlighting.module.css'
 
 const SearchHighlightingExample = () => {
   const [search, setSearch] = createSignal<string | undefined>()
-  const editor = createMemo(() => withHistory(withSolid(createEditor())), [])
+  const editor = createMemo(() => withHistory(withSolid(createEditor())))
   const decorate = ([node, path]: NodeEntry) => {
     const ranges = []
     const searchValue = search()
