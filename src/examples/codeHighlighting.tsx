@@ -27,7 +27,7 @@ import {
   SolidEditor,
   useSlateStatic,
 } from '@slate-solid/core'
-import { createMemo, createRenderEffect, type JSX } from 'solid-js'
+import { createMemo, type JSX } from 'solid-js'
 import { withHistory } from 'slate-history'
 import isHotkey from 'is-hotkey'
 import { CodeBlockElement } from './custom-types.d'
@@ -157,7 +157,7 @@ const CodeBlockButton = () => {
 
 const renderLeaf = (props: RenderLeafProps) => {
   const classNames = createMemo(() => {
-    const { text, ...rest } = props.leaf
+    const { text: _, ...rest } = props.leaf
     return Object.keys(rest).join(' ')
   })
 
