@@ -45,7 +45,7 @@ const withLayout = (editor: Editor) => {
         const slateIndex = childPath[0]
         const enforceType = (type: SlateElement['type']) => {
           if (SlateElement.isElement(child) && child.type !== type) {
-            const newProperties: Partial<SlateElement> = { type }
+            const newProperties = { type } as Partial<SlateElement>
             Transforms.setNodes<SlateElement>(editor, newProperties, {
               at: childPath,
             })
