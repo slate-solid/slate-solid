@@ -73,6 +73,11 @@ export const routeMap = {
     component: lazy(() => import('./richText')),
     src: 'src/examples/richText.tsx',
   },
+  '/search-highlighting': {
+    label: 'Search Highlighting',
+    component: lazy(() => import('./searchHighlighting')),
+    src: 'src/examples/searchHighlighting.tsx',
+  },
   '/styling': {
     label: 'Styling',
     component: lazy(() => import('./styling')),
