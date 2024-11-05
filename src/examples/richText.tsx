@@ -107,7 +107,7 @@ const toggleBlock = (editor: Editor, format: BlockFormat) => {
         : isList
         ? 'list-item'
         : (format as Exclude<BlockFormat, TextAlign>),
-    }
+    } as Partial<SlateElement>
   }
   Transforms.setNodes<SlateElement>(editor, newProperties)
 
@@ -151,7 +151,7 @@ export const isMarkActive = (editor: Editor, format: MarkFormat) => {
 
 export const Element = (props: RenderElementProps) => {
   const style = createMemo<JSX.CSSProperties>(() => ({
-    'text-align': props.element.align,
+    'text-align': 'align' in props.element ? props.element.align : undefined,
   }))
 
   return (

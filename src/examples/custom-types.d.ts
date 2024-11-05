@@ -4,7 +4,7 @@ import { HistoryEditor } from 'slate-history'
 
 export type BlockQuoteElement = {
   type: 'block-quote'
-  align?: string
+  align?: TextAlign
   children: Descendant[]
 }
 
@@ -33,43 +33,43 @@ export type EditableVoidElement = {
 
 export type HeadingElement = {
   type: 'heading'
-  align?: string
+  align?: TextAlign
   children: Descendant[]
 }
 
 export type Heading1Element = {
   type: 'heading-one'
-  align?: string
+  align?: TextAlign
   children: Descendant[]
 }
 
 export type Heading2Element = {
   type: 'heading-two'
-  align?: string
+  align?: TextAlign
   children: Descendant[]
 }
 
 export type Heading3Element = {
   type: 'heading-three'
-  align?: string
+  align?: TextAlign
   children: Descendant[]
 }
 
 export type Heading4Element = {
   type: 'heading-four'
-  align?: string
+  align?: TextAlign
   children: Descendant[]
 }
 
 export type Heading5Element = {
   type: 'heading-five'
-  align?: string
+  align?: TextAlign
   children: Descendant[]
 }
 
 export type Heading6Element = {
   type: 'heading-six'
-  align?: string
+  align?: TextAlign
   children: Descendant[]
 }
 
@@ -181,7 +181,7 @@ export type CustomEditor = BaseEditor &
 declare module 'slate' {
   interface CustomTypes {
     Editor: CustomEditor
-    Element: CustomElement & { align?: TextAlign }
+    Element: CustomElement
     Text: CustomText | EmptyText
     Range: BaseRange & {
       [key: string]: unknown
