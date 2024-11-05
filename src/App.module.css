@@ -4,4 +4,7 @@
   [data-slate-editor]:global {
     padding: 0.5rem 1rem;
   }
+  [data-slate-placeholder]:global {
+    margin-top: 0.5rem;
+  }
 }
