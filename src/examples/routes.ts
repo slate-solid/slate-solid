@@ -48,6 +48,11 @@ export const routeMap = {
     component: lazy(() => import('./embeds')),
     src: 'src/examples/embeds.tsx',
   },
+  '/forced-layout': {
+    label: 'Forced Layout',
+    component: lazy(() => import('./forcedLayout')),
+    src: 'src/examples/forcedLayout.tsx',
+  },
   '/hovering-toolbar': {
     label: 'Hovering Toolbar',
     component: lazy(() => import('./hoveringToolbar')),

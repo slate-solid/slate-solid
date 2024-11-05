@@ -1,6 +1,5 @@
 import type { SolidEditor } from '@slate-solid/core'
 import { Descendant, BaseEditor, BaseRange, Range, Element } from 'slate'
-import { DOMEditor } from 'slate-dom'
 import { HistoryEditor } from 'slate-history'
 
 export type BlockQuoteElement = {
@@ -72,11 +71,13 @@ export type MentionElement = {
 
 export type ParagraphElement = {
   type: 'paragraph'
-  align?: string
+  align?: TextAlign
   children: Descendant[]
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type TableRow = {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 type TableCell = {}
 
 export type TableElement = { type: 'table'; children: TableRow[] }
