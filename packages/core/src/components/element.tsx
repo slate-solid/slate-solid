@@ -139,12 +139,6 @@ const Element = (origProps: ElementProps) => {
           />
         </Tag>
       )
-
-      // TODO: This will get overwritten by `setNodeWeakMaps`, so we probably
-      // need to account for it there instead. Will also need to include
-      // setting `NODE_TO_PATH`.
-      NODE_TO_INDEX.set(text, 0)
-      NODE_TO_PARENT.set(text, props.element)
     }
 
     return children
