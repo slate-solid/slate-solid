@@ -1,4 +1,4 @@
-import { children, createEffect, createMemo } from 'solid-js'
+import { createEffect, createMemo } from 'solid-js'
 import {
   Slate,
   Editable,
@@ -6,7 +6,6 @@ import {
   useSlate,
   useFocused,
   useRef,
-  type RenderLeafProps,
 } from '@slate-solid/core'
 import { Editor, createEditor, Descendant, Range } from 'slate'
 import { withHistory } from 'slate-history'
@@ -15,6 +14,7 @@ import { Button, Icon, Menu, type IconType } from './components'
 import { Portal } from 'solid-js/web'
 import styles from './hoveringToolbar.module.css'
 import type { MarkFormat } from './custom-types'
+import { isMarkActive, Leaf, toggleMark } from './richText'
 
 const HoveringMenuExample = () => {
   const editor = createMemo(() => withHistory(withSolid(createEditor())))
@@ -41,43 +41,6 @@ const HoveringMenuExample = () => {
       />
     </Slate>
   )
-}
-
-const toggleMark = (editor: Editor, format: MarkFormat) => {
-  const isActive = isMarkActive(editor, format)
-
-  if (isActive) {
-    Editor.removeMark(editor, format)
-  } else {
-    Editor.addMark(editor, format, true)
-  }
-}
-
-const isMarkActive = (editor: Editor, format: MarkFormat) => {
-  const marks = Editor.marks(editor)
-  return marks ? marks[format as keyof typeof marks] === true : false
-}
-
-const Leaf = (props: RenderLeafProps) => {
-  const resolved = children(() => {
-    let children = props.children
-
-    if ('bold' in props.leaf && props.leaf.bold) {
-      children = <strong>{props.children}</strong>
-    }
-
-    if ('italic' in props.leaf && props.leaf.italic) {
-      children = <em>{props.children}</em>
-    }
-
-    if ('underline' in props.leaf && props.leaf.underline) {
-      children = <u>{props.children}</u>
-    }
-
-    return children
-  })
-
-  return <span {...props.attributes}>{resolved()}</span>
 }
 
 const HoveringToolbar = () => {

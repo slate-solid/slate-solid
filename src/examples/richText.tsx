@@ -5,7 +5,6 @@ import {
   withSolid,
   type RenderElementProps,
   type RenderLeafProps,
-  type SolidEditor,
 } from '@slate-solid/core'
 import isHotkey from 'is-hotkey'
 import {
@@ -21,8 +20,6 @@ import { Match, Switch, children, createMemo, type JSX } from 'solid-js'
 import { Button, Icon, Toolbar, type IconType } from './components'
 import type {
   BlockFormat,
-  BlockType,
-  CustomElement,
   Format,
   ListType,
   MarkFormat,
@@ -43,12 +40,9 @@ export const RichTextExample = () => {
   const renderElement = (props: RenderElementProps) => <Element {...props} />
   const renderLeaf = (props: RenderLeafProps) => <Leaf {...props} />
   const editor = createMemo(() => withHistory(withSolid(createEditor())))
-  const e = () => {
-    ;(editor() as any).id = 'XXXX'
-    return editor()
-  }
+
   return (
-    <Slate editor={e()} initialValue={initialValue}>
+    <Slate editor={editor()} initialValue={initialValue}>
       <Toolbar>
         <MarkButton format="bold" icon="format_bold" />
         <MarkButton format="italic" icon="format_italic" />
@@ -73,7 +67,7 @@ export const RichTextExample = () => {
         // TODO: I don't think `onKeyDown` is implemented yet
         onKeyDown={event => {
           for (const hotkey in HOTKEYS) {
-            if (isHotkey(hotkey, event as any)) {
+            if (isHotkey(hotkey, event)) {
               event.preventDefault()
               const mark = HOTKEYS[hotkey as keyof typeof HOTKEYS] as MarkFormat
               toggleMark(editor(), mark)
@@ -123,7 +117,7 @@ const toggleBlock = (editor: Editor, format: BlockFormat) => {
   }
 }
 
-const toggleMark = (editor: Editor, format: MarkFormat) => {
+export const toggleMark = (editor: Editor, format: MarkFormat) => {
   const isActive = isMarkActive(editor, format)
 
   if (isActive) {
@@ -150,7 +144,7 @@ const isBlockActive = (editor: Editor, format: Format, blockType = 'type') => {
   return !!match
 }
 
-const isMarkActive = (editor: Editor, format: MarkFormat) => {
+export const isMarkActive = (editor: Editor, format: MarkFormat) => {
   const marks = Editor.marks(editor)
   return marks ? marks[format as keyof typeof marks] === true : false
 }
@@ -207,19 +201,19 @@ export const Leaf = (props: RenderLeafProps) => {
     let children = props.children
 
     if ('bold' in props.leaf && props.leaf.bold) {
-      children = <strong>{props.children}</strong>
+      children = <strong>{children}</strong>
     }
 
     if ('code' in props.leaf && props.leaf.code) {
-      children = <code>{props.children}</code>
+      children = <code>{children}</code>
     }
 
     if ('italic' in props.leaf && props.leaf.italic) {
-      children = <em>{props.children}</em>
+      children = <em>{children}</em>
     }
 
     if ('underline' in props.leaf && props.leaf.underline) {
-      children = <u>{props.children}</u>
+      children = <u>{children}</u>
     }
 
     return children
@@ -228,27 +222,21 @@ export const Leaf = (props: RenderLeafProps) => {
   return <span {...props.attributes}>{resolved()}</span>
 }
 
-const BlockButton = ({
-  format,
-  icon,
-}: {
-  format: BlockFormat
-  icon: IconType
-}) => {
+const BlockButton = (props: { format: BlockFormat; icon: IconType }) => {
   const editor = useSlate()
   return (
     <Button
       active={isBlockActive(
         editor(),
-        format,
-        TEXT_ALIGN_TYPES.includes(format as TextAlign) ? 'align' : 'type',
+        props.format,
+        TEXT_ALIGN_TYPES.includes(props.format as TextAlign) ? 'align' : 'type',
       )}
       onMouseDown={event => {
         event.preventDefault()
-        toggleBlock(editor(), format)
+        toggleBlock(editor(), props.format)
       }}
     >
-      <Icon>{icon}</Icon>
+      <Icon>{props.icon}</Icon>
     </Button>
   )
 }
