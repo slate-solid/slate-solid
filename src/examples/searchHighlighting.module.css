@@ -1,0 +1,19 @@
+.toolbarContent {
+  position: relative;
+}
+.icon {
+  position: absolute;
+  top: 0.6em;
+  left: 0.4em;
+  color: #ccc;
+}
+.searchInput {
+  padding-left: 2.5em;
+  width: 100%;
+}
+.bold {
+  font-weight: bold;
+}
+.highlighted {
+  background-color: #ffeeba;
+}

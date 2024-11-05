@@ -19,5 +19,11 @@ export default [
         project: ['tsconfig.json', 'packages/core/tsconfig.json'],
       },
     },
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+    },
   },
 ]

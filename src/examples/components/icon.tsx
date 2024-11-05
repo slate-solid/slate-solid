@@ -13,6 +13,7 @@ import {
   BsTextRight,
   BsTypeItalic,
   BsTypeUnderline,
+  BsSearch,
 } from 'solid-icons/bs'
 import { Dynamic } from 'solid-js/web'
 
@@ -29,6 +30,7 @@ export const iconTypeMap = {
   format_italic: BsTypeItalic,
   format_underlined: BsTypeUnderline,
   code: BsCode,
+  search: BsSearch,
   // Blocks
   looks_one: Bs1SquareFill,
   looks_two: Bs2SquareFill,
@@ -45,5 +47,11 @@ export const iconTypeMap = {
 export type IconType = keyof typeof iconTypeMap
 
 export function Icon(props: IconProps) {
-  return <Dynamic size={props.size} component={iconTypeMap[props.children]} />
+  return (
+    <Dynamic
+      class={props.class}
+      size={props.size}
+      component={iconTypeMap[props.children]}
+    />
+  )
 }
