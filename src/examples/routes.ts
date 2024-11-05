@@ -58,6 +58,11 @@ export const routeMap = {
     component: lazy(() => import('./hugeDocument')),
     src: 'src/examples/hugeDocument.tsx',
   },
+  '/mentions': {
+    label: 'Mentions',
+    component: lazy(() => import('./mentions')),
+    src: 'src/examples/mentions.tsx',
+  },
   '/read-only': {
     label: 'Read-only',
     component: lazy(() => import('./readOnly')),

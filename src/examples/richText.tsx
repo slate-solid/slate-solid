@@ -111,8 +111,8 @@ const toggleBlock = (editor: Editor, format: BlockFormat) => {
       type: isActive
         ? 'paragraph'
         : isList
-          ? 'list-item'
-          : (format as Exclude<BlockFormat, TextAlign>),
+        ? 'list-item'
+        : (format as Exclude<BlockFormat, TextAlign>),
     }
   }
   Transforms.setNodes<SlateElement>(editor, newProperties)
@@ -202,7 +202,7 @@ const Element = (props: RenderElementProps) => {
   )
 }
 
-const Leaf = (props: RenderLeafProps) => {
+export const Leaf = (props: RenderLeafProps) => {
   const resolved = children(() => {
     let children = props.children
 

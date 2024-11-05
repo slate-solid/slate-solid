@@ -1,13 +1,7 @@
-import {
-  Ancestor,
-  Text,
-  type Operation,
-  type SetNodeOperation,
-  type SetSelectionOperation,
-} from 'slate'
+import { Ancestor, Text, type Operation } from 'slate'
 import { NODE_TO_INDEX, NODE_TO_PARENT } from 'slate-dom'
 import type { SolidEditor } from '../plugin/solid-editor'
-import { NODE_TO_PATH } from './weakMaps'
+import { EDITOR_TO_CHILDREN, NODE_TO_PATH } from './weakMaps'
 
 /**
  * Set WeakMap entries related to nodes in the Slate data model. These provide
@@ -16,8 +10,12 @@ import { NODE_TO_PATH } from './weakMaps'
  * again any time the node tree changes.
  */
 export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
-  // Node tree shouldn't change on these operations
-  if (operation?.type === 'set_selection' || operation?.type === 'set_node') {
+  // Track when Editor.children ref is updated
+  const childrenRefChanged = EDITOR_TO_CHILDREN.get(editor) !== editor.children
+  EDITOR_TO_CHILDREN.set(editor, editor.children)
+
+  // If children ref hasn't changed, no need to update node WeakMaps
+  if (!childrenRefChanged) {
     return
   }
 
@@ -34,7 +32,8 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
     const children = parent.children
 
     for (let i = 0; i < children.length; ++i) {
-      if (childFilterIndex && i !== childFilterIndex) {
+      // If we are applying a filter and this index is not in it, skip it.
+      if (childFilterIndex && !childFilterIndex.has(i)) {
         continue
       }
 
@@ -64,9 +63,7 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
  * @returns an index of the direct Editor child to process if an optimization
  * can be identified. Otherwise returns null which means process everything.
  */
-function getTopLevelFilterIndex(
-  operation?: Exclude<Operation, SetNodeOperation | SetSelectionOperation>,
-): number | null {
+function getTopLevelFilterIndex(operation?: Operation): Set<number> | null {
   if (operation == null) {
     return null
   }
@@ -80,6 +77,7 @@ function getTopLevelFilterIndex(
     case 'merge_node':
     case 'move_node':
     case 'remove_node':
+    case 'set_node':
     case 'split_node':
       return null
 
@@ -87,7 +85,38 @@ function getTopLevelFilterIndex(
     // So should be able to just target that sub tree.
     case 'insert_text':
     case 'remove_text': {
-      return operation.path[0]
+      return new Set([operation.path[0]])
+    }
+
+    // When setting selection, determine a Set of top level child indices
+    // included in the selection.
+    case 'set_selection': {
+      // If we ever get here, but there is no selection, we don't really have a
+      // way to know what has changed in children, so don't filter the update.
+      if (
+        operation.newProperties?.anchor == null &&
+        operation.newProperties?.focus == null
+      ) {
+        return null
+      }
+
+      const a = operation.newProperties.anchor?.path[0]
+      const f = operation.newProperties.focus?.path[0]
+
+      const bounds: number[] = [a, f].filter(n => n != null).sort()
+
+      if (bounds.length < 2) {
+        return new Set(bounds)
+      }
+
+      const [start, end] = bounds
+
+      const set = new Set<number>()
+      for (let i = start; i <= end; ++i) {
+        set.add(i)
+      }
+
+      return set
     }
   }
 }

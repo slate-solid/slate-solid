@@ -33,9 +33,20 @@ export const ZeroWidthString = (origProps: {
 
   return (
     <span {...attributes()}>
-      <Show when={!(IS_ANDROID || IS_IOS) || !props.isLineBreak}>
+      {/* <Show when={!(IS_ANDROID || IS_IOS) || !props.isLineBreak}>
         {'\uFEFF'}
-      </Show>
+      </Show> */}
+      {/*
+      TODO: This fixes an what seems to be an IOS bug in slate-react where the
+      length `domRange.setStart(startNode, isStartAtZeroWidth ? 1 : startOffset)`
+      gets called on a zero length string. Removing the `IS_IOS` check keeps the
+      BOM character which has a 1 length string and fixes the error, but I'm not
+      sure what the intent of the original check was or if this causes other
+      issues. Also not sure if android has same issue. Trying this for now. I
+      may file a bug with slate. Tracking here for now
+      `slate-solid/slate-solid/issues/11`
+      */}
+      <Show when={!IS_ANDROID || !props.isLineBreak}>{'\uFEFF'}</Show>
       <Show when={props.isLineBreak}>
         <br />
       </Show>
