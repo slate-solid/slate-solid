@@ -149,7 +149,7 @@ export const isMarkActive = (editor: Editor, format: MarkFormat) => {
   return marks ? marks[format as keyof typeof marks] === true : false
 }
 
-const Element = (props: RenderElementProps) => {
+export const Element = (props: RenderElementProps) => {
   const style = createMemo<JSX.CSSProperties>(() => ({
     'text-align': props.element.align,
   }))
@@ -181,6 +181,26 @@ const Element = (props: RenderElementProps) => {
         <h2 style={style()} {...props.attributes}>
           {props.children}
         </h2>
+      </Match>
+      <Match when={props.element.type === 'heading-three'}>
+        <h3 style={style()} {...props.attributes}>
+          {props.children}
+        </h3>
+      </Match>
+      <Match when={props.element.type === 'heading-four'}>
+        <h4 style={style()} {...props.attributes}>
+          {props.children}
+        </h4>
+      </Match>
+      <Match when={props.element.type === 'heading-five'}>
+        <h5 style={style()} {...props.attributes}>
+          {props.children}
+        </h5>
+      </Match>
+      <Match when={props.element.type === 'heading-six'}>
+        <h6 style={style()} {...props.attributes}>
+          {props.children}
+        </h6>
       </Match>
       <Match when={props.element.type === 'list-item'}>
         <li style={style()} {...props.attributes}>

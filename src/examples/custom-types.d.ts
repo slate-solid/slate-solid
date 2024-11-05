@@ -10,13 +10,13 @@ export type BlockQuoteElement = {
 
 export type BulletedListElement = {
   type: 'bulleted-list'
-  align?: string
+  align?: TextAlign
   children: Descendant[]
 }
 
 export type NumberedListElement = {
   type: 'numbered-list'
-  align?: string
+  align?: TextAlign
   children: Descendant[]
 }
 
@@ -37,14 +37,38 @@ export type HeadingElement = {
   children: Descendant[]
 }
 
-export type HeadingOneElement = {
+export type Heading1Element = {
   type: 'heading-one'
   align?: string
   children: Descendant[]
 }
 
-export type HeadingTwoElement = {
+export type Heading2Element = {
   type: 'heading-two'
+  align?: string
+  children: Descendant[]
+}
+
+export type Heading3Element = {
+  type: 'heading-three'
+  align?: string
+  children: Descendant[]
+}
+
+export type Heading4Element = {
+  type: 'heading-four'
+  align?: string
+  children: Descendant[]
+}
+
+export type Heading5Element = {
+  type: 'heading-five'
+  align?: string
+  children: Descendant[]
+}
+
+export type Heading6Element = {
+  type: 'heading-six'
   align?: string
   children: Descendant[]
 }
@@ -107,8 +131,12 @@ type CustomElement =
   | CheckListItemElement
   | EditableVoidElement
   | HeadingElement
-  | HeadingOneElement
-  | HeadingTwoElement
+  | Heading1Element
+  | Heading2Element
+  | Heading3Element
+  | Heading4Element
+  | Heading5Element
+  | Heading6Element
   | ImageElement
   | LinkElement
   | ButtonElement
