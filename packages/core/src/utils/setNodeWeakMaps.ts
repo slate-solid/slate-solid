@@ -1,4 +1,4 @@
-import { Ancestor, Text, type Operation } from 'slate'
+import { Ancestor, Editor, Element, Node, Text, type Operation } from 'slate'
 import { NODE_TO_INDEX, NODE_TO_PARENT } from 'slate-dom'
 import type { SolidEditor } from '../plugin/solid-editor'
 import { EDITOR_TO_CHILDREN, NODE_TO_PATH } from './weakMaps'
@@ -31,6 +31,8 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
     const [parent, parentPath] = queue.shift()!
     const children = parent.children
 
+    const firstVoidText = firstTextIfVoidElement(editor, parent)
+
     for (let i = 0; i < children.length; ++i) {
       // If we are applying a filter and this index is not in it, skip it.
       if (childFilterIndex && !childFilterIndex.has(i)) {
@@ -39,13 +41,17 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
 
       const child = children[i]
 
-      const childPath = [...parentPath, i]
+      // For void elements, set first text child as the first child. This is an
+      // adaptation of logic that lives in Element component in `slate-react`.
+      const index = child === firstVoidText ? 0 : i
+
+      const childPath = [...parentPath, index]
 
       if (!Text.isText(child)) {
         queue.push([child, childPath])
       }
 
-      NODE_TO_INDEX.set(child, i)
+      NODE_TO_INDEX.set(child, index)
       NODE_TO_PARENT.set(child, parent)
       NODE_TO_PATH.set(child, childPath)
     }
@@ -53,6 +59,25 @@ export function setNodeWeakMaps(editor: SolidEditor, operation?: Operation) {
     // Only applies to top level, so clear any existing filter
     childFilterIndex = null
   }
+}
+
+/**
+ * Return the first Text node if the given element is a void element.
+ */
+function firstTextIfVoidElement(
+  editor: Editor,
+  maybeElement: Node,
+): Text | null {
+  const isVoidElement =
+    Element.isElement(maybeElement) && Editor.isVoid(editor, maybeElement)
+
+  if (!isVoidElement) {
+    return null
+  }
+
+  const [[firstText]] = Node.texts(maybeElement)
+
+  return firstText
 }
 
 /**
