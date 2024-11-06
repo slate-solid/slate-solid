@@ -8,6 +8,7 @@ import {
 } from '@slate-solid/core'
 import { Descendant, createEditor } from 'slate'
 import { Match, Switch, createMemo } from 'solid-js'
+import type { HTMLEvent } from './types'
 
 const HEADINGS = 100
 const PARAGRAPHS = 7
@@ -31,10 +32,10 @@ const ScrollIntoViewExample = () => {
   const renderElement = (props: RenderElementProps) => <Element {...props} />
   const editor = createMemo(() => withSolid(createEditor()))
 
-  const scrollToSelection = event => {
+  const scrollToSelection = (event: HTMLEvent<MouseEvent>) => {
     const { selection } = editor()
     const root = SolidEditor.findDocumentOrShadowRoot(editor())
-    const domSelection = getSelection(root)
+    const domSelection = getSelection()
     console.log(domSelection, root, selection)
 
     if (domSelection?.anchorNode)
@@ -50,8 +51,8 @@ const ScrollIntoViewExample = () => {
 
   return (
     <Slate editor={editor()} initialValue={initialValue}>
-      <center>Make a selection then click the button</center>
-      <center><button onMouseDown={scrollToSelection}>Scroll To Selection</button></center>
+      <span>Make a selection then click the button</span>
+      <span><button onMouseDown={scrollToSelection}>Scroll To Selection</button></span>
       <Editable renderElement={renderElement} spellcheck autofocus />
     </Slate>
   )
