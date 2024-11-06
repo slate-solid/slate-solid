@@ -63,6 +63,11 @@ export const routeMap = {
     component: lazy(() => import('./hugeDocument')),
     src: 'src/examples/hugeDocument.tsx',
   },
+  '/scroll-into-view': {
+    label: 'Scroll Into View',
+    component: lazy(() => import('./scrollIntoView')),
+    src: 'src/examples/scrollIntoView.tsx',
+  },
   '/markdown-shortcuts': {
     label: 'Markdown Shortcuts',
     component: lazy(() => import('./markdownShortcuts')),
