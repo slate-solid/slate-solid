@@ -4,11 +4,11 @@ import {
   Slate,
   SolidEditor,
   withSolid,
+  type HTMLEvent,
   type RenderElementProps,
 } from '@slate-solid/core'
 import { Descendant, createEditor } from 'slate'
 import { Match, Switch, createMemo } from 'solid-js'
-import type { HTMLEvent } from './types'
 
 const HEADINGS = 100
 const PARAGRAPHS = 7
