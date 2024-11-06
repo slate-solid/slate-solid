@@ -49,6 +49,8 @@
   list-style: none;
   z-index: 10;
   display: none;
+  max-height: calc(100vh - 84px);
+  overflow-y: auto;
   &.isOpen {
     display: block;
   }
