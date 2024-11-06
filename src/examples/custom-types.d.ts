@@ -8,6 +8,12 @@ export type BlockQuoteElement = {
   children: Descendant[]
 }
 
+export type QuoteElement = {
+  type: 'quote'
+  align?: TextAlign
+  children: Descendant[]
+}
+
 export type BulletedListElement = {
   type: 'bulleted-list'
   align?: TextAlign
@@ -120,38 +126,45 @@ export type CodeBlockElement = {
   children: Descendant[]
 }
 
+export type CodeElement = {
+  type: 'code'
+  children: Descendant[]
+}
+
 export type CodeLineElement = {
   type: 'code-line'
   children: Descendant[]
 }
 
 type CustomElement =
+  | BadgeElement
   | BlockQuoteElement
   | BulletedListElement
+  | ButtonElement
   | CheckListItemElement
+  | CodeBlockElement
+  | CodeElement
+  | CodeLineElement
   | EditableVoidElement
-  | HeadingElement
   | Heading1Element
   | Heading2Element
   | Heading3Element
   | Heading4Element
   | Heading5Element
   | Heading6Element
+  | HeadingElement
   | ImageElement
   | LinkElement
-  | ButtonElement
-  | BadgeElement
   | ListItemElement
   | MentionElement
   | NumberedListElement
   | ParagraphElement
+  | QuoteElement
+  | TableCellElement
   | TableElement
   | TableRowElement
-  | TableCellElement
   | TitleElement
   | VideoElement
-  | CodeBlockElement
-  | CodeLineElement
 
 export type CustomText = {
   bold?: boolean
