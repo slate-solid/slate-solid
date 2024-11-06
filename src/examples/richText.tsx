@@ -236,6 +236,10 @@ export const Leaf = (props: RenderLeafProps) => {
       children = <u>{children}</u>
     }
 
+    if ('strikethrough' in props.leaf && props.leaf.strikethrough) {
+      children = <del>{children}</del>
+    }
+
     return children
   })
 

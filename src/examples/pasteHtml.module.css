@@ -1,0 +1,9 @@
+.image {
+  display: block;
+  max-width: 100%;
+  max-height: 20em;
+  box-shadow: none;
+  &.selected {
+    box-shadow: 0 0 0 2px blue;
+  }
+}

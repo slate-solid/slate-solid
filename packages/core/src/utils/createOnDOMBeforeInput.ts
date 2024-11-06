@@ -14,6 +14,7 @@ import type { DeferredOperation, HTMLEvent } from './types'
 import { isEventHandled } from './isEventHandled'
 import { Logger } from './logger'
 import type { JSX } from 'solid-js/jsx-runtime'
+import { setNodeWeakMaps } from './setNodeWeakMaps'
 
 const logger = new Logger('createOnDOMBeforeInput')
 
@@ -306,6 +307,7 @@ export function createOnDOMBeforeInput({
           // like cypress where cy.window does not work realibly
           if (data?.constructor.name === 'DataTransfer') {
             SolidEditor.insertData(editor, data)
+            setNodeWeakMaps(editor)
           } else if (typeof data === 'string') {
             // Only insertText operations use the native functionality, for now.
             // Potentially expand to single character deletes, as well.
