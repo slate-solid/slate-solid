@@ -4,7 +4,6 @@ import {
   Slate,
   SolidEditor,
   withSolid,
-  type HTMLEvent,
   type RenderElementProps,
 } from '@slate-solid/core'
 import { Descendant, createEditor } from 'slate'
@@ -32,7 +31,7 @@ const ScrollIntoViewExample = () => {
   const renderElement = (props: RenderElementProps) => <Element {...props} />
   const editor = createMemo(() => withSolid(createEditor()))
 
-  const scrollToSelection = (event: HTMLEvent<MouseEvent>) => {
+  const scrollToSelection = () => {
     const { selection } = editor()
     const root = SolidEditor.findDocumentOrShadowRoot(editor())
     const domSelection = getSelection()
@@ -43,8 +42,6 @@ const ScrollIntoViewExample = () => {
         behavior: 'smooth',
         block: 'center',
       })
-
-    event.preventDefault()
   }
 
 
@@ -52,7 +49,10 @@ const ScrollIntoViewExample = () => {
   return (
     <Slate editor={editor()} initialValue={initialValue}>
       <span>Make a selection then click the button</span>
-      <span><button onMouseDown={scrollToSelection}>Scroll To Selection</button></span>
+      <span><button onMouseDown={event=>{
+        scrollToSelection()
+        event.preventDefault()
+      }}>Scroll To Selection</button></span>
       <Editable renderElement={renderElement} spellcheck autofocus />
     </Slate>
   )
