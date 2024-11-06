@@ -1,6 +1,9 @@
 .exampleContent {
+  --padding: 20px;
   background: #fff;
   max-width: 42em;
   margin: 20px auto;
-  padding: 20px;
+  padding: var(--padding);
+  max-height: calc(100vh - 84px - var(--padding) * 2);
+  overflow-y: auto;
 }

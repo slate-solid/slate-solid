@@ -30,6 +30,10 @@ pre {
   white-space: pre-wrap;
 }
 
+div {
+  box-sizing: border-box;
+}
+
 :not(pre) > code {
   font-family: monospace;
   background-color: #eee;
