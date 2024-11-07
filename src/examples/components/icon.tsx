@@ -14,6 +14,8 @@ import {
   BsTypeItalic,
   BsTypeUnderline,
   BsSearch,
+  BsImage,
+  BsTrash,
 } from 'solid-icons/bs'
 import { Dynamic } from 'solid-js/web'
 
@@ -26,9 +28,11 @@ export interface IconProps {
 
 export const iconTypeMap = {
   add: BsPlus,
+  delete: BsTrash,
   format_bold: BsTypeBold,
   format_italic: BsTypeItalic,
   format_underlined: BsTypeUnderline,
+  image: BsImage,
   code: BsCode,
   search: BsSearch,
   // Blocks
