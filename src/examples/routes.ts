@@ -63,6 +63,11 @@ export const routeMap = {
     component: lazy(() => import('./hugeDocument')),
     src: 'src/examples/hugeDocument.tsx',
   },
+  '/images': {
+    label: 'Images',
+    component: lazy(() => import('./images')),
+    src: 'src/examples/images.tsx',
+  },
   '/scroll-into-view': {
     label: 'Scroll Into View',
     component: lazy(() => import('./scrollIntoView')),

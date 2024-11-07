@@ -3,6 +3,7 @@ import {
   createMemo,
   createSignal,
   onCleanup,
+  onMount,
   splitProps,
   type JSX,
 } from 'solid-js'
@@ -120,31 +121,22 @@ export const Slate = (origProps: {
     SolidEditor.isFocused(editor()),
   )
 
-  createEffect(() => {
-    setIsFocused(SolidEditor.isFocused(editor()))
+  onMount(() => {
+    const fn = () => {
+      // Call on next tick since this callback runs before the onFocus / onBlur
+      // handlers run on the Editable. This ensures the `IS_FOCUSED` WeakMap has
+      // been updated which is used by `SolidEditor.isFocused()`.
+      setTimeout(() => {
+        setIsFocused(SolidEditor.isFocused(editor()))
+      }, 0)
+    }
+    document.addEventListener('focus', fn, true)
+    document.addEventListener('blur', fn, true)
+    return () => {
+      document.removeEventListener('focus', fn, true)
+      document.removeEventListener('blur', fn, true)
+    }
   })
-
-  // useIsomorphicLayoutEffect(() => {
-  //   const fn = () => setIsFocused(SolidEditor.isFocused(editor))
-  //   if (REACT_MAJOR_VERSION >= 17) {
-  //     // In React >= 17 onFocus and onBlur listen to the focusin and focusout events during the bubbling phase.
-  //     // Therefore in order for <Editable />'s handlers to run first, which is necessary for SolidEditor.isFocused(editor)
-  //     // to return the correct value, we have to listen to the focusin and focusout events without useCapture here.
-  //     document.addEventListener('focusin', fn)
-  //     document.addEventListener('focusout', fn)
-  //     return () => {
-  //       document.removeEventListener('focusin', fn)
-  //       document.removeEventListener('focusout', fn)
-  //     }
-  //   } else {
-  //     document.addEventListener('focus', fn, true)
-  //     document.addEventListener('blur', fn, true)
-  //     return () => {
-  //       document.removeEventListener('focus', fn, true)
-  //       document.removeEventListener('blur', fn, true)
-  //     }
-  //   }
-  // }, [])
 
   return (
     <SlateSelectorContext.Provider value={selectorContext}>

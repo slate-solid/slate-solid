@@ -35,7 +35,6 @@ const withEmbeds = (editor: Editor) => {
 }
 
 const Element = (props: RenderElementProps) => {
-  const { attributes, children, element } = props
   switch (props.element.type) {
     case 'video':
       return (
@@ -44,7 +43,7 @@ const Element = (props: RenderElementProps) => {
         />
       )
     default:
-      return <p {...attributes}>{children}</p>
+      return <p {...props.attributes}>{props.children}</p>
   }
 }
 
@@ -78,7 +77,7 @@ const VideoElement = (
         >
           <iframe
             src={`${safeUrl()}?title=0&byline=0&portrait=0`}
-            // @ts-ignore
+            // @ts-expect-error frameborder is not included in the types
             frameborder="0"
             style={{
               position: 'absolute',

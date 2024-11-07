@@ -25,7 +25,7 @@ export function createOnFocus({
 }) {
   return (event: HTMLEvent<FocusEvent>) => {
     if (
-      !readOnly &&
+      !readOnly() &&
       !state.isUpdatingSelection &&
       SolidEditor.hasEditableTarget(editor(), event.target) &&
       !isEventHandled(event, onFocus)
