@@ -17,7 +17,7 @@ import { withHistory } from 'slate-history'
 import { Button, Icon, Toolbar } from './components'
 import { ImageElement } from './custom-types.d'
 import styles from './images.module.css'
-import { createEffect, createMemo } from 'solid-js'
+import { createMemo } from 'solid-js'
 import { classNames } from './utils/cssUtils'
 
 const ImagesExample = () => {
@@ -106,10 +106,6 @@ const Image = (props: RenderElementProps) => {
 
   const selected = useSelected()
   const focused = useFocused()
-
-  createEffect(() => {
-    console.log('selected:', selected(), focused())
-  })
 
   return (
     <div {...props.attributes}>
