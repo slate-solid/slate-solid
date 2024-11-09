@@ -265,7 +265,7 @@ const BlockButton = (props: { format: BlockFormat; icon: IconType }) => {
   )
 }
 
-const MarkButton = (props: { format: MarkFormat; icon: IconType }) => {
+export const MarkButton = (props: { format: MarkFormat; icon: IconType }) => {
   const editor = useSlate()
   return (
     <Button
