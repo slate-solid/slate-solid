@@ -113,6 +113,11 @@ export const routeMap = {
     component: lazy(() => import('./searchHighlighting')),
     src: 'src/examples/searchHighlighting.tsx',
   },
+  '/shadow-dom': {
+    label: 'Shadow DOM',
+    component: lazy(() => import('./shadowDom')),
+    src: 'src/examples/shadowDom.tsx',
+  },
   '/styling': {
     label: 'Styling',
     component: lazy(() => import('./styling')),
