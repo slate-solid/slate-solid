@@ -128,6 +128,11 @@ export const routeMap = {
     component: lazy(() => import('./plaintext')),
     src: 'src/examples/plaintext.tsx',
   },
+  '/tables': {
+    label: 'Tables',
+    component: lazy(() => import('./tables')),
+    src: 'src/examples/tables.tsx',
+  },
 }
 
 export type RouteParams = {
