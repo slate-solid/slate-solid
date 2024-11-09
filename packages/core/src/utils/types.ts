@@ -1,13 +1,11 @@
-import type { JSX } from 'solid-js'
-
 export type DeferredOperation = () => void
 
 // Extracted from SolidJS `InputEventHandler` type
 export type HTMLEvent<
   TEvent extends Event,
-  TElement extends HTMLElement = HTMLDivElement,
+  TCurrentTarget extends HTMLElement = HTMLDivElement,
 > = TEvent & {
-  currentTarget: TElement
+  currentTarget: TCurrentTarget
   target: globalThis.Element
 }
 
