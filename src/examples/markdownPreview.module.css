@@ -1,0 +1,40 @@
+.Leaf {
+  &.bold {
+    font-weight: bold;
+  }
+  &.italic {
+    font-style: italic;
+  }
+  &.underlined {
+    text-decoration: underline;
+  }
+  &.title {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 20px 0 10px 0;
+  }
+  &.list {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 20px 0 10px 0;
+  }
+  &.hr {
+    display: block;
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+  }
+  &.blockQuote {
+    display: inline-block;
+    border-left: 2px solid #ddd;
+    padding-left: 10px;
+    color: #aaa;
+    font-style: italic;
+  }
+  &.code {
+    font-family: monospace;
+    background-color: #eee;
+    padding: 3px;
+  }
+}
