@@ -92,7 +92,7 @@ export function createOnDOMBeforeInput({
 
       const { selection } = editor
       const { inputType: type } = event
-      const data = (event as any).dataTransfer || event.data || undefined
+      const data = event.dataTransfer || event.data || undefined
 
       const isCompositionChange =
         type === 'insertCompositionText' || type === 'deleteCompositionText'
@@ -173,7 +173,7 @@ export function createOnDOMBeforeInput({
       // to change the selection because it is the range that will be deleted,
       // and those commands determine that for themselves.
       if (!type.startsWith('delete') || type.startsWith('deleteBy')) {
-        const [targetRange] = (event as any).getTargetRanges()
+        const [targetRange] = event.getTargetRanges()
 
         if (targetRange) {
           const range = SolidEditor.toSlateRange(editor, targetRange, {
@@ -306,7 +306,7 @@ export function createOnDOMBeforeInput({
           // programmatic access of paste events coming from external windows
           // like cypress where cy.window does not work realibly
           if (data?.constructor.name === 'DataTransfer') {
-            SolidEditor.insertData(editor, data)
+            SolidEditor.insertData(editor, data as DataTransfer)
             setNodeWeakMaps(editor)
           } else if (typeof data === 'string') {
             // Only insertText operations use the native functionality, for now.
