@@ -66,6 +66,13 @@ export const isDOMElement = (value: any): value is DOMElement => {
 
 export const isDOMNode = (value: any): value is DOMNode => {
   const window = getDefaultView(value)
+  // Debugging iframe. There is an issue where some DOM elements are instantiated
+  // from `top.Node` instead of the `getDefaultView(value).Node`. This results
+  // in DOM node not being recognized.
+  console.log('[isDOMNode]', {
+    fromTop: value instanceof top!.Node,
+    fromDefaultView: !!window && value instanceof window.Node,
+  })
   return !!window && value instanceof window.Node
 }
 
