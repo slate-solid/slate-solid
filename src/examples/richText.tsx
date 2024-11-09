@@ -64,7 +64,6 @@ export const RichTextExample = () => {
         placeholder="Enter some rich text…"
         spellcheck
         autofocus
-        // TODO: I don't think `onKeyDown` is implemented yet
         onKeyDown={event => {
           for (const hotkey in HOTKEYS) {
             if (isHotkey(hotkey, event)) {

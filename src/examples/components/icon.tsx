@@ -2,6 +2,7 @@ import {
   BsPlus,
   Bs1SquareFill,
   Bs2SquareFill,
+  BsInputCursor,
   BsJustify,
   BsListOl,
   BsListUl,
@@ -16,7 +17,9 @@ import {
   BsSearch,
   BsImage,
   BsTrash,
+  BsLink,
 } from 'solid-icons/bs'
+import { IoUnlink } from 'solid-icons/io'
 import { Dynamic } from 'solid-js/web'
 
 export interface IconProps {
@@ -33,8 +36,11 @@ export const iconTypeMap = {
   format_italic: BsTypeItalic,
   format_underlined: BsTypeUnderline,
   image: BsImage,
+  link: BsLink,
+  link_off: IoUnlink,
   code: BsCode,
   search: BsSearch,
+  smart_button: BsInputCursor,
   // Blocks
   looks_one: Bs1SquareFill,
   looks_two: Bs2SquareFill,

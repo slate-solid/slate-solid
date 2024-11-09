@@ -1,0 +1,32 @@
+.InlineChromiumBugFix {
+  font-size: 0;
+}
+
+.LinkComponentSelected {
+  box-shadow: 0 0 0 3px #ddd;
+}
+
+.EditableButtonComponent {
+  /* Margin is necessary to clearly show the cursor adjacent to the button */
+  margin: 0 0.1em;
+  background-color: #efefef;
+  padding: 2px 6px;
+  border: 1px solid #767676;
+  border-radius: 2px;
+  font-size: 0.9em;
+}
+
+.BadgeComponent {
+  background-color: green;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-size: 0.9em;
+  .selected {
+    box-shadow: 0 0 0 3px #ddd;
+  }
+}
+
+.Text {
+  padding-left: 0.1px;
+}
