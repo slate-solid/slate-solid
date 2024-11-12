@@ -59,6 +59,8 @@ import { createOnCut } from '../utils/createOnCut'
 import { createOnPaste } from '../utils/createOnPaste'
 import { createOnDragStart } from '../utils/createOnDragStart'
 import { createOnDrop } from '../utils/createOnDrop'
+import { createOnDragEnd } from '../utils/createOnDragEnd'
+import { createOnDragOver } from '../utils/createOnDragOver'
 
 const logger = new Logger('Editable')
 
@@ -209,11 +211,23 @@ export function Editable(origProps: EditableProps) {
     onCut: attributes.onCut,
   })
 
+  const onDragEnd = createOnDragEnd({
+    editor,
+    readOnly: () => props.readOnly,
+    state,
+    onDragEnd: attributes.onDragEnd,
+  })
+
   const onDragStart = createOnDragStart({
     editor,
     readOnly: () => props.readOnly,
     state,
     onDragStart: attributes.onDragStart,
+  })
+
+  const onDragOver = createOnDragOver({
+    editor,
+    onDragOver: attributes.onDragOver,
   })
 
   const onDrop = createOnDrop({
@@ -411,25 +425,20 @@ export function Editable(origProps: EditableProps) {
                 // TODO: Implement forward ref for ref passed into Editable
               }}
               style={style()}
-              // TODO: The `slate-react` has the following note:
-              // COMPAT: Certain browsers don't support the `beforeinput` event, so we
-              // fall back to React's leaky polyfill instead just for it. It
-              // only works for the `insertText` input type. Not sure if SolidJS
-              // polyfills this as well. TBD what browsers need to be concerned
-              // with this.
               onBeforeInput={onBeforeInput}
               onBlur={onBlur}
               onClick={onClick}
               onCompositionEnd={onCompositionEnd}
               onCompositionStart={onCompositionStart}
               onCompositionUpdate={onCompositionUpdate}
-              onFocus={onFocus}
-              onInput={onInput}
               onCopy={onCopy}
               onCut={onCut}
+              onDragEnd={onDragEnd}
+              onDragOver={onDragOver}
               onDragStart={onDragStart}
               onDrop={onDrop}
-              // TODO: #4 Editable - Implement remaining event handlers
+              onFocus={onFocus}
+              onInput={onInput}
               onKeyDown={onKeyDown}
               onPaste={onPaste}
             >
