@@ -57,6 +57,7 @@ import { isArrayEqual } from '../utils/isEqual'
 import { createOnCopy } from '../utils/createOnCopy'
 import { createOnCut } from '../utils/createOnCut'
 import { createOnPaste } from '../utils/createOnPaste'
+import { createOnDragStart } from '../utils/createOnDragStart'
 
 const logger = new Logger('Editable')
 
@@ -205,6 +206,13 @@ export function Editable(origProps: EditableProps) {
     editor,
     readOnly: () => props.readOnly,
     onCut: attributes.onCut,
+  })
+
+  const onDragStart = createOnDragStart({
+    editor,
+    readOnly: () => props.readOnly,
+    state,
+    onDragStart: attributes.onDragStart,
   })
 
   const onFocus = createOnFocus({
@@ -402,6 +410,7 @@ export function Editable(origProps: EditableProps) {
               onInput={onInput}
               onCopy={onCopy}
               onCut={onCut}
+              onDragStart={onDragStart}
               // TODO: #4 Editable - Implement remaining event handlers
               onKeyDown={onKeyDown}
               onPaste={onPaste}
