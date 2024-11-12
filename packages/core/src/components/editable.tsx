@@ -250,6 +250,13 @@ export function Editable(origProps: EditableProps) {
     onPaste: attributes.onPaste,
   })
 
+  // Listen for dragend and drop globally. In Firefox, if a drop handler
+  // initiates an operation that causes the originally dragged element to
+  // unmount, that element will not emit a dragend event. (2024/06/21)
+  const onStoppedDragging = () => {
+    state.isDraggingInternally = false
+  }
+
   onMount(() => {
     const window = SolidEditor.getWindow(editor())
     window.document.addEventListener(
@@ -261,7 +268,8 @@ export function Editable(origProps: EditableProps) {
       ref.current.focus()
     }
 
-    // TODO: Implement drag / drop handling
+    window.document.addEventListener('dragend', onStoppedDragging)
+    window.document.addEventListener('drop', onStoppedDragging)
   })
 
   onCleanup(() => {
@@ -271,7 +279,8 @@ export function Editable(origProps: EditableProps) {
       scheduleOnDOMSelectionChange,
     )
 
-    // TODO: Cleanup drag / drop handling
+    window.document.removeEventListener('dragend', onStoppedDragging)
+    window.document.removeEventListener('drop', onStoppedDragging)
   })
 
   // This needs to run in `createEffect` to ensure `ref.current` has been set.
