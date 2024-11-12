@@ -54,6 +54,7 @@ import type {
 } from './propTypes'
 import { RerenderOnSignal } from './rerenderOnSignal'
 import { isArrayEqual } from '../utils/isEqual'
+import { createOnCopy } from '../utils/createOnCopy'
 
 const logger = new Logger('Editable')
 
@@ -191,6 +192,11 @@ export function Editable(origProps: EditableProps) {
     editor,
     onCompositionUpdate: attributes.onCompositionUpdate,
     onStartComposing: () => setIsComposing(true),
+  })
+
+  const onCopy = createOnCopy({
+    editor,
+    onCopy: attributes.onCopy,
   })
 
   const onFocus = createOnFocus({
@@ -380,6 +386,7 @@ export function Editable(origProps: EditableProps) {
               onCompositionUpdate={onCompositionUpdate}
               onFocus={onFocus}
               onInput={onInput}
+              onCopy={onCopy}
               // TODO: #4 Editable - Implement remaining event handlers
               onKeyDown={onKeyDown}
             >
