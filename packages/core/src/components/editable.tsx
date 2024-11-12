@@ -56,6 +56,7 @@ import { RerenderOnSignal } from './rerenderOnSignal'
 import { isArrayEqual } from '../utils/isEqual'
 import { createOnCopy } from '../utils/createOnCopy'
 import { createOnCut } from '../utils/createOnCut'
+import { createOnPaste } from '../utils/createOnPaste'
 
 const logger = new Logger('Editable')
 
@@ -225,6 +226,12 @@ export function Editable(origProps: EditableProps) {
     readOnly: () => props.readOnly,
     onKeyDown: attributes.onKeyDown,
     onStopComposing: () => setIsComposing(false),
+  })
+
+  const onPaste = createOnPaste({
+    editor,
+    readOnly: () => props.readOnly,
+    onPaste: attributes.onPaste,
   })
 
   onMount(() => {
@@ -397,6 +404,7 @@ export function Editable(origProps: EditableProps) {
               onCut={onCut}
               // TODO: #4 Editable - Implement remaining event handlers
               onKeyDown={onKeyDown}
+              onPaste={onPaste}
             >
               <Children
                 decorations={decorations()}
