@@ -3,6 +3,7 @@ import { Editor, Range, Transforms } from 'slate'
 import type { HTMLEvent } from './types'
 import { SolidEditor } from '../plugin/solid-editor'
 import { isEventHandled } from './isEventHandled'
+import { setNodeWeakMaps } from './setNodeWeakMaps'
 
 export function createOnDrop({
   editor,
@@ -50,6 +51,7 @@ export function createOnDrop({
       }
 
       SolidEditor.insertData(editor(), data)
+      setNodeWeakMaps(editor())
 
       // When dragging from another source into the editor, it's possible
       // that the current editor does not have focus.

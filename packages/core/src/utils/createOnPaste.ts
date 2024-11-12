@@ -8,6 +8,7 @@ import {
   isPlainTextOnlyPaste,
 } from 'slate-dom'
 import { isEventHandled } from './isEventHandled'
+import { setNodeWeakMaps } from './setNodeWeakMaps'
 
 export function createOnPaste({
   editor,
@@ -34,6 +35,7 @@ export function createOnPaste({
           return
         }
         SolidEditor.insertData(editor(), event.clipboardData)
+        setNodeWeakMaps(editor())
       }
     }
   }
