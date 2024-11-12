@@ -58,6 +58,7 @@ import { createOnCopy } from '../utils/createOnCopy'
 import { createOnCut } from '../utils/createOnCut'
 import { createOnPaste } from '../utils/createOnPaste'
 import { createOnDragStart } from '../utils/createOnDragStart'
+import { createOnDrop } from '../utils/createOnDrop'
 
 const logger = new Logger('Editable')
 
@@ -213,6 +214,13 @@ export function Editable(origProps: EditableProps) {
     readOnly: () => props.readOnly,
     state,
     onDragStart: attributes.onDragStart,
+  })
+
+  const onDrop = createOnDrop({
+    editor,
+    readOnly: () => props.readOnly,
+    state,
+    onDrop: attributes.onDrop,
   })
 
   const onFocus = createOnFocus({
@@ -411,6 +419,7 @@ export function Editable(origProps: EditableProps) {
               onCopy={onCopy}
               onCut={onCut}
               onDragStart={onDragStart}
+              onDrop={onDrop}
               // TODO: #4 Editable - Implement remaining event handlers
               onKeyDown={onKeyDown}
               onPaste={onPaste}
