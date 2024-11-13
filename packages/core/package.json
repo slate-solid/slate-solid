@@ -1,7 +1,7 @@
 {
   "name": "@slate-solid/core",
   "description": "",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "license": "MIT",
   "main": "./dist/index.js",
   "files": [
@@ -40,7 +40,7 @@
   },
   "peerDependencies": {
     "slate": ">=0.99.0",
-    "slate-dom": ">=1.0.0"
+    "slate-dom": ">=0.99.0"
   },
   "publishConfig": {
     "access": "public"
