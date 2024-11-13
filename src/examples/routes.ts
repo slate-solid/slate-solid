@@ -63,6 +63,11 @@ export const routeMap = {
     component: lazy(() => import('./hugeDocument')),
     src: 'src/examples/hugeDocument.tsx',
   },
+  '/iframe': {
+    label: 'Iframe',
+    component: lazy(() => import('./iframe')),
+    src: 'src/examples/iframe.tsx',
+  },
   '/images': {
     label: 'Images',
     component: lazy(() => import('./images')),
