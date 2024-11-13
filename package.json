@@ -8,6 +8,8 @@
     "lint": "eslint .",
     "ts:check": "tsc --build tsconfig.json",
     "build": "npm run ts:check && vite build && cp dist/index.html dist/404.html",
+    "publish:npm": "./scripts/publish.sh",
+    "publish:tag": "git tag v$(node -p -e \"require('./packages/core/package.json').version\")",
     "serve": "vite preview"
   },
   "license": "MIT",
