@@ -24,7 +24,6 @@ export interface CreateOnDOMSelectionChangeProps {
     isDraggingInternally: boolean
     isUpdatingSelection: boolean
     latestElement: DOMElement | null
-    hasMarkPlaceholder: boolean
   }
 }
 

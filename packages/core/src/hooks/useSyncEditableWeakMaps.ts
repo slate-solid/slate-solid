@@ -202,7 +202,7 @@ export function useSyncEditableWeakMaps({
             el.focus()
 
             setDomSelection(forceChange)
-          } catch (e) {
+          } catch {
             // Ignore, dom and state might be out of sync
           }
         }

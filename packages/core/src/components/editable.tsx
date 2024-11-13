@@ -1,11 +1,12 @@
 import debounce from 'lodash/debounce'
-import { Editor, Node, Range, type NodeEntry } from 'slate'
+import { Editor, Node, Range, type NodeEntry, Text } from 'slate'
 import {
   CAN_USE_DOM,
   EDITOR_TO_ELEMENT,
   EDITOR_TO_WINDOW,
   ELEMENT_TO_NODE,
   HAS_BEFORE_INPUT_SUPPORT,
+  MARK_PLACEHOLDER_SYMBOL,
   NODE_TO_ELEMENT,
   PLACEHOLDER_SYMBOL,
   getDefaultView,
@@ -343,13 +344,39 @@ export function Editable(origProps: EditableProps) {
         })
       }
 
+      const { marks, selection } = editor()
+      state.hasMarkPlaceholder = false
+
+      if (selection && Range.isCollapsed(selection) && marks) {
+        const { anchor } = selection
+        const leaf = Node.leaf(editor(), anchor.path)
+        const { text: _, ...rest } = leaf
+
+        // While marks isn't a 'complete' text, we can still use loose Text.equals
+        // here which only compares marks anyway.
+        if (!Text.equals(leaf, marks as Text, { loose: true })) {
+          state.hasMarkPlaceholder = true
+
+          const unset = Object.fromEntries(
+            Object.keys(rest).map(mark => [mark, null]),
+          )
+
+          decorations.push({
+            [MARK_PLACEHOLDER_SYMBOL]: true,
+            ...unset,
+            ...marks,
+
+            anchor,
+            focus: anchor,
+          })
+        }
+      }
+
       return decorations
     },
     undefined,
     { equals: isArrayEqual },
   )
-
-  // TODO: marks
 
   const style = createMemo<JSX.CSSProperties>(() => ({
     ...(props.disableDefaultStyles
