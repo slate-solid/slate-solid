@@ -27,10 +27,7 @@ npm i
 Install peer dependencies:
 
 ```sh
-npm install slate
-
-# For now `slate-dom` is an alias until ianstormtaylor/slate/pull/5734 is merged
-npm install slate-dom@npm:@slate-solid/slate-dom-preview
+npm install slate slate-dom
 ```
 
 Install `SlateSolid`
