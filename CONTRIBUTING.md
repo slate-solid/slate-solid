@@ -19,4 +19,9 @@ S
 </SvgLetterIcon>
 ```
 
-## Npm Builds
+## Npm Publishing
+
+- Update `package.json` versions
+- Run `npm i`
+- Run `npm run publish:npm`
+- Run `npm run publish:tag && git push --tags`

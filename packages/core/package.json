@@ -1,7 +1,7 @@
 {
   "name": "@slate-solid/core",
   "description": "",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "MIT",
   "main": "./dist/index.js",
   "files": [
