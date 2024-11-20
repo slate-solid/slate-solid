@@ -1,7 +1,7 @@
 {
   "name": "@slate-solid/core",
   "description": "",
-  "version": "1.0.11",
+  "version": "1.0.12-alpha.3",
   "license": "MIT",
   "main": "./dist/index.js",
   "files": [
@@ -19,8 +19,8 @@
   "browser": {},
   "exports": {
     "solid": {
-      "development": "./dist/index.js",
-      "import": "./dist/index.js"
+      "development": "./dist/index.jsx",
+      "import": "./dist/index.jsx"
     }
   },
   "scripts": {
