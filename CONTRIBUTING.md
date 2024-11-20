@@ -24,4 +24,3 @@ S
 - Update `package.json` versions
 - Run `npm i`
 - Run `npm run publish:npm`
-- Run `npm run publish:tag && git push --tags`
