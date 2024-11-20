@@ -1,7 +1,7 @@
 {
   "name": "@slate-solid/core",
   "description": "",
-  "version": "1.0.9",
+  "version": "1.0.13",
   "license": "MIT",
   "main": "./dist/index.js",
   "files": [
@@ -19,14 +19,17 @@
   "browser": {},
   "exports": {
     "solid": {
-      "development": "./dist/index.js",
-      "import": "./dist/index.js"
+      "development": "./dist/index.jsx",
+      "import": "./dist/index.jsx"
     }
   },
   "scripts": {
     "build": "tsc -p .",
     "clean": "rm -rf dist/ tsconfig.tsbuildinfo",
-    "prepublishOnly": "npm run clean && npm run build"
+    "prepublishOnly": "npm run clean && npm run build",
+    "publish:alpha": "npm version prerelease --preid alpha && npm publish --tag alpha",
+    "publish:patch": "npm version patch && npm publish && npm run publish:tag",
+    "publish:tag": "git tag v$(node -p -e \"require('./package.json').version\") && git push --tags"
   },
   "dependencies": {
     "@juggle/resize-observer": "^3.4.0",
