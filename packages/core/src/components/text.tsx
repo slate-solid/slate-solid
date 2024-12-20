@@ -33,6 +33,7 @@ const Text = (props: TextProps) => {
 
   // Update element-related weak maps with the DOM element ref.
   const callbackRef = (span: HTMLSpanElement | null) => {
+    console.log('Text', span)
     const KEY_TO_ELEMENT = EDITOR_TO_KEY_TO_ELEMENT.get(editor())
     if (span) {
       KEY_TO_ELEMENT?.set(key(), span)
